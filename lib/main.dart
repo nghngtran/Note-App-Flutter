@@ -26,6 +26,7 @@
 //  }
 //}
 
+import 'package:device_preview/device_preview.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:note_app/application/constants.dart';
@@ -37,6 +38,12 @@ import 'package:note_app/presentations/UI/page/home_screen.dart';
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(MyApp());
+//  runApp(
+//    DevicePreview(
+//      builder: (context) => MyApp(),
+//    ),
+//  );
+
 }
 
 class MyApp extends StatelessWidget {
