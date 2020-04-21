@@ -39,7 +39,8 @@ TextTheme customizedTheme = TextTheme(
     fontSize: 23,
     fontFamily: Font.Name,
     fontWeight: Font.Regular,
-  ), //H5
+  ),
+   //H5
   display1: TextStyle(
     fontSize: 25,
     fontFamily: Font.Name,
