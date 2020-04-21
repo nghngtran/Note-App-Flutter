@@ -86,17 +86,21 @@ class DropDownButton extends StatefulWidget {
   _DropDownButtonState createState() => _DropDownButtonState();
 }
 class _DropDownButtonState extends State<DropDownButton> {
-  var _value = ColorTheme.colorTag1.toString();
+  var _value = Colors.green.toString();
   DropdownButton dropdownBtn() => DropdownButton<String>(
     items:[
-      DropdownMenuItem(value: ColorTheme.colorTag1.toString(), child:
-          Icon(Icons.local_offer,color: ColorTheme.colorTag1, size: 18)),
-      DropdownMenuItem(value: ColorTheme.colorTag2.toString(), child:
-      Icon(Icons.local_offer,color: ColorTheme.colorTag2,size: 18)),
-      DropdownMenuItem(value: ColorTheme.colorTag3.toString(), child:
-      Icon(Icons.local_offer,color: ColorTheme.colorTag3,size: 18)),
-      DropdownMenuItem(value: ColorTheme.colorTag4.toString(), child:
-      Icon(Icons.local_offer,color: ColorTheme.colorTag4,size: 18)),
+      DropdownMenuItem(value: Colors.green.toString(), child:
+          Icon(Icons.local_offer,color: Colors.green, size: 22)),
+      DropdownMenuItem(value: ColorTheme.blue.toString(), child:
+      Icon(Icons.local_offer,color: Colors.blue,size: 22)),
+      DropdownMenuItem(value: Colors.purple.toString(), child:
+      Icon(Icons.local_offer,color: Colors.purple,size: 22)),
+      DropdownMenuItem(value: Colors.pink.toString(), child:
+      Icon(Icons.local_offer,color: Colors.pink,size: 22)),
+      DropdownMenuItem(value: Colors.yellow.toString(), child:
+      Icon(Icons.local_offer,color: Colors.yellow,size: 22)),
+
+
     ],
     onChanged: (value){
       setState(() {
