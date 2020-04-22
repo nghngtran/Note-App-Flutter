@@ -4,6 +4,8 @@ import 'package:note_app/presentations/UI/custom_widget/custom_list_notes.dart';
 
 import 'package:note_app/presentations/UI/custom_widget/custom_note_card.dart';
 import 'package:note_app/presentations/UI/custom_widget/custom_type_tag.dart';
+import 'package:note_app/presentations/UI/page/image_pick.dart';
+import 'package:page_transition/page_transition.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -91,40 +93,6 @@ class HomeScreenState extends State<HomeScreen> {
        iconSize: 24,
         color: Colors.black,
       )
-//      InkWell(
-//        onTap: _startSearch,
-//        child:
-//        Column(
-//          mainAxisAlignment: MainAxisAlignment.center,
-//          children: <Widget>[
-//            Container(
-//                margin: EdgeInsets.only(
-//                    left: 3 * MediaQuery.of(context).size.width / 100,
-//                    right: 3 * MediaQuery.of(context).size.width / 100),
-//                width: 70 * MediaQuery.of(context).size.width / 100,
-//                height: 5 * MediaQuery.of(context).size.height / 100,
-//                decoration: BoxDecoration(
-//                  borderRadius: BorderRadius.all(Radius.circular(10)),
-//                  color: Colors.blue.withOpacity(0.9),
-//                ),
-//                child: Row(
-//                  mainAxisAlignment: MainAxisAlignment.start,
-//                  children: <Widget>[
-//                    SizedBox(
-//                        width: 2 * MediaQuery.of(context).size.width / 100),
-//                    Icon(Icons.search, size: 20, color: Colors.white),
-//                    SizedBox(
-//                        width: 2 * MediaQuery.of(context).size.width / 100),
-//                    Text('Seach for a word .. ',
-//                        style: Theme.of(context)
-//                            .textTheme
-//                            .subhead
-//                            .copyWith(color: Colors.white))
-//                  ],
-//                ))
-//          ],
-//        ),
-//      ),
     ];
   }
 
@@ -150,7 +118,9 @@ class HomeScreenState extends State<HomeScreen> {
         backgroundColor: Colors.white,
         resizeToAvoidBottomPadding: false,
         floatingActionButton: FloatingActionButton(backgroundColor: Colors.black,
-            child: Icon(Icons.add, size: 18), onPressed: () {}),
+            child: Icon(Icons.add, size: 18), onPressed: () {
+          Navigator.push(context, PageTransition(type: PageTransitionType.downToUp,child:PickImage()));
+            }),
         appBar: AppBar(
           backgroundColor: Color.fromRGBO(255,209,16,1.0),
           title: _isSearching ? _buildSearchField() : null,
@@ -167,12 +137,6 @@ class HomeScreenState extends State<HomeScreen> {
      ListView(controller: mainController, // parent ListView
     children: <Widget>[
         TagBar(mainController),
-//        Container(
-//            width: MediaQuery.of(context).size.width,
-//               height: MediaQuery.of(context).size.height,
-//               child: Stack( children:<Widget>[NoteGrid(listNotes)]))
-
-
         SingleChildScrollView(
             child:
 
@@ -184,25 +148,4 @@ class HomeScreenState extends State<HomeScreen> {
    ]));
   }
 }
-//Widget historyGrid(BuildContext context, List<Note> notes)
-//{
-//  List<Widget> date = List<Widget>();
-//  List<NoteCardModel> notecard = List<NoteCardModel>();
-//  for (int i = 0; i < notes.length; i++)
-//  {
-//    if (notes[i] is DateNote)
-//    {
-//    date.add(NoteCard(notes[i]));
-//    }
-//    else {
-//      notecard.add(notes[i]);
-//    }
-//  }
-//  return Column(
-//    children: <Widget>[
-//      Container(child:Column(children:date)),
-//      noteGridBuilder(context,notecard)
-//    ],
-//  );
-//
-//}
+

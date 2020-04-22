@@ -10,6 +10,8 @@ class Tag{
         colorTag = color;
 }
 class CreateTag extends StatelessWidget{
+  final textController = TextEditingController();
+
   Widget build(BuildContext context)
   {
     return Container(
@@ -34,6 +36,7 @@ class CreateTag extends StatelessWidget{
                SizedBox(width: MediaQuery.of(context).size.width/100*2),
             Expanded(flex: 7,
                 child: TextField(
+                  controller: textController,
               textAlign: TextAlign.start,
               style: TextStyle(fontSize: 18),
               decoration: InputDecoration(
@@ -68,6 +71,8 @@ class CreateTag extends StatelessWidget{
                 Expanded(flex: 1,child: FlatButton(color: Colors.blue,textColor: Colors.black,child: Text("Save",style: Theme.of(context)
                     .textTheme
                     .subhead), onPressed: (){
+                  Tag _tag = Tag(name: textController.text,color: Colors.purple.toString());
+                  Navigator.of(context).pop();
                 },shape: RoundedRectangleBorder(
                     borderRadius: new BorderRadius.circular(5),
                     side: BorderSide(color: Colors.blue)

@@ -33,6 +33,8 @@ import 'package:note_app/application/constants.dart';
 import 'package:note_app/application/router.dart';
 import 'package:note_app/presentations/UI/page/create_tag.dart';
 import 'package:note_app/presentations/UI/page/home_screen.dart';
+import 'package:note_app/presentations/UI/page/image_pick.dart';
+import 'package:note_app/presentations/UI/page/painter.dart';
 
 
 
@@ -56,7 +58,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
 
       theme: ThemeData(),
-      initialRoute: RoutePaths.Home,
+      initialRoute: RoutePaths.Pick_image,
       onGenerateRoute: Router.generateRoute,
       home: TestWidget(),
     );
@@ -67,7 +69,7 @@ class TestWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return HomeScreen();
+    return PickImage();
   }
 }
 
