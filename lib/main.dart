@@ -58,7 +58,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
 
       theme: ThemeData(),
-      initialRoute: RoutePaths.Pick_image,
+//      initialRoute: RoutePaths.Pick_image,
       onGenerateRoute: Router.generateRoute,
       home: TestWidget(),
     );
@@ -66,10 +66,9 @@ class MyApp extends StatelessWidget {
 }
 
 class TestWidget extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
-    return PickImage();
+    return HomeScreen();
   }
 }
 

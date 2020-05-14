@@ -2,11 +2,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:note_app/application/constants.dart';
 import 'package:note_app/presentations/UI/custom_widget/custom_text_style.dart';
+import 'package:note_app/utils/database/dao/tag_dao.dart';
+import 'package:note_app/utils/database/database.dart';
+import 'package:note_app/utils/database/model/tag.dart';
+import 'package:sqflite/sqflite.dart';
 
-class Tag{
+class Tags{
   String colorTag;
   String nameTag;
-  Tag({@required String name,@required String color}) : nameTag = name,
+  Tags({@required String name,@required String color}) : nameTag = name,
         colorTag = color;
 }
 class CreateTag extends StatelessWidget{
@@ -71,8 +75,15 @@ class CreateTag extends StatelessWidget{
                 Expanded(flex: 1,child: FlatButton(color: Colors.blue,textColor: Colors.black,child: Text("Save",style: Theme.of(context)
                     .textTheme
                     .subhead), onPressed: (){
-                  Tag _tag = Tag(name: textController.text,color: Colors.purple.toString());
-                  Navigator.of(context).pop();
+//                  Tag _tag = Tag(name: textController.text,color: Colors.purple.toString());
+                  Tag _tag = Tag.withFullInfo("123","Homework","ABD",DateTime.now(),DateTime.now());
+                  DatabaseApp db  = DatabaseApp();
+                  Future<Database> create  = db.getDatabase();
+                  TagDAO _tagDAO = TagDAO(create);
+                  _tagDAO.insertTag(_tag);
+
+                  Future<List<Tag>> _tag1 = _tagDAO.getTags();
+                  print(_tag1);
                 },shape: RoundedRectangleBorder(
                     borderRadius: new BorderRadius.circular(5),
                     side: BorderSide(color: Colors.blue)

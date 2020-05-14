@@ -5,12 +5,12 @@ const String CREATE_TABLE_NOTE ="CREATE TABLE notes("
     "modified_time NUMERIC, "
     "tag_id TEXT"
     ")";
-const String CREATE_TABLE_TAG ="CREATE TABLE tags("
+const String CREATE_TABLE_TAG ="CREATE TABLE IF NOT EXISTS tags("
     "tag_id TEXT PRIMARY KEY, "
-    "name TEXT, "
-    "created_time NUMERIC, "
-    "modified_time NUMERIC, "
-    "color TEXT, "
+    "title TEXT, "
+//    "created_time NUMERIC, "
+//    "modified_time NUMERIC, "
+    "color TEXT"
     ")";
 const String CREATE_TABLE_NOTE_ITEM ="CREATE TABLE noteItems("
     "noteItem_id TEXT PRIMARY KEY, "
@@ -22,3 +22,4 @@ const String CREATE_TABLE_NOTE_ITEM ="CREATE TABLE noteItems("
     "textColor TEXT, "
     "bgColor TEXT"
     ")";
+const String DROP_TABLE_TAG = "DROP TABLE IF EXISTS tags";

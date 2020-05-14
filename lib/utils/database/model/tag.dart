@@ -13,10 +13,11 @@ class Tag extends TimeUtils {
     this.title = "New Tag";
   }
 
-  Tag.withFullInfo(this.id, this.title, this.color, DateTime created_time,
+  Tag.withFullInfo(this.id, this.title, this.color
+      , DateTime created_time,
       DateTime modified_time) {
-    this.created_time = created_time;
-    this.modified_time = modified_time;
+//    this.created_time = created_time;
+//    this.modified_time = modified_time;
   }
 
   Tag.withTitle(String title, this.id) {
@@ -29,8 +30,8 @@ class Tag extends TimeUtils {
       'tag_id': id,
       'title': title,
       'color': color,
-      'created_time': created_time,
-      'modified_time': modified_time
+//      'created_time': created_time,
+//      'modified_time': modified_time
     };
   }
 }
