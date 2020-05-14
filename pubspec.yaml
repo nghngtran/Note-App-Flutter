@@ -31,6 +31,7 @@ dependencies:
   device_preview: ^0.3.0+1
   page_transition: ^1.1.5
   path_provider: any
+  pref_dessert: ^0.5.1
 
 
   image_picker: ^0.6.5+2
