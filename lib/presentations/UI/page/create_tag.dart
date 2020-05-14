@@ -1,30 +1,17 @@
-import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:note_app/application/constants.dart';
-import 'package:note_app/data/repository.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:note_app/presentations/UI/custom_widget/custom_text_style.dart';
 
 class Tag{
   String colorTag;
   String nameTag;
-  Tag(String name,String color) : nameTag = name,
+  Tag({@required String name,@required String color}) : nameTag = name,
         colorTag = color;
-  Tag.fromJson(Map<String, dynamic> json):
-      nameTag = json['name'],
-      colorTag = json['color'];
-  Map<String, dynamic> toJson() => {
-    'name': nameTag,
-    'color':colorTag,
-  };
 }
-class CreateTag extends StatefulWidget{
-  CreateTagState createState() => CreateTagState();
-}
-class CreateTagState extends State<CreateTag>{
+class CreateTag extends StatelessWidget{
   final textController = TextEditingController();
-  SharePrefTag prefTag = SharePrefTag();
+
   Widget build(BuildContext context)
   {
     return Container(
@@ -84,7 +71,7 @@ class CreateTagState extends State<CreateTag>{
                 Expanded(flex: 1,child: FlatButton(color: Colors.blue,textColor: Colors.black,child: Text("Save",style: Theme.of(context)
                     .textTheme
                     .subhead), onPressed: (){
-                  prefTag.save('name', textController.toString());
+                  Tag _tag = Tag(name: textController.text,color: Colors.purple.toString());
                   Navigator.of(context).pop();
                 },shape: RoundedRectangleBorder(
                     borderRadius: new BorderRadius.circular(5),
@@ -132,4 +119,3 @@ class _DropDownButtonState extends State<DropDownButton> {
     return dropdownBtn();
   }
 }
-
