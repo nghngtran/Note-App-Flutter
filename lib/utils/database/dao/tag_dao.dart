@@ -61,8 +61,8 @@ class TagDAO {
         maps[i]['tag_id'],
         maps[i]['title'],
         maps[i]['color'],
-        maps[i]['created_time'],
-        maps[i]['modified_time'],
+        DateTime.parse(maps[i]['created_time']),
+        DateTime.parse(maps[i]['modified_time']),
       );
     });
   }
