@@ -6,6 +6,7 @@ import 'package:note_app/presentations/UI/custom_widget/custom_note_card.dart';
 import 'package:note_app/presentations/UI/custom_widget/custom_type_tag.dart';
 import 'package:note_app/presentations/UI/page/create_note.dart';
 import 'package:note_app/presentations/UI/page/image_pick.dart';
+import 'package:note_app/utils/database/model/note.dart';
 import 'package:note_app/utils/database/model/noteItem.dart';
 import 'package:page_transition/page_transition.dart';
 
@@ -22,7 +23,7 @@ class HomeScreenState extends State<HomeScreen> {
   TextEditingController _searchQuery;
   List<Note> listNotes = List<Note>();
   bool visible = true;
-  List<NoteItem> listNote = List<NoteItem>();
+  Notes note = new Notes();
   ScrollController mainController = ScrollController();
   void initState() {
     super.initState();
@@ -122,7 +123,7 @@ class HomeScreenState extends State<HomeScreen> {
         resizeToAvoidBottomPadding: false,
         floatingActionButton: FloatingActionButton(heroTag: "btnAdd",backgroundColor: Colors.black,
             child: Icon(Icons.add, size: 18), onPressed: () {
-          Navigator.push(context, PageTransition(type: PageTransitionType.downToUp,child:CreateNote(listNote)));
+          Navigator.push(context, PageTransition(type: PageTransitionType.downToUp,child:CreateNote(note)));
             }),
         appBar: AppBar(
           backgroundColor: Color.fromRGBO(255,209,16,1.0),

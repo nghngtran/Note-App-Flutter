@@ -8,14 +8,14 @@ import 'package:note_app/utils/database/model/note.dart';
 import 'package:note_app/utils/database/model/noteItem.dart';
 import 'package:note_app/utils/database/model/tag.dart';
 
-class Tags {
-  String colorTag;
-  String nameTag;
-
-  Tags({@required String name, @required String color})
-      : nameTag = name,
-        colorTag = color;
-}
+//class Tags {
+//  String colorTag;
+//  String nameTag;
+//
+//  Tags({@required String name, @required String color})
+//      : nameTag = name,
+//        colorTag = color;
+//}
 
 class CreateTag extends StatelessWidget {
   final textController = TextEditingController();
@@ -95,23 +95,23 @@ class CreateTag extends StatelessWidget {
                           style: Theme.of(context).textTheme.subhead),
                       onPressed: () {
 //                  Tag _tag = Tag(name: textController.text,color: Colors.purple.toString());
-                        DatabaseApp db = new DatabaseApp();
-                        Tag _other = new Tag();
-                        TagDAO.insertTag(_other);
 
-                        NoteItem textItem = new NoteItem("TEXT");
-                        textItem.setContent("Day la Text Item");
-
-                        Notes simpleNote = new Notes.withTag(_other);
-                        simpleNote.addNoteItem(textItem);
-                        NoteDAO.insertNote(simpleNote);
-
-                        NoteItem textItem1 = new NoteItem("TEXT");
-                        textItem1.setContent("Day la Text Item 1");
-
-                        Notes simpleNote1 = new Notes.withTag(_other);
-                        simpleNote1.addNoteItem(textItem1);
-                        NoteDAO.insertNote(simpleNote1);
+//                        Tag _other = new Tag();
+//                        TagDAO.insertTag(_other);
+//
+//                        NoteItem textItem = new NoteItem("TEXT");
+//                        textItem.setContent("Day la Text Item");
+//
+//                        Notes simpleNote = new Notes.withTag(_other);
+//                        simpleNote.addNoteItem(textItem);
+//                        NoteDAO.insertNote(simpleNote);
+//
+//                        NoteItem textItem1 = new NoteItem("TEXT");
+//                        textItem1.setContent("Day la Text Item 1");
+//
+//                        Notes simpleNote1 = new Notes.withTag(_other);
+//                        simpleNote1.addNoteItem(textItem1);
+//                        NoteDAO.insertNote(simpleNote1);
 
 
                         Future<Notes> notedetail;
@@ -127,6 +127,7 @@ class CreateTag extends StatelessWidget {
                                   })
                             }));
                         //print(_tag1);
+                        Navigator.of(context).pop();
                       },
                       shape: RoundedRectangleBorder(
                           borderRadius: new BorderRadius.circular(5),

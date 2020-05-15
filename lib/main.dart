@@ -36,6 +36,7 @@ import 'package:note_app/presentations/UI/page/create_tag.dart';
 import 'package:note_app/presentations/UI/page/home_screen.dart';
 import 'package:note_app/presentations/UI/page/image_pick.dart';
 import 'package:note_app/presentations/UI/page/painter.dart';
+import 'package:note_app/utils/database/database.dart';
 
 
 
@@ -61,7 +62,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(),
 //      initialRoute: RoutePaths.Pick_image,
       onGenerateRoute: Router.generateRoute,
-      home: TestWidget(),
+      home: HomeScreen(),
     );
   }
 }
@@ -69,6 +70,7 @@ class MyApp extends StatelessWidget {
 class TestWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    DatabaseApp db = new DatabaseApp();
     return HomeScreen();
   }
 }

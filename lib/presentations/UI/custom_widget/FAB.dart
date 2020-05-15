@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:note_app/presentations/UI/page/create_note.dart';
+import 'package:note_app/utils/database/model/note.dart';
 import 'package:note_app/utils/database/model/noteItem.dart';
 import 'package:page_transition/page_transition.dart';
 
 class FancyFab extends StatefulWidget {
-  final Function() onPressed;
-  final String tooltip;
-   Icon icon = Icon(Icons.add);
-
-  FancyFab({this.onPressed, this.tooltip, this.icon});
-
+//  final Function() onPressed;
+//  final String tooltip;
+//   Icon icon = Icon(Icons.add);
+  final Notes note;
+//  FancyFab({this.onPressed, this.tooltip, this.icon});
+  FancyFab(Notes _note):note=_note;
   @override
   _FancyFabState createState() => _FancyFabState();
 }
@@ -24,11 +25,11 @@ class _FancyFabState extends State<FancyFab>
   Curve _curve = Curves.easeOut;
   double _fabHeight = 56.0;
 
-  static List<NoteItem> listNote =  List<NoteItem>();
+
   void _addWidget(){
     setState(() {
-      NoteItem newNote = NoteItem.withFullInfo("124","264",NoteItemType.TEXT,"Ahihi","abd","adf",DateTime.now(),DateTime.now());
-      listNote.add(newNote);
+      NoteItem noteItem = new NoteItem("Text");
+      widget.note.contents.add(noteItem);
     });
   }
   @override
@@ -85,8 +86,9 @@ class _FancyFabState extends State<FancyFab>
       child: FloatingActionButton(heroTag: "btnAdd",
         onPressed:(){
           _addWidget();
-//        _secondPage(context,CreateNote(listNote));
-          Navigator.of(context).push(MaterialPageRoute(builder: (context) => CreateNote(listNote)));
+//          _secondPage(context,CreateNote(_note));
+          print(widget.note.contents.length);
+          Navigator.of(context).push(MaterialPageRoute(builder: (context) => CreateNote(widget.note)));
         },
         tooltip: 'Text',
         child: Icon(Icons.create),
@@ -97,7 +99,7 @@ class _FancyFabState extends State<FancyFab>
     final dataFromSecondPage = await Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => page),
-    ) as List<NoteItem>;
+    ) as Notes;
 
   }
   Widget image() {
