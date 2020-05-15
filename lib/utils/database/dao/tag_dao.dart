@@ -1,58 +1,75 @@
 import 'dart:async';
 
+import 'package:note_app/utils/database/database.dart';
 import 'package:note_app/utils/database/model/tag.dart';
-import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
 class TagDAO {
-  final Future<Database> database;
+  static Future<void> insertTag(Tag tag) async {
+    if(DatabaseApp.database == null){
+      print("LOG: TagDAO can't start because DatabaseApp not start! please start DatabaseApp");
+      return null;
+    }
+    final Database db = await DatabaseApp.database;
 
-  TagDAO(this.database);
-  Future<void> insertTag(Tag tag) async {
-    // Get a reference to the database.
-    final Database db = await database;
-
-    // Insert the Dog into the correct table. Also specify the
-    // `conflictAlgorithm`. In this case, if the same dog is inserted
-    // multiple times, it replaces the previous data.
     await db.insert(
       'tags',
       tag.toMap(),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }
-  Future<void> updateTag(Tag tag) async {
-    // Get a reference to the database.
-    final db = await database;
+  static Future<void> updateTag(Tag tag) async {
+    if(DatabaseApp.database == null){
+      print("LOG: TagDAO can't start because DatabaseApp not start! please start DatabaseApp");
+      return null;
+    }
+    final Database db = await DatabaseApp.database;
 
-    // Update the given Dog.
     await db.update(
       'tags',
       tag.toMap(),
-      // Ensure that the Dog has a matching id.
       where: "tag_id = ?",
-      // Pass the Dog's id as a whereArg to prevent SQL injection.
       whereArgs: [tag.id],
     );
   }
-  Future<void> deleteTag(Tag tag) async {
-    // Get a reference to the database.
-    final db = await database;
+  static Future<void> deleteTag(Tag tag) async {
+    if(DatabaseApp.database == null){
+      print("LOG: TagDAO can't start because DatabaseApp not start! please start DatabaseApp");
+      return null;
+    }
+    final Database db = await DatabaseApp.database;
 
-    // Remove the Dog from the database.
     await db.delete(
       'tags',
-      // Use a `where` clause to delete a specific dog.
       where: "tag_id = ?",
-      // Pass the Dog's id as a whereArg to prevent SQL injection.
       whereArgs: [tag.id],
     );
   }
-  Future<List<Tag>> getTags() async {
-    // Get a reference to the database.
-    final Database db = await database;
+  static Future<Tag> getTagByID(String tag_id) async {
+    if(DatabaseApp.database == null){
+      print("LOG: TagDAO can't start because DatabaseApp not start! please start DatabaseApp");
+      return null;
+    }
+    final Database db = await DatabaseApp.database;
 
-    // Query the table for all The Dogs.
+    final List<Map<String, dynamic>> maps =
+    await db.query('tags', where: "tag_id = ?", whereArgs: [tag_id]);
+
+    return maps.isEmpty? null : Tag.withFullInfo(
+      maps[0]['tag_id'],
+      maps[0]['title'],
+      maps[0]['color'],
+      DateTime.parse(maps[0]['created_time']),
+      DateTime.parse(maps[0]['modified_time']),
+    );
+  }
+  static Future<List<Tag>> getTags() async {
+    if(DatabaseApp.database == null){
+      print("LOG: TagDAO can't start because DatabaseApp not start! please start DatabaseApp");
+      return null;
+    }
+    final Database db = await DatabaseApp.database;
+
     final List<Map<String, dynamic>> maps = await db.query('tags');
 
     // Convert the List<Map<String, dynamic> into a List<Tag>.
@@ -61,8 +78,8 @@ class TagDAO {
         maps[i]['tag_id'],
         maps[i]['title'],
         maps[i]['color'],
-        maps[i]['created_time'],
-        maps[i]['modified_time'],
+        DateTime.parse(maps[i]['created_time']),
+        DateTime.parse(maps[i]['modified_time']),
       );
     });
   }
