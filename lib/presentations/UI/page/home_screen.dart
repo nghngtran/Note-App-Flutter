@@ -4,7 +4,9 @@ import 'package:note_app/presentations/UI/custom_widget/custom_list_notes.dart';
 
 import 'package:note_app/presentations/UI/custom_widget/custom_note_card.dart';
 import 'package:note_app/presentations/UI/custom_widget/custom_type_tag.dart';
+import 'package:note_app/presentations/UI/page/create_note.dart';
 import 'package:note_app/presentations/UI/page/image_pick.dart';
+import 'package:note_app/utils/database/model/noteItem.dart';
 import 'package:page_transition/page_transition.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -20,6 +22,7 @@ class HomeScreenState extends State<HomeScreen> {
   TextEditingController _searchQuery;
   List<Note> listNotes = List<Note>();
   bool visible = true;
+  List<NoteItem> listNote = List<NoteItem>();
   ScrollController mainController = ScrollController();
   void initState() {
     super.initState();
@@ -117,9 +120,9 @@ class HomeScreenState extends State<HomeScreen> {
     return Scaffold(
         backgroundColor: Colors.white,
         resizeToAvoidBottomPadding: false,
-        floatingActionButton: FloatingActionButton(backgroundColor: Colors.black,
+        floatingActionButton: FloatingActionButton(heroTag: "btnAdd",backgroundColor: Colors.black,
             child: Icon(Icons.add, size: 18), onPressed: () {
-          Navigator.push(context, PageTransition(type: PageTransitionType.downToUp,child:PickImage()));
+          Navigator.push(context, PageTransition(type: PageTransitionType.downToUp,child:CreateNote(listNote)));
             }),
         appBar: AppBar(
           backgroundColor: Color.fromRGBO(255,209,16,1.0),
@@ -139,7 +142,6 @@ class HomeScreenState extends State<HomeScreen> {
         TagBar(mainController),
         SingleChildScrollView(
             child:
-
            Container( width: MediaQuery.of(context).size.width,
                height: MediaQuery.of(context).size.height,
                child: Stack( children:<Widget>[NoteGrid(listNotes)]),

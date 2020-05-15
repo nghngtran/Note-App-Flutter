@@ -76,14 +76,18 @@ class CreateTag extends StatelessWidget{
                     .textTheme
                     .subhead), onPressed: (){
 //                  Tag _tag = Tag(name: textController.text,color: Colors.purple.toString());
-                  Tag _tag = Tag.withFullInfo("123","Homework","ABD",DateTime.now(),DateTime.now());
+                  Tag _tag = Tag.withFullInfo("123",textController.toString(),"ABCD",DateTime.now(),DateTime.now());
                   DatabaseApp db  = DatabaseApp();
                   Future<Database> create  = db.getDatabase();
                   TagDAO _tagDAO = TagDAO(create);
                   _tagDAO.insertTag(_tag);
 
-                  Future<List<Tag>> _tag1 = _tagDAO.getTags();
-                  print(_tag1);
+                  Future<List<Tag>> _listTag = _tagDAO.getTags();
+                  _listTag.then((list) =>{
+                    list.forEach((tag) => print(
+                  tag.id+ " " + tag.title
+                  )
+                    )});
                 },shape: RoundedRectangleBorder(
                     borderRadius: new BorderRadius.circular(5),
                     side: BorderSide(color: Colors.blue)

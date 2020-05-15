@@ -12,6 +12,9 @@ class Tag extends TimeUtils {
     //this.id = "tag"+ ((++order) as String);
     this.title = "New Tag";
   }
+  String toString() {
+    return title;
+  }
 
   Tag.withFullInfo(this.id, this.title, this.color
       , DateTime created_time,

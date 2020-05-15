@@ -25,7 +25,7 @@ class DatabaseApp {
       onCreate: (db, version) async {
         //await db.execute(CREATE_TABLE_NOTE);
         //await db.execute(CREATE_TABLE_NOTE_ITEM);
-        await db.execute(DROP_TABLE_TAG);
+//        await db.execute(DROP_TABLE_TAG);
         await db.execute(CREATE_TABLE_TAG);
       },
       // Set the version. This executes the onCreate function and provides a

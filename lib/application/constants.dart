@@ -4,6 +4,7 @@ class RoutePaths {
   static const String Home = '/';
   static const String Create_tag = 'create_tag';
   static const String Pick_image = 'pick_image';
+  static const String Create_note = 'create_note';
 }
 class Font {
   static const String Name = "SFProDisplay";
