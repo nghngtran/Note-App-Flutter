@@ -4,12 +4,12 @@ class Tag extends TimeUtils {
   static int order = 0;
 
   //@primaryKey
-  final String id;
+  String id;
   String title;
   String color;
 
-  Tag(this.id) : super() {
-    //this.id = "tag"+ ((++order) as String);
+  Tag() : super() {
+    this.id = "tag"+ ((++order).toString());
     this.title = "New Tag";
   }
 
@@ -19,15 +19,20 @@ class Tag extends TimeUtils {
     this.created_time = created_time;
     this.modified_time = modified_time;
   }
-  Tag.withTitle(String title, this.id) {
-    Tag(id);
+  Tag.withTitle(String title, this.id):super() {
+    this.id = "tag"+ ((++order).toString());
     this.title = title;
   }
+
   String toString(){
-    return "id:"+this.id+" title:"+this.title+" created:"+this.created_time.toString()+" modified:"+this.modified_time.toString();
+    return id.toString()+"  |  "+
+        title.toString()+"  |  "+
+        color.toString()+"  |  "+
+        created_time.toString()+"  |  "+
+        modified_time.toString();
   }
   Map<String, dynamic> toMap() {
-    var formatter = new DateFormat('y-MM-d HH:mm:ss.sss');
+    var formatter = TimeUtils.formatter;
     return {
       'tag_id': id,
       'title': title,

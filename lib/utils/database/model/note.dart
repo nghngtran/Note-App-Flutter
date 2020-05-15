@@ -1,36 +1,49 @@
-import 'package:intl/intl.dart';
 import 'package:note_app/utils/database/model/TimeUtils.dart';
 
 import 'noteItem.dart';
 import 'tag.dart';
 
-//@entity
-class Note extends TimeUtils {
+class Notes extends TimeUtils {
   static int order = 0;
 
   //@primaryKey
-  final String id;
+  String id;
   String title;
   List<Tag> tags;
   List<NoteItem> contents;
   List<String> history;
 
   //Constructor
-  Note(this.id) : super() {
-    //this.id = "note"+ ((++order) as String);
+  Notes() : super() {
+    this.id = "note"+ ((++order).toString());
     this.title = "New Note";
     this.tags = new List<Tag>();
+    this.contents = new List<NoteItem>();
     this.history = new List<String>();
-    this.history.add(DateFormat('yyyy-MM-dd – kk:mm').format(DateTime.now()));
+    this.history.add(TimeUtils.formatter.format(DateTime.now()));
   }
-
-  Note.withTitle(String title, this.id) {
-    Note(id);
+  Notes.withFullInfo(this.id,this.title,DateTime created_time,DateTime modified_time){
+    this.tags = new List<Tag>();
+    this.contents = new List<NoteItem>();
+    this.created_time = created_time;
+    this.modified_time = modified_time;
+  }
+  Notes.withTitle(String title) {
+    this.id = "note"+ ((++order).toString());
+    this.tags = new List<Tag>();
+    this.contents = new List<NoteItem>();
+    this.history = new List<String>();
+    this.history.add(TimeUtils.formatter.format(DateTime.now()));
     this.title = title;
   }
 
-  Note.withTag(Tag tag, this.id) {
-    Note(id);
+  Notes.withTag(Tag tag):super() {
+    this.id = "note"+ ((++order).toString());
+    this.title = "New Note";
+    this.tags = new List<Tag>();
+    this.contents = new List<NoteItem>();
+    this.history = new List<String>();
+    this.history.add(TimeUtils.formatter.format(DateTime.now()));
     this.tags.add(tag);
   }
 
@@ -47,11 +60,15 @@ class Note extends TimeUtils {
     this.tags.addAll(tags);
     //this.tags = this.tags.toSet().toList();
   }
-
+  void addTag(Tag tag){
+    this.tags.add(tag);
+  }
   void removeTag(List<Tag> tags) {
     tags.forEach((element) => this.tags.remove(element));
   }
-
+  void setNoteItem(List<NoteItem> noteItems){
+    this.contents.addAll(noteItems);
+  }
   void addNoteItem(NoteItem noteItem) {
     this.contents.add(noteItem);
   }
@@ -64,13 +81,21 @@ class Note extends TimeUtils {
     return this.contents[index];
   }
 
-  Map<String, dynamic> toMap(Tag tag) {
+  String toString(){
+    return id+"  |  "+
+    title+"  |  "+
+    created_time.toString()+"  |  "+
+    modified_time.toString();
+  }
+
+
+  Map<String, dynamic> toMap() {
+    var formatter = TimeUtils.formatter;
     return {
       'note_id': id,
       'title': title,
-      'tag_id': tag.id,
-      'created_time': created_time,
-      'modified_time': modified_time
+      'created_time': formatter.format(created_time),
+      'modified_time': formatter.format(modified_time)
     };
   }
 }

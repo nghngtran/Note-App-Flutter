@@ -6,18 +6,17 @@ class NoteItem extends TimeUtils {
   static int order = 0;
 
   //@primaryKey
-  final String id;
-  final String note_id;
+  String id;
   String content;
-  final NoteItemType type;
+  String type;
   String textColor;
   String bgColor;
 
-  NoteItem(this.id, this.note_id, this.type) : super();
+  NoteItem(this.type) : super() {
+    this.id = "noteItem" + ((++order).toString());
+  }
 
-  NoteItem.withFullInfo(
-      this.id,
-      this.note_id,
+  NoteItem.withFullInfo(this.id,
       this.type,
       this.content,
       this.textColor,
@@ -41,7 +40,18 @@ class NoteItem extends TimeUtils {
     this.bgColor = color;
   }
 
-  Map<String, dynamic> toMap() {
+  String toString() {
+    return id.toString() + "  |  " +
+        type.toString() +" | "+
+        content.toString() + "  |  " +
+        bgColor.toString() + "  |  " +
+        textColor.toString() + "  |  " +
+        created_time.toString() + "  |  " +
+        modified_time.toString();
+  }
+
+  Map<String, dynamic> toMap(String note_id) {
+    var formatter = TimeUtils.formatter;
     return {
       'noteItem_id': id,
       'note_id': note_id,
@@ -49,8 +59,21 @@ class NoteItem extends TimeUtils {
       'content': content,
       'textColor': textColor,
       'bgColor': bgColor,
-      'created_time': created_time,
-      'modified_time': modified_time
+      'created_time': formatter.format(created_time),
+      'modified_time': formatter.format(modified_time)
+    };
+  }
+
+  Map<String, dynamic> toMapWithOutNoteID() {
+    var formatter = TimeUtils.formatter;
+    return {
+      'noteItem_id': id,
+      'type': type,
+      'content': content,
+      'textColor': textColor,
+      'bgColor': bgColor,
+      'created_time': formatter.format(created_time),
+      'modified_time': formatter.format(modified_time)
     };
   }
 }
