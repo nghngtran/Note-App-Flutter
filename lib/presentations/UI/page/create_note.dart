@@ -6,6 +6,7 @@ import 'package:note_app/presentations/UI/custom_widget/choose_title.dart';
 import 'package:note_app/presentations/UI/custom_widget/custom_text_style.dart';
 import 'package:note_app/presentations/UI/page/create_tag.dart';
 import 'package:note_app/presentations/UI/page/customPaint.dart';
+import 'package:note_app/presentations/UI/page/home_screen.dart';
 import 'package:note_app/utils/database/dao/note_dao.dart';
 import 'package:note_app/utils/database/model/note.dart';
 import 'package:note_app/utils/database/model/noteItem.dart';
@@ -17,9 +18,7 @@ class CreateNote extends StatefulWidget {
 }
 
 class CreateNoteState extends State<CreateNote> {
-    bool _isSearching = false;
-    String searchQuery = "Search for a word ...";
-    TextEditingController _searchQuery;
+
     bool visible = true;
     ScrollController mainController = ScrollController();
     TextEditingController txtController;
@@ -27,78 +26,38 @@ class CreateNoteState extends State<CreateNote> {
     void initState() {
       super.initState();
 
-      _searchQuery = new TextEditingController();
     }
-
-    void updateSearchQuery(String newQuery) {
-      setState(() {
-        searchQuery = newQuery;
-      });
-    }
-
-    void _clearSearchQuery() {
-      setState(() {
-        _searchQuery.clear();
-        updateSearchQuery("Search for a word");
-      });
-    }
-
-    void _stopSearching() {
-      _clearSearchQuery();
-
-      setState(() {
-        _isSearching = false;
-      });
-    }
-
-    void _startSearch() {
-      ModalRoute.of(context).addLocalHistoryEntry(
-          new LocalHistoryEntry(onRemove: _stopSearching));
-
-      setState(() {
-        _isSearching = true;
-      });
-    }
-
-    Widget _buildSearchField() {
-      return TextField(
-        controller: _searchQuery,
-        autofocus: true,
-        decoration: const InputDecoration(
-          hintText: 'Search...',
-          border: InputBorder.none,
-          hintStyle: TextStyle(color: Colors.black45),
-        ),
-        style: const TextStyle(color: Colors.black, fontSize: 18.0),
-        onChanged: updateSearchQuery,
+    Future<void> _handleClickMe() async {
+      return showDialog<void>(
+context: context,
+        barrierDismissible: false, // user must tap button!
+        builder: (BuildContext context) {
+          return CupertinoAlertDialog(
+            title: Text('Save your changes to this note ?'),
+            content: Text('Your changes will be canceled, press "Cancel" to continue or "Don\'t save" to exit. '),
+            actions: <Widget>[
+              CupertinoDialogAction(
+                child: Text('Don\'t save',style:Theme.of(context)
+                    .textTheme
+                    .headline7
+                    .copyWith(color: Colors.black.withOpacity(0.2),fontWeight: Font.SemiBold)),
+                onPressed: () {
+                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => HomeScreen()));
+                },
+              ),
+              CupertinoDialogAction(
+                child: Text('Continue',style:Theme.of(context)
+              .textTheme
+              .headline7
+              .copyWith(color: Colors.blue,fontWeight: Font.SemiBold)),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
       );
-    }
-
-    List<Widget> _buildActions() {
-      if (_isSearching) {
-        return <Widget>[
-          IconButton(
-            color: Colors.black,
-            icon: const Icon(Icons.clear, size: 24),
-            onPressed: () {
-              if (_searchQuery == null || _searchQuery.text.isEmpty) {
-                Navigator.pop(context);
-                return;
-              }
-              _clearSearchQuery();
-            },
-          ),
-        ];
-      }
-
-      return <Widget>[
-        IconButton(
-          onPressed: _startSearch,
-          icon: Icon(Icons.search),
-          iconSize: 24,
-          color: Colors.black,
-        )
-      ];
     }
 
     Widget build(BuildContext context) {
@@ -112,16 +71,13 @@ class CreateNoteState extends State<CreateNote> {
           floatingActionButton:
           FancyFab(widget.note),
           appBar: AppBar(
+              title: Text('Create new note',style:TextStyle(color: Colors.black)),
             backgroundColor: Color.fromRGBO(255, 209, 16, 1.0),
-            title: _isSearching ? _buildSearchField() : null,
-            actions: _buildActions(),
-            leading: _isSearching
-                ? const BackButton(color: Colors.black)
-                : IconButton(
-                    color: Colors.black,
-                    icon: Icon(Icons.menu, size: 24),
-                    onPressed: () {},
-                  ),
+            leading: BackButton(color: Colors.black,onPressed: (){
+              _handleClickMe();
+
+            },)
+
           ),
           body: Column(crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[

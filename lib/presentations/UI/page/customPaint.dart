@@ -101,10 +101,14 @@ class _CustomPaintPageState extends State< CustomPaintPage> {
           actions: actions,
           bottom: PreferredSize(
             child: DrawBar(_controller),
-            preferredSize: Size(MediaQuery.of(context).size.width, 30.0),
+            preferredSize: Size(MediaQuery.of(context).size.width, 30),
           )),
       body: Center(
-          child: AspectRatio(aspectRatio: 1.0, child: Painter(_controller))),
+          child: Container(width: MediaQuery.of(context).size.width,height: MediaQuery.of(context).size.height/100*80,
+    decoration: BoxDecoration(color:Colors.yellow.withAlpha(20),
+    border: Border.all(width: 1),
+    borderRadius: BorderRadius.all(Radius.circular(5))),
+              child:AspectRatio(aspectRatio: 1.0, child: Painter(_controller)))),
     );
   }
 }
