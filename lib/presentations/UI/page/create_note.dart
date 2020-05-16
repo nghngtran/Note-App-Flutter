@@ -5,6 +5,7 @@ import 'package:note_app/presentations/UI/custom_widget/FAB.dart';
 import 'package:note_app/presentations/UI/custom_widget/choose_title.dart';
 import 'package:note_app/presentations/UI/custom_widget/custom_text_style.dart';
 import 'package:note_app/presentations/UI/page/create_tag.dart';
+import 'package:note_app/presentations/UI/page/customPaint.dart';
 import 'package:note_app/utils/database/dao/note_dao.dart';
 import 'package:note_app/utils/database/model/note.dart';
 import 'package:note_app/utils/database/model/noteItem.dart';
@@ -227,29 +228,70 @@ class BlockText extends State<ListNoteItems> {
     else{
     return ListView.builder(
         itemCount: widget.note.contents.length, itemBuilder: (context, index) {
-//      final item = widget.listNote[index];
-      return Container(height: h * 25,
-          margin: EdgeInsets.fromLTRB(w * 4, h * 2, w * 2, h),
-          padding: EdgeInsets.fromLTRB(w, h, w, h),
-          decoration: BoxDecoration(
-              border: Border.all(width: 1.5, color: Colors.black),
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-              color: Colors.greenAccent),
-          child: TextFormField(
-            maxLength: 1000,
-            maxLines: 50,
-            controller: txtController,
-            style: TextStyle(
-                fontSize: 17, fontStyle: FontStyle.normal, color: Colors.black),
-            validator: (value) {
-              if (value.isEmpty) {
-                return 'Pls enter some text';
-              }
+      final item = widget.note.contents[index];
+      if (item.type == "Text")
+      {
+        return
+//          Wrap(direction: Axis.vertical,children: <Widget>[
+        Container(height: h*25,
+            margin: EdgeInsets.fromLTRB(w * 4, h * 2, w * 2, h),
+            padding: EdgeInsets.fromLTRB(w, h, w, h),
+            decoration: BoxDecoration(
+                border: Border.all(width: 1.5, color: Colors.black),
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+                color: Colors.greenAccent),
+            child: TextFormField(
+              maxLength: 1000,
+              maxLines: 50,
+              controller: txtController,
+              style: TextStyle(
+                  fontSize: 17,
+                  fontStyle: FontStyle.normal,
+                  color: Colors.black),
+              validator: (value) {
+                if (value.isEmpty) {
+//                  return 'Pls enter some text';
+                }
 //              widget.listNote.add(NoteItem.s)
-              return value;
-            },
-          )
-      );
+//                return value;
+              },
+            )
+        );
+
+}
+
+      else if (item.type == "Image")
+        {
+          return Container(height: w*100,
+          margin: EdgeInsets.fromLTRB(w * 4, h * 2, w * 2, h),
+      padding: EdgeInsets.fromLTRB(w, h, w, h),
+      decoration: BoxDecoration(
+      border: Border.all(width: 1.5, color: Colors.black),
+      borderRadius: BorderRadius.all(Radius.circular(10)),
+      color: Colors.white),child:RaisedButton(autofocus: false,onPressed:(){
+                Navigator.of(context).push(MaterialPageRoute(builder: (context) => CustomPaintPage("assets/img.png")));
+              },child:
+          Image.asset("assets/img.png",fit: BoxFit.contain,)));
+        }
+      return Container(height: h * 5,
+      margin: EdgeInsets.fromLTRB(w * 4, h * 2, w * 2, h),
+      padding: EdgeInsets.fromLTRB(w, h, w, h),
+      decoration: BoxDecoration(
+      border: Border.all(width: 1, color: Colors.black),
+      borderRadius: BorderRadius.all(Radius.circular(10)),
+      color: Colors.white),
+          child: Row(mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              Icon(Icons.audiotrack, size: 20,color: Colors.black),
+              SizedBox(width: w*2),
+              Text("Em Gai Mua audio",style:Theme.of(context)
+                  .textTheme
+                  .headline7
+                  .copyWith(
+                  color: Colors.black))
+            ],
+          ));
+
     });
   }}
 }

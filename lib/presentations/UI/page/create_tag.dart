@@ -124,6 +124,7 @@ class CreateTag extends StatelessWidget {
                                         (tag) => print("\t"+tag.toString())),
                                     noteD.contents.forEach((noteItem) =>
                                         print("\t"+noteItem.toString()))
+
                                   })
                             }));
                         //print(_tag1);

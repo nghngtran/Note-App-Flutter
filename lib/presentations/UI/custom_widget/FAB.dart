@@ -26,9 +26,9 @@ class _FancyFabState extends State<FancyFab>
   double _fabHeight = 56.0;
 
 
-  void _addWidget(){
+  void _addWidget(String type){
     setState(() {
-      NoteItem noteItem = new NoteItem("Text");
+      NoteItem noteItem = new NoteItem(type);
       widget.note.contents.add(noteItem);
     });
   }
@@ -85,7 +85,7 @@ class _FancyFabState extends State<FancyFab>
     return Container(
       child: FloatingActionButton(heroTag: "btnAdd",
         onPressed:(){
-          _addWidget();
+          _addWidget("Text");
 //          _secondPage(context,CreateNote(_note));
           print(widget.note.contents.length);
           Navigator.of(context).push(MaterialPageRoute(builder: (context) => CreateNote(widget.note)));
@@ -105,7 +105,10 @@ class _FancyFabState extends State<FancyFab>
   Widget image() {
     return Container(
       child: FloatingActionButton(heroTag: "btnImg",
-        onPressed: null,
+        onPressed: (){
+          _addWidget("Image");
+          Navigator.of(context).push(MaterialPageRoute(builder: (context) => CreateNote(widget.note)));
+    },
         tooltip: 'Image',
         child: Icon(Icons.camera_alt),
       ),
@@ -115,7 +118,10 @@ class _FancyFabState extends State<FancyFab>
   Widget audio() {
     return Container(
       child: FloatingActionButton(heroTag: "btnSound",
-        onPressed: null,
+        onPressed: (){
+          _addWidget("Audio");
+          Navigator.of(context).push(MaterialPageRoute(builder: (context) => CreateNote(widget.note)));
+        },
         tooltip: 'Audio',
         child: Icon(Icons.audiotrack),
       ),

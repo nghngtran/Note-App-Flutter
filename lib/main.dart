@@ -31,11 +31,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:note_app/application/constants.dart';
 import 'package:note_app/application/router.dart';
-import 'package:note_app/presentations/UI/page/create_note.dart';
-import 'package:note_app/presentations/UI/page/create_tag.dart';
+
 import 'package:note_app/presentations/UI/page/home_screen.dart';
-import 'package:note_app/presentations/UI/page/image_pick.dart';
-import 'package:note_app/presentations/UI/page/painter.dart';
+
 import 'package:note_app/utils/database/database.dart';
 
 
@@ -55,6 +53,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    DatabaseApp db = new DatabaseApp();
     return MaterialApp(
       title: "Note App",
       debugShowCheckedModeBanner: false,
@@ -62,7 +61,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(),
 //      initialRoute: RoutePaths.Pick_image,
       onGenerateRoute: Router.generateRoute,
-      home: HomeScreen(),
+      home: TestWidget(),
     );
   }
 }
@@ -70,7 +69,7 @@ class MyApp extends StatelessWidget {
 class TestWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    DatabaseApp db = new DatabaseApp();
+
     return HomeScreen();
   }
 }
