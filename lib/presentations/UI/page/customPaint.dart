@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:note_app/application/app_localizations.dart';
 import 'package:note_app/application/constants.dart';
 import 'package:painter2/painter2.dart';
 
@@ -85,7 +86,9 @@ class _CustomPaintPageState extends State< CustomPaintPage> {
                   .push(MaterialPageRoute(builder: (BuildContext context) {
                 return Scaffold(
                   appBar: AppBar(
-                    title: Text('View your image'),
+                    title: Text(AppLocalizations.of(context)
+                        .translate('view_your_img')
+                    ),
                   ),
                   body: Container(
                     child: Image.memory(bytes),
@@ -97,7 +100,9 @@ class _CustomPaintPageState extends State< CustomPaintPage> {
     }
     return Scaffold(
       appBar: AppBar(
-          title: Text('Edit image'),
+          title: Text(AppLocalizations.of(context)
+              .translate('edit_img')
+          ),
           actions: actions,
           bottom: PreferredSize(
             child: DrawBar(_controller),
@@ -172,7 +177,9 @@ class _ColorPickerButtonState extends State<ColorPickerButton> {
         builder: (BuildContext context) {
           return Scaffold(
               appBar: AppBar(
-                title: Text('Pick color'),
+                title: Text(AppLocalizations.of(context)
+                    .translate('pick_color')
+                ),
               ),
               body: Container(
                   alignment: Alignment.center,

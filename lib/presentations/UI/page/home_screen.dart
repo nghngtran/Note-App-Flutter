@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:note_app/application/app_localizations.dart';
 import 'package:note_app/presentations/UI/custom_widget/custom_list_notes.dart';
 
 import 'package:note_app/presentations/UI/custom_widget/custom_note_card.dart';
@@ -41,7 +42,9 @@ class HomeScreenState extends State<HomeScreen> {
   void _clearSearchQuery() {
     setState(() {
       _searchQuery.clear();
-      updateSearchQuery("Search for a word");
+      updateSearchQuery(AppLocalizations.of(context)
+          .translate('search')
+      );
     });
   }
 

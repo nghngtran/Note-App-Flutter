@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:note_app/application/app_localizations.dart';
 import 'package:note_app/application/constants.dart';
 import 'package:note_app/presentations/UI/custom_widget/FAB.dart';
 import 'package:note_app/presentations/UI/custom_widget/choose_title.dart';
@@ -33,20 +34,27 @@ context: context,
         barrierDismissible: false, // user must tap button!
         builder: (BuildContext context) {
           return CupertinoAlertDialog(
-            title: Text('Save your changes to this note ?'),
-            content: Text('Your changes will be canceled, press "Cancel" to continue or "Don\'t save" to exit. '),
+              title: Text(AppLocalizations.of(context)
+                  .translate('warning_title')
+              ),
+            content: Text(AppLocalizations.of(context)
+                .translate('warning_content')),
             actions: <Widget>[
               CupertinoDialogAction(
-                child: Text('Don\'t save',style:Theme.of(context)
+                child: Text(AppLocalizations.of(context)
+                    .translate('don\'t_save')
+                    ,style:Theme.of(context)
                     .textTheme
                     .headline7
-                    .copyWith(color: Colors.black.withOpacity(0.2),fontWeight: Font.SemiBold)),
+                    .copyWith(color: Colors.black,fontWeight: Font.SemiBold)),
                 onPressed: () {
                   Navigator.of(context).push(MaterialPageRoute(builder: (context) => HomeScreen()));
                 },
               ),
               CupertinoDialogAction(
-                child: Text('Continue',style:Theme.of(context)
+                child: Text(AppLocalizations.of(context)
+                    .translate('continue')
+                    ,style:Theme.of(context)
               .textTheme
               .headline7
               .copyWith(color: Colors.blue,fontWeight: Font.SemiBold)),
@@ -71,7 +79,9 @@ context: context,
           floatingActionButton:
           FancyFab(widget.note),
           appBar: AppBar(
-              title: Text('Create new note',style:TextStyle(color: Colors.black)),
+              title: Text(AppLocalizations.of(context)
+                  .translate('create_note')
+                  ,style:TextStyle(color: Colors.black)),
             backgroundColor: Color.fromRGBO(255, 209, 16, 1.0),
             leading: BackButton(color: Colors.black,onPressed: (){
               _handleClickMe();
@@ -95,7 +105,9 @@ context: context,
                           children: <Widget>[
                             SizedBox(width: w*4),
                             Text(
-                              "New untitled note",
+                              AppLocalizations.of(context)
+                                  .translate('new_untitled_note')
+                              ,
                               style: Theme.of(context)
                                   .textTheme
                                   .title
@@ -111,7 +123,9 @@ context: context,
                         NoteDAO.insertNote(widget.note);
                       },
                     child: Text(
-                      "Save",
+                      AppLocalizations.of(context)
+                          .translate('save')
+                      ,
                       style: Theme.of(context)
                           .textTheme
                           .title
@@ -142,8 +156,10 @@ context: context,
                               ),
                               SizedBox(width: w),
                               Text(
-                                "Add tag",
-                                style: Theme.of(context)
+                                  AppLocalizations.of(context)
+                                      .translate('add_tag')
+,
+                                  style: Theme.of(context)
                                     .textTheme
                                     .headline7
                                     .copyWith(

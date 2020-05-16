@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:note_app/application/app_localizations.dart';
 import 'package:note_app/application/constants.dart';
 import 'package:note_app/utils/database/dao/note_dao.dart';
 import 'package:note_app/utils/database/dao/tag_dao.dart';
@@ -32,7 +33,9 @@ class CreateTag extends StatelessWidget {
             EdgeInsets.only(top: MediaQuery.of(context).size.height / 100 * 2),
         child: Column(
           children: <Widget>[
-            Text("Create new tag",
+            Text(AppLocalizations.of(context)
+                .translate('create_tag')
+                ,
                 style: Theme.of(context)
                     .textTheme
                     .title
@@ -76,7 +79,9 @@ class CreateTag extends StatelessWidget {
                     child: FlatButton(
                       color: Colors.redAccent,
                       textColor: Colors.black,
-                      child: Text("Cancel",
+                      child: Text(AppLocalizations.of(context)
+                          .translate('cancel')
+                          ,
                           style: Theme.of(context).textTheme.subhead),
                       onPressed: () {
                         Navigator.of(context).pop();
@@ -91,7 +96,9 @@ class CreateTag extends StatelessWidget {
                     child: FlatButton(
                       color: Colors.blue,
                       textColor: Colors.black,
-                      child: Text("Save",
+                      child: Text(AppLocalizations.of(context)
+                          .translate('save')
+                          ,
                           style: Theme.of(context).textTheme.subhead),
                       onPressed: () {
 //                  Tag _tag = Tag(name: textController.text,color: Colors.purple.toString());

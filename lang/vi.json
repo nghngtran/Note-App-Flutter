@@ -1,0 +1,17 @@
+{
+  "search": "Tìm kiếm",
+  "create_note": "Tạo ghi chú",
+  "edit": "Sửa",
+  "save": "Lưu",
+  "add_tag": "Thêm nhãn",
+  "create_tag": "Tạo nhãn",
+  "new_untitled_note": "Tiêu đề ghi chú",
+  "edit_img": "Chỉnh sửa",
+  "pick_color": "Chọn màu",
+  "view_your_img": "Xem trước",
+  "don't_save": "Thoát",
+  "continue": "Tiếp tục",
+  "cancel": "Hủy",
+  "warning_title": "Lưu thay đổi ?",
+  "warning_content": "Thay đổi sẽ bị hủy, chọn 'Thoát' để hủy lưu thay đổi hoặc 'Tiếp tục' để hoàn tất tạo ghi chú. "
+}

@@ -1,0 +1,17 @@
+{
+  "search": "Search for a word",
+  "create_note": "Create note",
+  "edit": "Edit",
+  "save": "Save",
+  "add_tag": "Add tag",
+  "create_tag": "Create tag",
+  "new_untitled_note": "New untitled note",
+  "edit_img": "Edit image",
+  "pick_color": "Pick color",
+  "view_your_img": "View your image",
+  "don't_save": "Don't save",
+  "continue": "Continue",
+  "cancel": "Cancel",
+  "warning_title": "Save your changes to this note ?",
+  "warning_content": "Your changes will be canceled, press \"Cancel\" to continue or \"Don\\'t save\" to exit. "
+}
