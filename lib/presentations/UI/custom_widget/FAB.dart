@@ -1,16 +1,16 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:note_app/presentations/UI/page/create_note.dart';
+import 'package:note_app/presentations/UI/page/image_pick.dart';
 import 'package:note_app/utils/database/model/note.dart';
 import 'package:note_app/utils/database/model/noteItem.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:provider/provider.dart';
 
 class FancyFab extends StatefulWidget {
-//  final Function() onPressed;
-//  final String tooltip;
-//   Icon icon = Icon(Icons.add);
-  final Notes note;
-//  FancyFab({this.onPressed, this.tooltip, this.icon});
-  FancyFab(Notes _note):note=_note;
+
+  Notes note;
+  FancyFab(Notes _note): note= _note;
   @override
   _FancyFabState createState() => _FancyFabState();
 }
@@ -24,16 +24,11 @@ class _FancyFabState extends State<FancyFab>
   Animation<double> _translateButton;
   Curve _curve = Curves.easeOut;
   double _fabHeight = 56.0;
+  bool isVisible;
 
-
-  void _addWidget(String type){
-    setState(() {
-      NoteItem noteItem = new NoteItem(type);
-      widget.note.contents.add(noteItem);
-    });
-  }
   @override
   initState() {
+
     _animationController =
     AnimationController(vsync: this, duration: Duration(milliseconds: 500))
       ..addListener(() {
@@ -84,30 +79,42 @@ class _FancyFabState extends State<FancyFab>
   Widget text() {
     return Container(
       child: FloatingActionButton(heroTag: "btnAdd",
-        onPressed:(){
-          _addWidget("Text");
-//          _secondPage(context,CreateNote(_note));
-          print(widget.note.contents.length);
-          Navigator.of(context).push(MaterialPageRoute(builder: (context) => CreateNote(widget.note)));
+        onPressed:() {
+          final NoteItem noteItem = NoteItem("Text");
+          Provider.of<Notes>(context,listen: true).addNoteItem(noteItem);
+    widget.note.addNoteItem(noteItem);
+        animate();
         },
         tooltip: 'Text',
         child: Icon(Icons.create),
-      ),
+      ) ,
     );
   }
-  _secondPage(BuildContext context, Widget page) async {
-    final dataFromSecondPage = await Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => page),
-    ) as Notes;
 
-  }
   Widget image() {
     return Container(
-      child: FloatingActionButton(heroTag: "btnImg",
+      child:   FloatingActionButton(heroTag: "btnImg",
         onPressed: (){
-          _addWidget("Image");
-          Navigator.of(context).push(MaterialPageRoute(builder: (context) => CreateNote(widget.note)));
+          final NoteItem noteItem = NoteItem("Image");
+          Provider.of<Notes>(context,listen: true).addNoteItem(noteItem);
+//          CupertinoAlertDialog(
+//            title: Text('Get image from ?'),
+//            actions: <Widget>[
+//              CupertinoDialogAction(
+//                child: Text('Camera'),
+//                onPressed: () {
+//                  Navigator.of(context).pop();
+//                },
+//              ),
+//              CupertinoDialogAction(
+//                child: Text('Gallery'),
+//                onPressed: () {
+//                PickImage();
+//                },
+//              ),
+//            ],
+//          );
+          animate();
     },
         tooltip: 'Image',
         child: Icon(Icons.camera_alt),
@@ -119,8 +126,11 @@ class _FancyFabState extends State<FancyFab>
     return Container(
       child: FloatingActionButton(heroTag: "btnSound",
         onPressed: (){
-          _addWidget("Audio");
-          Navigator.of(context).push(MaterialPageRoute(builder: (context) => CreateNote(widget.note)));
+
+          final NoteItem noteItem = NoteItem("Audio");
+
+          Provider.of<Notes>(context,listen: true).addNoteItem(noteItem);
+          animate();
         },
         tooltip: 'Audio',
         child: Icon(Icons.audiotrack),
@@ -144,6 +154,7 @@ class _FancyFabState extends State<FancyFab>
 
   @override
   Widget build(BuildContext context) {
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.end,
       children: <Widget>[

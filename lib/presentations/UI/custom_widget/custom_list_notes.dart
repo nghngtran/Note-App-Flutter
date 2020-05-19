@@ -54,13 +54,13 @@ Widget noteGridBuilder(BuildContext context, List<NoteCardModel> indexes) {
             children: secondColumnFirst ? columnTwo : columnOne,
           ),
         ),
-        Container(
+        Expanded(child:Container(
           width: MediaQuery.of(context).size.width / 2 - 4,
           child: Column(
             children: secondColumnFirst ? columnOne : columnTwo,
           ),
         ),
-      ],
+        )],
     );
   } else
     return null;

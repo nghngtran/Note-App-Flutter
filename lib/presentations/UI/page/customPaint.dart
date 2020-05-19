@@ -1,18 +1,23 @@
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:note_app/application/constants.dart';
+import 'package:note_app/presentations/UI/page/create_note.dart';
+import 'package:note_app/utils/database/model/note.dart';
 import 'package:painter2/painter2.dart';
+import 'package:provider/provider.dart';
 
 
 
 
 class CustomPaintPage extends StatefulWidget {
 
-  String path;
-  CustomPaintPage(String _path): path =_path;
+  Image path;
+  CustomPaintPage(Image _path): path =_path;
   @override
   _CustomPaintPageState createState() => new _CustomPaintPageState();
 }
@@ -32,8 +37,7 @@ class _CustomPaintPageState extends State< CustomPaintPage> {
     PainterController controller = new PainterController();
     controller.thickness = 5.0;
 //    _controller.backgroundColor = Colors.transparent;
-    controller.backgroundImage = Image.asset(
-        widget.path);
+    controller.backgroundImage = widget.path;
     super.initState();
     return controller;
   }
@@ -85,6 +89,20 @@ class _CustomPaintPageState extends State< CustomPaintPage> {
                   .push(MaterialPageRoute(builder: (BuildContext context) {
                 return Scaffold(
                   appBar: AppBar(
+                    backgroundColor: Color.fromRGBO(255,209,16,1.0),
+actions: <Widget>[
+    IconButton(
+    icon: Icon(Icons.check),
+    onPressed: ()  {
+//      Provider.of<Notes>(context,listen: true).addNoteItem(noteItem);
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (BuildContext context) {
+          return CreateNote();
+    }));
+
+    })
+],
+                    elevation: 0.0,
                     title: Text('View your image'),
                   ),
                   body: Container(
@@ -97,6 +115,9 @@ class _CustomPaintPageState extends State< CustomPaintPage> {
     }
     return Scaffold(
       appBar: AppBar(
+          backgroundColor: Color.fromRGBO(255,209,16,1.0),
+//          backgroundColor: Colors.transparent,
+          elevation: 0.0,
           title: Text('Edit image'),
           actions: actions,
           bottom: PreferredSize(
@@ -172,6 +193,10 @@ class _ColorPickerButtonState extends State<ColorPickerButton> {
         builder: (BuildContext context) {
           return Scaffold(
               appBar: AppBar(
+leading:BackButton(),
+                backgroundColor: Color.fromRGBO(255,209,16,1.0),
+//          backgroundColor: Colors.transparent,
+                elevation: 0.0,
                 title: Text('Pick color'),
               ),
               body: Container(

@@ -33,14 +33,24 @@ import 'package:note_app/application/constants.dart';
 import 'package:note_app/application/router.dart';
 
 import 'package:note_app/presentations/UI/page/home_screen.dart';
+import 'package:note_app/presentations/UI/page/test.dart';
 
 import 'package:note_app/utils/database/database.dart';
+import 'package:note_app/utils/database/model/note.dart';
+import 'package:provider/provider.dart';
 
 
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
+  final originalCheck = Provider.debugCheckInvalidValueType;
+  Provider.debugCheckInvalidValueType = <T>(T value) {
+    if (value is Object) return;
+    originalCheck<T>(value);
+
+  };
   runApp(MyApp());
+
 //  runApp(
 //    DevicePreview(
 //      builder: (context) => MyApp(),
@@ -54,15 +64,16 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     DatabaseApp db = new DatabaseApp();
-    return MaterialApp(
+    return ChangeNotifierProvider(builder:(context) => Notes(),child: MaterialApp(
       title: "Note App",
       debugShowCheckedModeBanner: false,
 
       theme: ThemeData(),
 //      initialRoute: RoutePaths.Pick_image,
       onGenerateRoute: Router.generateRoute,
-      home: TestWidget(),
-    );
+      home:
+      TestWidget(),
+    ) );
   }
 }
 
@@ -70,7 +81,8 @@ class TestWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    return HomeScreen();
+    return
+      HomeScreen();
   }
 }
 

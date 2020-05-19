@@ -8,14 +8,7 @@ import 'package:note_app/utils/database/model/note.dart';
 import 'package:note_app/utils/database/model/noteItem.dart';
 import 'package:note_app/utils/database/model/tag.dart';
 
-//class Tags {
-//  String colorTag;
-//  String nameTag;
-//
-//  Tags({@required String name, @required String color})
-//      : nameTag = name,
-//        colorTag = color;
-//}
+
 
 class CreateTag extends StatelessWidget {
   final textController = TextEditingController();
@@ -40,8 +33,8 @@ class CreateTag extends StatelessWidget {
             SizedBox(height: MediaQuery.of(context).size.height / 100 * 2),
             Row(children: <Widget>[
               SizedBox(width: MediaQuery.of(context).size.width / 100 * 5),
-              Container(
-                  width: MediaQuery.of(context).size.width / 100 * 12,
+              Expanded(
+flex:3,
                   child: DropDownButton()),
               SizedBox(width: MediaQuery.of(context).size.width / 100 * 2),
               Expanded(
@@ -68,13 +61,13 @@ class CreateTag extends StatelessWidget {
               SizedBox(width: MediaQuery.of(context).size.width / 100 * 2),
             ]),
             Expanded(
-                child: Row(
+                child: Row(mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
-                SizedBox(width: MediaQuery.of(context).size.width / 100 * 10),
+//                SizedBox(width: MediaQuery.of(context).size.width / 100 * 10),
                 Expanded(
                     flex: 1,
                     child: FlatButton(
-                      color: Colors.redAccent,
+                      color: Colors.white,
                       textColor: Colors.black,
                       child: Text("Cancel",
                           style: Theme.of(context).textTheme.subhead),
@@ -83,62 +76,43 @@ class CreateTag extends StatelessWidget {
                       },
                       shape: RoundedRectangleBorder(
                           borderRadius: new BorderRadius.circular(5),
-                          side: BorderSide(color: Colors.red)),
+                          side: BorderSide(color: Colors.black,width: 0.5)),
                     )),
-                SizedBox(width: MediaQuery.of(context).size.width / 100 * 5),
                 Expanded(
                     flex: 1,
                     child: FlatButton(
-                      color: Colors.blue,
+                      color: Colors.white,
                       textColor: Colors.black,
                       child: Text("Save",
                           style: Theme.of(context).textTheme.subhead),
                       onPressed: () {
-//                  Tag _tag = Tag(name: textController.text,color: Colors.purple.toString());
+                  Tag _tag =  Tag.withTitle(textController.text,"123");
 
-//                        Tag _other = new Tag();
-//                        TagDAO.insertTag(_other);
-//
-//                        NoteItem textItem = new NoteItem("TEXT");
-//                        textItem.setContent("Day la Text Item");
-//
-//                        Notes simpleNote = new Notes.withTag(_other);
-//                        simpleNote.addNoteItem(textItem);
-//                        NoteDAO.insertNote(simpleNote);
-//
-//                        NoteItem textItem1 = new NoteItem("TEXT");
-//                        textItem1.setContent("Day la Text Item 1");
-//
-//                        Notes simpleNote1 = new Notes.withTag(_other);
-//                        simpleNote1.addNoteItem(textItem1);
-//                        NoteDAO.insertNote(simpleNote1);
-
-
-                        Future<Notes> notedetail;
-                        var listNotes = NoteDAO.getNotes();
-                        listNotes.then((list) => list.forEach((note) => {
-                              print(note.toString()),
-                              notedetail = NoteDAO.getNoteByID(note.id),
-                              notedetail.then((noteD) => {
-                                    noteD.tags.forEach(
-                                        (tag) => print("\t"+tag.toString())),
-                                    noteD.contents.forEach((noteItem) =>
-                                        print("\t"+noteItem.toString()))
-
-                                  })
-                            }));
-                        //print(_tag1);
+                        TagDAO.insertTag(_tag);
+                        print(_tag);
+                  // Future<Notes> notedetail;
+                        //                            var listNotes = NoteDAO.getNotes();
+                        //                            listNotes.then((list) => list.forEach((note) => {
+                        //                                  print(note.toString()),
+                        //                                  notedetail = NoteDAO.getNoteByID(note.id),
+                        //                                  notedetail.then((noteD) => {
+                        //                                        noteD.tags.forEach((tag) =>
+                        //                                            print("\t" + tag.toString())),
+                        //                                        noteD.contents.forEach((noteItem) =>
+                        //                                            print("\t" + noteItem.toString()))
+                        //                                      })
+                        //                                }));
                         Navigator.of(context).pop();
                       },
                       shape: RoundedRectangleBorder(
                           borderRadius: new BorderRadius.circular(5),
-                          side: BorderSide(color: Colors.blue)),
-                    )),
-                SizedBox(width: MediaQuery.of(context).size.width / 100 * 10),
+                          side: BorderSide(color: Colors.black,width: 0.5)),
+                    )
+
+                )])),
               ],
-            )),
-          ],
-        ));
+            ))
+        ;
   }
 }
 
@@ -154,19 +128,19 @@ class _DropDownButtonState extends State<DropDownButton> {
         items: [
           DropdownMenuItem(
               value: Colors.green.toString(),
-              child: Icon(Icons.local_offer, color: Colors.green, size: 22)),
+              child: Icon(Icons.local_offer, color: Colors.green, size:18)),
           DropdownMenuItem(
               value: ColorTheme.blue.toString(),
-              child: Icon(Icons.local_offer, color: Colors.blue, size: 22)),
+              child: Icon(Icons.local_offer, color: Colors.blue, size: 18)),
           DropdownMenuItem(
               value: Colors.purple.toString(),
-              child: Icon(Icons.local_offer, color: Colors.purple, size: 22)),
+              child: Icon(Icons.local_offer, color: Colors.purple, size: 18)),
           DropdownMenuItem(
               value: Colors.pink.toString(),
-              child: Icon(Icons.local_offer, color: Colors.pink, size: 22)),
+              child: Icon(Icons.local_offer, color: Colors.pink, size:18)),
           DropdownMenuItem(
               value: Colors.yellow.toString(),
-              child: Icon(Icons.local_offer, color: Colors.yellow, size: 22)),
+              child: Icon(Icons.local_offer, color: Colors.yellow, size: 18)),
         ],
         onChanged: (value) {
           setState(() {
@@ -174,6 +148,7 @@ class _DropDownButtonState extends State<DropDownButton> {
           });
         },
         value: _value,
+    hint:Text("Pick color")
       );
 
   Widget build(BuildContext context) {
