@@ -1,9 +1,12 @@
+import 'dart:collection';
+
+import 'package:flutter/cupertino.dart';
 import 'package:note_app/utils/database/model/TimeUtils.dart';
 
 import 'noteItem.dart';
 import 'tag.dart';
 
-class Notes extends TimeUtils {
+class Notes extends TimeUtils with ChangeNotifier{
   static int order = 0;
 
   //@primaryKey
@@ -71,10 +74,12 @@ class Notes extends TimeUtils {
   }
   void addNoteItem(NoteItem noteItem) {
     this.contents.add(noteItem);
+    notifyListeners();
   }
 
   void removeNoteItem(NoteItem noteItem) {
     this.contents.remove(noteItem);
+    notifyListeners();
   }
 
   NoteItem getNoteItemAt(index) {
@@ -98,4 +103,6 @@ class Notes extends TimeUtils {
       'modified_time': formatter.format(modified_time)
     };
   }
+  UnmodifiableListView<NoteItem> get allTasks => UnmodifiableListView(this.contents);
+
 }

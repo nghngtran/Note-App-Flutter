@@ -123,10 +123,12 @@ class HomeScreenState extends State<HomeScreen> {
         resizeToAvoidBottomPadding: false,
         floatingActionButton: FloatingActionButton(heroTag: "btnAdd",backgroundColor: Colors.black,
             child: Icon(Icons.add, size: 18), onPressed: () {
-          Navigator.push(context, PageTransition(type: PageTransitionType.downToUp,child:CreateNote(note)));
+          Navigator.push(context, PageTransition(type: PageTransitionType.downToUp,child:CreateNote()));
             }),
         appBar: AppBar(
           backgroundColor: Color.fromRGBO(255,209,16,1.0),
+//          backgroundColor: Colors.transparent,
+          elevation: 0.0,
           title: _isSearching ? _buildSearchField() : null,
           actions: _buildActions(),
           leading: _isSearching

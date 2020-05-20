@@ -60,7 +60,7 @@ class TagBar extends StatefulWidget {
            showDialog(context: context, builder: (BuildContext context) => Dialog(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),child: CreateTag()));
     },child: Icon(Icons.add, size: 20, color: Colors.black), backgroundColor: Colors.white)),
 //      SizedBox (width: MediaQuery.of(context).size.width / 100 * 2),
-      Container(
+      Expanded(child:Container(
         width: MediaQuery.of(context).size.width/100*85,
        height: MediaQuery.of(context).size.height / 100 * 6,
         child: ListView.builder(
@@ -71,7 +71,7 @@ class TagBar extends StatefulWidget {
               final item = listTags[index];
 //            if (listTags.length != 0) ??
               return CustomTag(name: item.nameTag.toString());
-            }))]
+            })))]
     );
   }
 }
