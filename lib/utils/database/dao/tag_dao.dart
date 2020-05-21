@@ -5,6 +5,7 @@ import 'package:note_app/utils/database/model/tag.dart';
 import 'package:sqflite/sqflite.dart';
 
 class TagDAO {
+  //Insert new Tag
   static Future<void> insertTag(Tag tag) async {
     if(DatabaseApp.database == null){
       print("LOG: TagDAO can't start because DatabaseApp not start! please start DatabaseApp");
@@ -18,6 +19,7 @@ class TagDAO {
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }
+  //Update Tag with another Tag with same tag_id
   static Future<void> updateTag(Tag tag) async {
     if(DatabaseApp.database == null){
       print("LOG: TagDAO can't start because DatabaseApp not start! please start DatabaseApp");
@@ -32,6 +34,7 @@ class TagDAO {
       whereArgs: [tag.id],
     );
   }
+  //Delete exist Tag with Tag
   static Future<void> deleteTag(Tag tag) async {
     if(DatabaseApp.database == null){
       print("LOG: TagDAO can't start because DatabaseApp not start! please start DatabaseApp");
@@ -45,6 +48,21 @@ class TagDAO {
       whereArgs: [tag.id],
     );
   }
+  //Delete exist Tag with tag_id
+  static Future<void> deleteTagByID(String tag_id) async {
+    if(DatabaseApp.database == null){
+      print("LOG: TagDAO can't start because DatabaseApp not start! please start DatabaseApp");
+      return null;
+    }
+    final Database db = await DatabaseApp.database;
+
+    await db.delete(
+      'tags',
+      where: "tag_id = ?",
+      whereArgs: [tag_id],
+    );
+  }
+  //Find Tag by tag_id
   static Future<Tag> getTagByID(String tag_id) async {
     if(DatabaseApp.database == null){
       print("LOG: TagDAO can't start because DatabaseApp not start! please start DatabaseApp");
@@ -63,6 +81,7 @@ class TagDAO {
       DateTime.parse(maps[0]['modified_time']),
     );
   }
+  //Get List Tag in Database
   static Future<List<Tag>> getTags() async {
     if(DatabaseApp.database == null){
       print("LOG: TagDAO can't start because DatabaseApp not start! please start DatabaseApp");
