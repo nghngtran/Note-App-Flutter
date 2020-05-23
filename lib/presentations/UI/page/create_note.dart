@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:note_app/application/constants.dart';
@@ -20,13 +22,14 @@ class CreateNote extends StatefulWidget {
 
 class CreateNoteState extends State<CreateNote> {
   ScrollController mainController = ScrollController();
-  static Notes note;
+  var note = new Notes();
   void initState() {
     super.initState();
   }
 
   @override
   void dispose() {
+    mainController.dispose();
     super.dispose();
   }
 
@@ -58,9 +61,9 @@ class CreateNoteState extends State<CreateNote> {
   }
 
   Widget build(BuildContext context) {
-    note = new Notes();
     double w = MediaQuery.of(context).size.width / 100;
     double h = MediaQuery.of(context).size.height / 100;
+    print(note.contents.length);
     return Scaffold(
         backgroundColor: Colors.white,
         resizeToAvoidBottomPadding: false,
@@ -75,124 +78,123 @@ class CreateNoteState extends State<CreateNote> {
                 _handleClickMe();
               },
             )),
-        body: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              SizedBox(height: h * 2),
-              Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    Expanded(
-                        flex: 6,
-                        child: InkWell(
-                            onTap: () {
-                              showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) => Dialog(
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(5)),
-                                      child: ChooseTitle()));
-                            },
-                            child: Container(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: <Widget>[
-                                  SizedBox(width: w * 4),
-                                  Text(
-                                    "New untitled note",
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .subhead
-                                        .copyWith(
-                                            color: Colors.black,
-                                            fontWeight: Font.Regular),
-                                  ),
-                                  SizedBox(width: w * 2),
-                                  Image.asset(
-                                    "assets/edit.png",
-                                    fit: BoxFit.contain,
-                                    width: w * 5,
-                                    height: w * 5,
-                                  )
-                                ],
-                              ),
-                            ))),
-                    Expanded(
-                        child: GestureDetector(
-                      onTap: () {
-                        NoteDAO.insertNote(note);
-                        Future<Notes> notedetail;
-                        var listNotes = NoteDAO.getNotes();
-                        listNotes.then((list) => list.forEach((note) => {
-                              print(note.toString()),
-                              notedetail = NoteDAO.getNoteByID(note.id),
-                              notedetail.then((noteD) => {
-                                    noteD.tags.forEach(
-                                        (tag) => print("\t" + tag.toString())),
-                                    noteD.contents.forEach((noteItem) =>
-                                        print("\t" + noteItem.toString()))
-                                  })
-                            }));
-                        Navigator.of(context).pop();
-                      },
-                      child: Text(
-                        "Save",
-                        style: Theme.of(context).textTheme.title.copyWith(
-                            color: Colors.blue, fontWeight: Font.SemiBold),
-                      ),
-                    ))
-                  ]),
-              Container(
-                  width: w * 25,
-                  height: h * 5,
-                  margin: EdgeInsets.only(
-                      left: 4 * MediaQuery.of(context).size.width / 100,
-                      top: MediaQuery.of(context).size.height / 100 * 2,
-                      bottom: h),
-                  decoration: BoxDecoration(
-                      border: Border.all(color: Colors.black, width: 1),
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(10),
-                      ),
-                      color: Colors.white),
-                  child: GestureDetector(
-                      onTap: () {
-                        showDialog(
-                            context: context,
-                            builder: (BuildContext context) => Dialog(
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(5)),
-                                child: CreateTag()));
-                      },
+        body: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <
+            Widget>[
+          SizedBox(height: h * 2),
+          Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: <
+              Widget>[
+            Expanded(
+                flex: 6,
+                child: InkWell(
+                    onTap: () {
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext context) => Dialog(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(5)),
+                              child: ChooseTitle(note)));
+//                      print(note.title);
+                    },
+                    child: Container(
                       child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: <Widget>[
+                          SizedBox(width: w * 4),
+                          Text(
+                            Provider.of<Notes>(context, listen: true).title,
+                            style: Theme.of(context).textTheme.subhead.copyWith(
+                                color: Colors.black, fontWeight: Font.Regular),
+                          ),
+                          SizedBox(width: w * 2),
+                          Image.asset(
+                            "assets/edit.png",
+                            fit: BoxFit.contain,
+                            width: w * 5,
+                            height: w * 5,
+                          )
+                        ],
+                      ),
+                    ))),
+            Expanded(
+                child: GestureDetector(
+              onTap: () {
+                if (Provider.of<Notes>(context, listen: true).title != null ||
+                    Provider.of<Notes>(context, listen: true).tags.length !=
+                        0) {
+                  note.setTitle(
+                      Provider.of<Notes>(context, listen: true).title);
+                }
+                NoteDAO.insertNote(note);
+                Future<Notes> notedetail;
+                var listNotes = NoteDAO.getNotes();
+                listNotes.then((list) => list.forEach((note) => {
+                      print(note.toString()),
+                      notedetail = NoteDAO.getNoteByID(note.id),
+                      notedetail.then((noteD) => {
+                            noteD.tags
+                                .forEach((tag) => print("\t" + tag.toString())),
+                            noteD.contents.forEach(
+                                (noteItem) => print("\t" + noteItem.toString()))
+                          })
+                    }));
+                Navigator.of(context).pushNamedAndRemoveUntil(
+                    '/', (Route<dynamic> route) => false);
+              },
+              child: Text(
+                "Save",
+                style: Theme.of(context)
+                    .textTheme
+                    .title
+                    .copyWith(color: Colors.blue, fontWeight: Font.SemiBold),
+              ),
+            ))
+          ]),
+          Container(
+              width: w * 25,
+              height: h * 5,
+              margin: EdgeInsets.only(
+                  left: 4 * MediaQuery.of(context).size.width / 100,
+                  top: MediaQuery.of(context).size.height / 100 * 2,
+                  bottom: h),
+              decoration: BoxDecoration(
+                  border: Border.all(color: Colors.black, width: 1),
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(10),
+                  ),
+                  color: Colors.white),
+              child: GestureDetector(
+                  onTap: () {
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) => Dialog(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5)),
+                            child: CreateTag()));
+                  },
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
 //                            SizedBox(width: w * 2),
-                            Icon(
-                              Icons.local_offer,
+                        Icon(
+                          Icons.local_offer,
+                          color: Colors.black.withOpacity(0.4),
+                        ),
+                        SizedBox(width: w),
+                        Text(
+                          "Add tag",
+                          style: Theme.of(context).textTheme.headline7.copyWith(
                               color: Colors.black.withOpacity(0.4),
-                            ),
-                            SizedBox(width: w),
-                            Text(
-                              "Add tag",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headline7
-                                  .copyWith(
-                                      color: Colors.black.withOpacity(0.4),
-                                      fontWeight: Font.SemiBold),
-                            )
-                          ]))),
-              (note.contents != null)
-                  ? Expanded(child: Container(
-                      child: Consumer<Notes>(//                    <--- Consumer
-                          builder: (context, note, child) {
-                      print(note.contents.length);
-                      return Stack(children: <Widget>[ListNoteItems((note))]);
-                    })))
-                  : Text("")
-            ]));
+                              fontWeight: Font.SemiBold),
+                        )
+                      ]))),
+          (note.contents != null)
+              ? Expanded(child: Container(
+                  child: Consumer<Notes>(//                    <--- Consumer
+                      builder: (context, note, child) {
+                  return Stack(children: <Widget>[ListNoteItems((note))]);
+                })))
+              : Text("")
+        ]));
   }
 }
 
@@ -200,10 +202,13 @@ class ListNoteItems extends StatelessWidget {
   Notes note;
 
   ListNoteItems(Notes _note) : note = _note;
-
+  ScrollController _controller = new ScrollController();
   @override
   Widget build(BuildContext context) {
+    Timer(Duration(milliseconds: 1000),
+        () => _controller.jumpTo(_controller.position.maxScrollExtent));
     return ListView(
+      controller: _controller,
       children: getChildrenNotes(),
     );
   }
@@ -225,6 +230,7 @@ class EditTextState extends State<EditText> {
   TextEditingController txtController = TextEditingController();
   var note_color;
   var _editableNote;
+
   void initState() {
     _editableNote = widget.item;
     note_color = _editableNote.note_color;
@@ -307,16 +313,19 @@ class NoteItemWidget extends StatelessWidget {
           CupertinoDialogAction(
             child: Text('Camera'),
             onPressed: () {
-              Navigator.of(context).pop();
+              Navigator.of(context, rootNavigator: true).pop();
             },
           ),
           CupertinoDialogAction(
               child: Text('Gallery'),
               onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (BuildContext context) {
-                  return PickImage();
-                }));
+                Navigator.of(context).pushNamed('pick_image');
+//                Navigator.PushNamed(context, 'pick_image');
+//                Navigator.push(context,
+//                    MaterialPageRoute(builder: (BuildContext context) {
+//                  return PickImage();
+//                })
+//                );
               }),
         ],
       );

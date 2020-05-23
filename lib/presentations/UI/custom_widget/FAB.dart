@@ -8,9 +8,8 @@ import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
 class FancyFab extends StatefulWidget {
-
   Notes note;
-  FancyFab(Notes _note): note= _note;
+  FancyFab(Notes _note) : note = _note;
   @override
   _FancyFabState createState() => _FancyFabState();
 }
@@ -28,12 +27,11 @@ class _FancyFabState extends State<FancyFab>
 
   @override
   initState() {
-
     _animationController =
-    AnimationController(vsync: this, duration: Duration(milliseconds: 500))
-      ..addListener(() {
-        setState(() {});
-      });
+        AnimationController(vsync: this, duration: Duration(milliseconds: 500))
+          ..addListener(() {
+            setState(() {});
+          });
     _animateIcon =
         Tween<double>(begin: 0.0, end: 1.0).animate(_animationController);
     _buttonColor = ColorTween(
@@ -78,44 +76,30 @@ class _FancyFabState extends State<FancyFab>
 
   Widget text() {
     return Container(
-      child: FloatingActionButton(heroTag: "btnAdd",
-        onPressed:() {
+      child: FloatingActionButton(
+        heroTag: "btnAdd",
+        onPressed: () {
           final NoteItem noteItem = NoteItem("Text");
-          Provider.of<Notes>(context,listen: true).addNoteItem(noteItem);
-    widget.note.addNoteItem(noteItem);
-        animate();
+          Provider.of<Notes>(context, listen: true).addNoteItem(noteItem);
+          widget.note.addNoteItem(noteItem);
+          animate();
         },
         tooltip: 'Text',
         child: Icon(Icons.create),
-      ) ,
+      ),
     );
   }
 
   Widget image() {
     return Container(
-      child:   FloatingActionButton(heroTag: "btnImg",
-        onPressed: (){
+      child: FloatingActionButton(
+        heroTag: "btnImg",
+        onPressed: () {
           final NoteItem noteItem = NoteItem("Image");
-          Provider.of<Notes>(context,listen: true).addNoteItem(noteItem);
-//          CupertinoAlertDialog(
-//            title: Text('Get image from ?'),
-//            actions: <Widget>[
-//              CupertinoDialogAction(
-//                child: Text('Camera'),
-//                onPressed: () {
-//                  Navigator.of(context).pop();
-//                },
-//              ),
-//              CupertinoDialogAction(
-//                child: Text('Gallery'),
-//                onPressed: () {
-//                PickImage();
-//                },
-//              ),
-//            ],
-//          );
+          Provider.of<Notes>(context, listen: true).addNoteItem(noteItem);
+
           animate();
-    },
+        },
         tooltip: 'Image',
         child: Icon(Icons.camera_alt),
       ),
@@ -124,12 +108,12 @@ class _FancyFabState extends State<FancyFab>
 
   Widget audio() {
     return Container(
-      child: FloatingActionButton(heroTag: "btnSound",
-        onPressed: (){
-
+      child: FloatingActionButton(
+        heroTag: "btnSound",
+        onPressed: () {
           final NoteItem noteItem = NoteItem("Audio");
 
-          Provider.of<Notes>(context,listen: true).addNoteItem(noteItem);
+          Provider.of<Notes>(context, listen: true).addNoteItem(noteItem);
           animate();
         },
         tooltip: 'Audio',
@@ -154,29 +138,28 @@ class _FancyFabState extends State<FancyFab>
 
   @override
   Widget build(BuildContext context) {
-
     return Column(
       mainAxisAlignment: MainAxisAlignment.end,
       children: <Widget>[
         Transform(
           transform: Matrix4.translationValues(
-          0.0,
-            _translateButton.value *3,
+            0.0,
+            _translateButton.value * 3,
             0.0,
           ),
           child: text(),
         ),
         Transform(
           transform: Matrix4.translationValues(
-           0.0,
-            _translateButton.value*2 ,
+            0.0,
+            _translateButton.value * 2,
             0.0,
           ),
           child: image(),
         ),
         Transform(
           transform: Matrix4.translationValues(
-           0.0,
+            0.0,
             _translateButton.value,
             0.0,
           ),
