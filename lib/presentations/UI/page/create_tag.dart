@@ -14,6 +14,7 @@ class CreateTag extends StatefulWidget {
 }
 
 class CreateTagState extends State<CreateTag> {
+  Tag tag = new Tag();
   final textController = TextEditingController();
 
   Widget build(BuildContext context) {
@@ -43,7 +44,7 @@ class CreateTagState extends State<CreateTag> {
                   Container(
                       width: MediaQuery.of(context).size.width / 100 * 30,
                       height: MediaQuery.of(context).size.height * 15,
-                      child: DropDownButton()),
+                      child: DropDownButton(tag)),
                   SizedBox(width: MediaQuery.of(context).size.width / 100),
                   Expanded(
                       flex: 5,
@@ -97,10 +98,10 @@ class CreateTagState extends State<CreateTag> {
                         onPressed: () {
 //                          Provider.of<Tag>(context, listen: false)
 //                              .setTitle(textController.text);
-                          Tag _tag = Tag.withTitle(textController.text, "123");
+                          tag.setTitle(textController.text);
 
-                          TagDAO.insertTag(_tag);
-                          print(_tag);
+                          TagDAO.insertTag(tag);
+                          print(tag);
 
 //                          Navigator.of(context).popAndPushNamed('/');
                           // Future<Notes> notedetail;
@@ -130,6 +131,8 @@ class CreateTagState extends State<CreateTag> {
 }
 
 class DropDownButton extends StatefulWidget {
+  Tag tag;
+  DropDownButton(Tag _tag) : tag = _tag;
   @override
   _DropDownButtonState createState() => _DropDownButtonState();
 }
@@ -159,6 +162,7 @@ class _DropDownButtonState extends State<DropDownButton> {
             setState(() {
               _value = value;
 //              Provider.of<Tag>(context, listen: true).setColor(value);
+              widget.tag.setColor(value);
             });
           },
           value: _value,
