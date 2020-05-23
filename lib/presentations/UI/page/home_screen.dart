@@ -9,6 +9,7 @@ import 'package:note_app/presentations/UI/page/image_pick.dart';
 import 'package:note_app/utils/database/model/note.dart';
 import 'package:note_app/utils/database/model/noteItem.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:note_app/presentations/UI/custom_widget/custom_text_style.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -17,17 +18,38 @@ class HomeScreen extends StatefulWidget {
   }
 }
 
-class HomeScreenState extends State<HomeScreen> {
+class HomeScreenState extends State<HomeScreen>
+    with SingleTickerProviderStateMixin {
   bool _isSearching = false;
   String searchQuery = "Search for a word ...";
   TextEditingController _searchQuery;
   List<Note> listNotes = List<Note>();
   bool visible = true;
-  Notes note = new Notes();
+  bool isCollapsed = true;
+  double screenWidth, screenHeight;
+  final Duration duration = const Duration(milliseconds: 300);
+  AnimationController _controller;
+  Animation<double> _scaleAnimation;
+  Animation<double> _menuScaleAnimation;
+  Animation<Offset> _slideAnimation;
+  bool _light = true;
   ScrollController mainController = ScrollController();
   void initState() {
     super.initState();
     _searchQuery = new TextEditingController();
+    _controller = AnimationController(vsync: this, duration: duration);
+    _scaleAnimation = Tween<double>(begin: 1, end: 1).animate(_controller);
+    _menuScaleAnimation =
+        Tween<double>(begin: 0.5, end: 1).animate(_controller);
+    _slideAnimation = Tween<Offset>(begin: Offset(1, 0), end: Offset(-1.5, 0))
+        .animate(_controller);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    _searchQuery.dispose();
+    super.dispose();
   }
 
   void _stopSearching() {
@@ -92,9 +114,10 @@ class HomeScreenState extends State<HomeScreen> {
     }
 
     return <Widget>[
-      IconButton(onPressed: _startSearch,
-       icon: Icon(Icons.search),
-       iconSize: 24,
+      IconButton(
+        onPressed: _startSearch,
+        icon: Icon(Icons.search),
+        iconSize: 24,
         color: Colors.black,
       )
     ];
@@ -106,51 +129,122 @@ class HomeScreenState extends State<HomeScreen> {
         tag: "Homework",
         name: "Intro SE",
         imageUrl: "assets/img.png",
-        contentCard: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."));
+        contentCard:
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."));
     notecard.add(NoteCardModel(
         tag: "Homework",
         name: "Intro SE",
         imageUrl: "assets/asset_bg.png",
-        contentCard: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. "));
+        contentCard:
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. "));
     listNotes.add(Note(date: DateNote(dateNote: "Today"), list: notecard));
     notecard.add(NoteCardModel(
         tag: "Homework",
         name: "Intro SE",
-        contentCard: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."));
+        contentCard:
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."));
     listNotes.add(Note(date: DateNote(dateNote: "12/04/2020"), list: notecard));
     return Scaffold(
-        backgroundColor: Colors.white,
-        resizeToAvoidBottomPadding: false,
-        floatingActionButton: FloatingActionButton(heroTag: "btnAdd",backgroundColor: Colors.black,
-            child: Icon(Icons.add, size: 18), onPressed: () {
-          Navigator.push(context, PageTransition(type: PageTransitionType.downToUp,child:CreateNote()));
-            }),
-        appBar: AppBar(
-          backgroundColor: Color.fromRGBO(255,209,16,1.0),
-//          backgroundColor: Colors.transparent,
-          elevation: 0.0,
-          title: _isSearching ? _buildSearchField() : null,
-          actions: _buildActions(),
-          leading: _isSearching
-              ? const BackButton(color: Colors.black)
-              : IconButton(
-                  color: Colors.black,
-                  icon: Icon(Icons.menu, size: 24),
-                  onPressed: () {},
-                ),
+      backgroundColor: Colors.white,
+      resizeToAvoidBottomPadding: false,
+      floatingActionButton: FloatingActionButton(
+          heroTag: "btnAdd",
+          backgroundColor: Colors.black,
+          child: Icon(Icons.add, size: 18),
+          onPressed: () {
+            Navigator.push(
+                context,
+                PageTransition(
+                    type: PageTransitionType.downToUp, child: CreateNote()));
+          }),
+      appBar: AppBar(
+        backgroundColor: Color.fromRGBO(255, 209, 16, 1.0),
+        elevation: 0.0,
+        title: _isSearching ? _buildSearchField() : null,
+        actions: _buildActions(),
+        leading: _isSearching
+            ? const BackButton(color: Colors.black)
+            : IconButton(
+                color: Colors.black,
+                icon: Icon(Icons.menu, size: 24),
+                onPressed: () {
+                  setState(() {
+                    if (isCollapsed)
+                      _controller.forward();
+                    else
+                      _controller.reverse();
+
+                    isCollapsed = !isCollapsed;
+                  });
+                }),
+      ),
+      body: Stack(
+        children: <Widget>[
+          menu(context),
+          home(context),
+        ],
+      ),
+    );
+  }
+
+  Widget home(context) {
+    return AnimatedPositioned(
+        duration: duration,
+        top: 0,
+        bottom: 0,
+        left: isCollapsed ? 0 : MediaQuery.of(context).size.width * 0.6,
+        right: isCollapsed ? 0 : -0.2 * MediaQuery.of(context).size.width,
+        child: Material(
+            animationDuration: duration,
+            child: ScaleTransition(
+                scale: _scaleAnimation,
+                child: ListView(controller: mainController, // parent ListView
+                    children: <Widget>[
+                      TagBar(mainController),
+                      SingleChildScrollView(
+                          child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        height: MediaQuery.of(context).size.height,
+                        child: NoteGrid(listNotes),
+                      ))
+                    ]))));
+  }
+
+  Widget menu(context) {
+    return SlideTransition(
+      position: _slideAnimation,
+      child: ScaleTransition(
+        scale: _menuScaleAnimation,
+        child: Container(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
+          alignment: Alignment.topLeft,
+          child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                MergeSemantics(
+                  child: ListTile(
+                    title: Text('Lights'),
+                    trailing: CupertinoSwitch(
+                      value: _light,
+                      onChanged: (bool value) {
+                        setState(() {
+                          _light = value;
+                        });
+                      },
+                    ),
+                    onTap: () {
+                      setState(() {
+                        _light = !_light;
+                      });
+                    },
+                  ),
+                )
+              ]),
         ),
-        body:
-     ListView(controller: mainController, // parent ListView
-    children: <Widget>[
-        TagBar(mainController),
-        SingleChildScrollView(
-            child:
-           Container( width: MediaQuery.of(context).size.width,
-               height: MediaQuery.of(context).size.height,
-               child: Stack( children:<Widget>[NoteGrid(listNotes)]),
-            )
-    )
-   ]));
+      ),
+    );
   }
 }
-
