@@ -6,7 +6,9 @@ class RoutePaths {
   static const String Pick_image = 'pick_image';
   static const String Create_note = 'create_note';
   static const String Paint = 'paint';
+  static const String Camera = 'camera';
 }
+
 class Font {
   static const String Name = "SFProDisplay";
   static const FontWeight Regular = FontWeight.w400;
@@ -15,13 +17,14 @@ class Font {
   static const FontWeight Bold = FontWeight.w700;
   static const FontWeight Light = FontWeight.w200;
 }
-class ColorTheme{
-  static const Color colorBar = Color.fromRGBO(255, 255, 250,1.0);
-  static const Color orange = Color.fromRGBO(255,177,130,1.0);
-  static const Color yellow = Color.fromRGBO(255,241,142,1.0);
-  static const Color beige = Color.fromRGBO(255,232,209,1.0);
-  static const Color pink = Color.fromRGBO(255,184,209, 1.0);
-  static const Color green  = Color.fromRGBO(188,255,195,1.0);
-  static const Color blue  = Color.fromRGBO(185,214,242,1.0);
-  static const Color colorAppBar = Color.fromRGBO(226,226,226,0.8);
+
+class ColorTheme {
+  static const Color colorBar = Color.fromRGBO(255, 255, 250, 1.0);
+  static const Color orange = Color.fromRGBO(255, 177, 130, 1.0);
+  static const Color yellow = Color.fromRGBO(255, 241, 142, 1.0);
+  static const Color beige = Color.fromRGBO(255, 232, 209, 1.0);
+  static const Color pink = Color.fromRGBO(255, 184, 209, 1.0);
+  static const Color green = Color.fromRGBO(188, 255, 195, 1.0);
+  static const Color blue = Color.fromRGBO(185, 214, 242, 1.0);
+  static const Color colorAppBar = Color.fromRGBO(226, 226, 226, 0.8);
 }

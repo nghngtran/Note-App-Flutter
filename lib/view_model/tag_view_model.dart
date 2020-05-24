@@ -1,67 +1,27 @@
-import 'package:flutter/cupertino.dart';
-import 'package:note_app/utils/database/model/TimeUtils.dart';
-import 'package:intl/intl.dart';
+import 'package:note_app/utils/database/model/tag.dart';
+import 'package:note_app/view_model/list_tag_viewmodel.dart';
 
-class TagViewModel extends TimeUtils with ChangeNotifier {
-  static int order = 0;
-
-  //@primaryKey
-  String id;
-  String title;
-  String color;
-
-  TagViewModel() : super() {
-    this.id = "tag" + ((++order).toString());
-    this.title = "New Tag";
+class NoteTagsViewModel extends BaseModel {
+  List<Tag> listTagOfNote = [];
+  List<Tag> get listTag {
+    return listTagOfNote;
   }
-//  String toString() {
-//    return title;
-//  }
 
-  TagViewModel.withFullInfo(this.id, this.title, this.color,
-      DateTime created_time, DateTime modified_time) {
-    this.created_time = created_time;
-    this.modified_time = modified_time;
-    notifyListeners();
+  int get listSize {
+    return listTagOfNote != null ? listTagOfNote.length : 0;
   }
-  TagViewModel.withTitle(String title, this.id) : super() {
-    this.id = "tag" + ((++order).toString());
-    this.title = title;
-  }
-  void setTitle(String title) {
-    this.title = title;
+
+  void addToList(Tag tag) {
+    listTagOfNote.add(tag);
     notifyListeners();
   }
 
-  void setColor(String color) {
-    this.color = color;
+  List<Tag> getTagCreated() {
+    return listTagOfNote;
+  }
+
+  void clear() {
+    listTagOfNote = [];
     notifyListeners();
-  }
-
-  TagViewModel getTag() {
-    return this;
-  }
-
-  String toString() {
-    return id.toString() +
-        "  |  " +
-        title.toString() +
-        "  |  " +
-        color.toString() +
-        "  |  " +
-        created_time.toString() +
-        "  |  " +
-        modified_time.toString();
-  }
-
-  Map<String, dynamic> toMap() {
-    var formatter = TimeUtils.formatter;
-    return {
-      'tag_id': id,
-      'title': title,
-      'color': String,
-      'created_time': formatter.format(created_time),
-      'modified_time': formatter.format(modified_time)
-    };
   }
 }

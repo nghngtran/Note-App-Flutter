@@ -39,6 +39,5 @@ GetIt dependencyAssembler = GetIt.instance;
 void setupDependencyAssembler() {
 //  dependencyAssembler.registerLazySingleton(() => API());
   dependencyAssembler.registerFactory(() => NoteViewModel());
-//  dependencyAssembler.registerFactory(() => TagCreatedModel());
   dependencyAssembler.registerFactory(() => TagCreatedModel());
 }

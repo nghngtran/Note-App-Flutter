@@ -26,6 +26,7 @@
 //  }
 //}
 
+import 'package:camera/camera.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -40,8 +41,14 @@ import 'package:note_app/utils/database/database.dart';
 import 'package:note_app/utils/database/model/note.dart';
 import 'package:provider/provider.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+// Obtain a list of the available cameras on the device.
+  final cameras = await availableCameras();
+
+// Get a specific camera from the list of available cameras.
+  final firstCamera = cameras.first;
   final originalCheck = Provider.debugCheckInvalidValueType;
   Provider.debugCheckInvalidValueType = <T>(T value) {
     if (value is Object) return;

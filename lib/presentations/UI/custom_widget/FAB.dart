@@ -4,12 +4,15 @@ import 'package:note_app/presentations/UI/page/create_note.dart';
 import 'package:note_app/presentations/UI/page/image_pick.dart';
 import 'package:note_app/utils/database/model/note.dart';
 import 'package:note_app/utils/database/model/noteItem.dart';
+import 'package:note_app/view_model/note_view_model.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
 class FancyFab extends StatefulWidget {
-  Notes note;
-  FancyFab(Notes _note) : note = _note;
+//  Notes note;
+// / FancyFab(Notes _note) : note = _note;
+  final NoteViewModel model;
+  FancyFab(this.model);
   @override
   _FancyFabState createState() => _FancyFabState();
 }
@@ -81,7 +84,8 @@ class _FancyFabState extends State<FancyFab>
         onPressed: () {
           final NoteItem noteItem = NoteItem("Text");
           Provider.of<Notes>(context, listen: true).addNoteItem(noteItem);
-          widget.note.addNoteItem(noteItem);
+//          widget.note.addNoteItem(noteItem);
+          widget.model.addNoteItem(noteItem);
           animate();
         },
         tooltip: 'Text',
@@ -96,8 +100,8 @@ class _FancyFabState extends State<FancyFab>
         heroTag: "btnImg",
         onPressed: () {
           final NoteItem noteItem = NoteItem("Image");
-          Provider.of<Notes>(context, listen: true).addNoteItem(noteItem);
-
+//          Provider.of<Notes>(context, listen: true).addNoteItem(noteItem);
+          widget.model.addNoteItem(noteItem);
           animate();
         },
         tooltip: 'Image',
@@ -112,8 +116,8 @@ class _FancyFabState extends State<FancyFab>
         heroTag: "btnSound",
         onPressed: () {
           final NoteItem noteItem = NoteItem("Audio");
-
-          Provider.of<Notes>(context, listen: true).addNoteItem(noteItem);
+          widget.model.addNoteItem(noteItem);
+//          Provider.of<Notes>(context, listen: true).addNoteItem(noteItem);
           animate();
         },
         tooltip: 'Audio',
