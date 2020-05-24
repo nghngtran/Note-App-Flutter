@@ -12,6 +12,11 @@ extension CustomTextStyles on TextTheme {
         fontFamily: Font.Name,
         fontWeight: Font.Regular,
       ); // H7
+  TextStyle get headline6 => TextStyle(
+        fontSize: 13,
+        fontFamily: Font.Name,
+        fontWeight: Font.Regular,
+      );
 }
 
 TextTheme customizedTheme = TextTheme(
@@ -40,7 +45,7 @@ TextTheme customizedTheme = TextTheme(
     fontFamily: Font.Name,
     fontWeight: Font.Regular,
   ),
-   //H5
+  //H5
   display1: TextStyle(
     fontSize: 25,
     fontFamily: Font.Name,
