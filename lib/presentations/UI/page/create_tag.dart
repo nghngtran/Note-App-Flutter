@@ -7,20 +7,18 @@ import 'package:note_app/utils/database/database.dart';
 import 'package:note_app/utils/database/model/note.dart';
 import 'package:note_app/utils/database/model/noteItem.dart';
 import 'package:note_app/utils/database/model/tag.dart';
-import 'package:provider/provider.dart';
+import 'package:note_app/view_model/list_tag_viewmodel.dart';
+import 'package:note_app/presentations/UI/custom_widget/custom_text_style.dart';
 
-class CreateTag extends StatefulWidget {
-  CreateTagState createState() => CreateTagState();
-}
-
-class CreateTagState extends State<CreateTag> {
+class CreateTag extends StatelessWidget {
   Tag tag = new Tag();
   final textController = TextEditingController();
-
+  final TagCreatedModel tagCreatedModel;
+  CreateTag(this.tagCreatedModel);
   Widget build(BuildContext context) {
     return Container(
         width: MediaQuery.of(context).size.width / 100 * 80,
-        height: MediaQuery.of(context).size.height / 100 * 25,
+        height: MediaQuery.of(context).size.height / 100 * 20,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(5)),
           color: ColorTheme.colorBar,
@@ -33,21 +31,17 @@ class CreateTagState extends State<CreateTag> {
             Text("Create new tag",
                 style: Theme.of(context)
                     .textTheme
-                    .title
+                    .subtitle
                     .copyWith(fontWeight: Font.SemiBold)),
             SizedBox(height: MediaQuery.of(context).size.height / 100 * 2),
             Expanded(
                 child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
-//              SizedBox(width: MediaQuery.of(context).size.width / 100 * 5),
-                  Container(
-                      width: MediaQuery.of(context).size.width / 100 * 30,
-                      height: MediaQuery.of(context).size.height * 15,
-                      child: DropDownButton(tag)),
+                  Wrap(children: <Widget>[DropDownButton(tag)]),
                   SizedBox(width: MediaQuery.of(context).size.width / 100),
                   Expanded(
-                      flex: 5,
+                      flex: 7,
                       child: TextField(
                         controller: textController,
                         textAlign: TextAlign.start,
@@ -65,7 +59,7 @@ class CreateTagState extends State<CreateTag> {
                             hintText: "Enter tag's name",
                             contentPadding: EdgeInsets.fromLTRB(5, 15, 0, 15),
                             hintStyle:
-                                TextStyle(color: Colors.black, fontSize: 16)),
+                                TextStyle(color: Colors.black, fontSize: 13)),
                       )),
                   SizedBox(width: MediaQuery.of(context).size.width / 100 * 2),
                 ])),
@@ -80,13 +74,13 @@ class CreateTagState extends State<CreateTag> {
                         color: Colors.white,
                         textColor: Colors.black,
                         child: Text("Cancel",
-                            style: Theme.of(context).textTheme.subhead),
+                            style: Theme.of(context).textTheme.headline6),
                         onPressed: () {
                           Navigator.of(context).pop();
                         },
                         shape: RoundedRectangleBorder(
                             borderRadius: new BorderRadius.circular(5),
-                            side: BorderSide(color: Colors.black, width: 0.5)),
+                            side: BorderSide(color: Colors.white, width: 0.5)),
                       )),
                   Expanded(
                       flex: 1,
@@ -94,35 +88,31 @@ class CreateTagState extends State<CreateTag> {
                         color: Colors.white,
                         textColor: Colors.black,
                         child: Text("Save",
-                            style: Theme.of(context).textTheme.subhead),
+                            style: Theme.of(context)
+                                .textTheme
+                                .headline6
+                                .copyWith(color: Colors.blue)),
                         onPressed: () {
 //                          Provider.of<Tag>(context, listen: false)
 //                              .setTitle(textController.text);
                           tag.setTitle(textController.text);
-
+//                          Provider.of<Tag>(context, listen: false).setColor()
+//                              .setTitle(textController.text);
                           TagDAO.insertTag(tag);
                           print(tag);
-
-//                          Navigator.of(context).popAndPushNamed('/');
-                          // Future<Notes> notedetail;
-                          //                            var listNotes = NoteDAO.getNotes();
-                          //                            listNotes.then((list) => list.forEach((note) => {
-                          //                                  print(note.toString()),
-                          //                                  notedetail = NoteDAO.getNoteByID(note.id),
-                          //                                  notedetail.then((noteD) => {
-                          //                                        noteD.tags.forEach((tag) =>
-                          //                                            print("\t" + tag.toString())),
-                          //                                        noteD.contents.forEach((noteItem) =>
-                          //                                            print("\t" + noteItem.toString()))
-                          //                                      })
-                          //                                }));
-//                          Future<Tag> tag;
-
+                          var _listTags = TagDAO.getTags();
+                          List<Tag> listTags = List<Tag>();
+                          _listTags.then((list) =>
+                              list.forEach((tag) => listTags.add(tag)));
+                          listTags.forEach((listT) => listT.toString());
+//                          Provider.of<TagCreated>(context, listen: true)
+//                              .addTag(tag);
+                          tagCreatedModel.addToList(tag);
                           Navigator.of(context).pop();
                         },
                         shape: RoundedRectangleBorder(
                             borderRadius: new BorderRadius.circular(5),
-                            side: BorderSide(color: Colors.black, width: 0.5)),
+                            side: BorderSide(color: Colors.white, width: 0.5)),
                       ))
                 ])),
           ],
@@ -138,31 +128,31 @@ class DropDownButton extends StatefulWidget {
 }
 
 class _DropDownButtonState extends State<DropDownButton> {
-  var _value = Colors.green.toString();
+  var _value = Colors.green;
 
-  DropdownButton dropdownBtn() => DropdownButton<String>(
+  DropdownButton dropdownBtn() => DropdownButton<Color>(
           items: [
             DropdownMenuItem(
-                value: Colors.green.toString(),
+                value: Colors.green,
                 child: Icon(Icons.local_offer, color: Colors.green, size: 18)),
             DropdownMenuItem(
-                value: ColorTheme.blue.toString(),
+                value: Colors.blue,
                 child: Icon(Icons.local_offer, color: Colors.blue, size: 18)),
             DropdownMenuItem(
-                value: Colors.purple.toString(),
+                value: Colors.purple,
                 child: Icon(Icons.local_offer, color: Colors.purple, size: 18)),
             DropdownMenuItem(
-                value: Colors.pink.toString(),
+                value: Colors.pink,
                 child: Icon(Icons.local_offer, color: Colors.pink, size: 18)),
             DropdownMenuItem(
-                value: Colors.yellow.toString(),
+                value: Colors.yellow,
                 child: Icon(Icons.local_offer, color: Colors.yellow, size: 18)),
           ],
           onChanged: (value) {
             setState(() {
               _value = value;
 //              Provider.of<Tag>(context, listen: true).setColor(value);
-              widget.tag.setColor(value);
+              widget.tag.setColor(_value);
             });
           },
           value: _value,

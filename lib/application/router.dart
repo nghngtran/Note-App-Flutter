@@ -13,9 +13,9 @@ class Router {
       case RoutePaths.Home:
         return MaterialPageRoute(
             builder: (BuildContext context) => HomeScreen());
-      case RoutePaths.Create_tag:
-        return MaterialPageRoute(
-            builder: (BuildContext context) => CreateTag());
+//      case RoutePaths.Create_tag:
+//        return MaterialPageRoute(
+//            builder: (BuildContext context) => CreateTag());
       case RoutePaths.Pick_image:
         return MaterialPageRoute(
             builder: (BuildContext context) => PickImage());

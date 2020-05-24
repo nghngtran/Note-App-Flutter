@@ -2,15 +2,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:note_app/utils/database/model/TimeUtils.dart';
 import 'package:intl/intl.dart';
 
-class Tag extends TimeUtils with ChangeNotifier {
+class TagViewModel extends TimeUtils with ChangeNotifier {
   static int order = 0;
 
   //@primaryKey
   String id;
   String title;
-  Color color;
+  String color;
 
-  Tag() : super() {
+  TagViewModel() : super() {
     this.id = "tag" + ((++order).toString());
     this.title = "New Tag";
   }
@@ -18,13 +18,13 @@ class Tag extends TimeUtils with ChangeNotifier {
 //    return title;
 //  }
 
-  Tag.withFullInfo(this.id, this.title, this.color, DateTime created_time,
-      DateTime modified_time) {
+  TagViewModel.withFullInfo(this.id, this.title, this.color,
+      DateTime created_time, DateTime modified_time) {
     this.created_time = created_time;
     this.modified_time = modified_time;
     notifyListeners();
   }
-  Tag.withTitle(String title, this.id) : super() {
+  TagViewModel.withTitle(String title, this.id) : super() {
     this.id = "tag" + ((++order).toString());
     this.title = title;
   }
@@ -33,12 +33,12 @@ class Tag extends TimeUtils with ChangeNotifier {
     notifyListeners();
   }
 
-  void setColor(Color color) {
+  void setColor(String color) {
     this.color = color;
     notifyListeners();
   }
 
-  Tag getTag() {
+  TagViewModel getTag() {
     return this;
   }
 

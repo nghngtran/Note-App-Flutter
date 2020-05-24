@@ -1,10 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:note_app/presentations/UI/custom_widget/custom_text_style.dart';
+
 import 'package:note_app/presentations/UI/page/create_tag.dart';
 import 'package:note_app/utils/database/dao/tag_dao.dart';
 import 'package:note_app/utils/database/model/tag.dart';
+import 'package:note_app/view_model/list_tag_viewmodel.dart';
 import 'package:provider/provider.dart';
+import 'package:note_app/presentations/UI/custom_widget/custom_text_style.dart';
 
 class CustomTag extends StatelessWidget {
   Tag tag;
@@ -12,37 +14,41 @@ class CustomTag extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
         onTap: () {},
-        child: Container(
-            margin: EdgeInsets.only(
-                left: 4 * MediaQuery.of(context).size.width / 100,
-                top: MediaQuery.of(context).size.height / 100),
-            width: MediaQuery.of(context).size.width / 100 * 25,
-            height: MediaQuery.of(context).size.height / 100 * 10,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(15)),
-                color: Colors.lightGreen),
-            child: Center(
-                child: Text(
-              "#" + Provider.of<Tag>(context, listen: true).title,
-              style: Theme.of(context)
-                  .textTheme
-                  .headline7
-                  .copyWith(color: Colors.white),
-            ))));
+        child: Wrap(children: <Widget>[
+          Container(
+              margin: EdgeInsets.only(
+                  left: 4 * MediaQuery.of(context).size.width / 100,
+                  top: MediaQuery.of(context).size.height / 100),
+//            width: MediaQuery.of(context).size.width / 100 * 25,
+              height: MediaQuery.of(context).size.height / 100 * 5,
+              padding: EdgeInsets.fromLTRB(
+                  MediaQuery.of(context).size.width / 100 * 2,
+                  0,
+                  MediaQuery.of(context).size.width / 100 * 2,
+                  0),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(15)),
+                  color: tag.color),
+              child: Center(
+                  child: Text(
+                "#" + tag.title,
+                style: Theme.of(context)
+                    .textTheme
+                    .headline7
+                    .copyWith(color: Colors.white),
+              )))
+        ]));
   }
 }
 
 class TagBar extends StatelessWidget {
-  final ScrollController horizontal = ScrollController();
-  TagBar(horizontal);
+  ScrollController horizontal;
 
-  List<Tag> listTags = List<Tag>();
-  var _listTags = TagDAO.getTags();
+  TagBar(ScrollController _scroll, this.model) : horizontal = _scroll;
+//  List<Tag> listTags = List<Tag>();
+  final TagCreatedModel model;
 
   Widget build(BuildContext context) {
-    _listTags.then((list) =>
-        list.forEach((tag) => {list.forEach((tag) => listTags.add(tag))}));
-    listTags.forEach((tag) => print(tag.toString()));
     return Row(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -62,26 +68,24 @@ class TagBar extends StatelessWidget {
                         builder: (BuildContext context) => Dialog(
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(5)),
-                            child: CreateTag()));
+                            child: CreateTag(model)));
                   },
                   child: Icon(Icons.add, size: 20, color: Colors.black),
                   backgroundColor: Colors.white)),
 //      SizedBox (width: MediaQuery.of(context).size.width / 100 * 2),
-          (listTags.length != 0)
-              ? Expanded(
-                  child: Container(
-                      width: MediaQuery.of(context).size.width / 100 * 85,
-                      height: MediaQuery.of(context).size.height / 100 * 6,
-                      child: ListView.builder(
-                          controller: horizontal,
-                          scrollDirection: Axis.horizontal,
-                          itemCount: listTags.length,
-                          itemBuilder: (context, index) {
-                            final item = listTags[index];
-
-                            return CustomTag(item);
-                          })))
-              : Text("")
+          model.listTagCreated.length > 0
+              ? Container(
+                  width: MediaQuery.of(context).size.width / 100 * 85,
+                  height: MediaQuery.of(context).size.height / 100 * 6,
+                  child: ListView.builder(
+                      controller: horizontal,
+                      scrollDirection: Axis.horizontal,
+                      itemCount: model.listTagCreated.length,
+                      itemBuilder: (context, index) {
+                        final item = model.listTagCreated[index];
+                        return CustomTag(item);
+                      }))
+              : Container()
         ]);
   }
 }

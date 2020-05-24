@@ -14,6 +14,7 @@ import 'package:note_app/presentations/UI/page/image_pick.dart';
 import 'package:note_app/utils/database/dao/note_dao.dart';
 import 'package:note_app/utils/database/model/note.dart';
 import 'package:note_app/utils/database/model/noteItem.dart';
+import 'package:note_app/view_model/list_tag_viewmodel.dart';
 import 'package:provider/provider.dart';
 
 class CreateNote extends StatefulWidget {
@@ -22,6 +23,7 @@ class CreateNote extends StatefulWidget {
 
 class CreateNoteState extends State<CreateNote> {
   ScrollController mainController = ScrollController();
+  TagCreatedModel tagCreatedModel;
   var note = new Notes();
   void initState() {
     super.initState();
@@ -164,12 +166,12 @@ class CreateNoteState extends State<CreateNote> {
                   color: Colors.white),
               child: GestureDetector(
                   onTap: () {
-                    showDialog(
-                        context: context,
-                        builder: (BuildContext context) => Dialog(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(5)),
-                            child: CreateTag()));
+//                    showDialog(
+//                        context: context,
+//                        builder: (BuildContext context) => Dialog(
+//                            shape: RoundedRectangleBorder(
+//                                borderRadius: BorderRadius.circular(5)),
+//                            child: CreateTag()));
                   },
                   child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,

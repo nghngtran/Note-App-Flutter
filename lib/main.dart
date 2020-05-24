@@ -31,6 +31,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:note_app/application/constants.dart';
 import 'package:note_app/application/router.dart';
+import 'package:note_app/presentations/UI/page/base_view.dart';
 
 import 'package:note_app/presentations/UI/page/home_screen.dart';
 import 'package:note_app/presentations/UI/page/test.dart';
@@ -46,6 +47,7 @@ void main() {
     if (value is Object) return;
     originalCheck<T>(value);
   };
+  setupDependencyAssembler();
   runApp(MyApp());
 
 //  runApp(
@@ -61,7 +63,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     DatabaseApp db = new DatabaseApp();
     return ChangeNotifierProvider(
-        builder: (context) => Notes(),
+        create: (context) => Notes(),
         child: MaterialApp(
           title: "Note App",
           debugShowCheckedModeBanner: false,

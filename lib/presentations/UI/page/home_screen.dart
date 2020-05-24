@@ -4,10 +4,13 @@ import 'package:note_app/presentations/UI/custom_widget/custom_list_notes.dart';
 
 import 'package:note_app/presentations/UI/custom_widget/custom_note_card.dart';
 import 'package:note_app/presentations/UI/custom_widget/custom_type_tag.dart';
+import 'package:note_app/presentations/UI/page/base_view.dart';
 import 'package:note_app/presentations/UI/page/create_note.dart';
 import 'package:note_app/presentations/UI/page/image_pick.dart';
 import 'package:note_app/utils/database/model/note.dart';
 import 'package:note_app/utils/database/model/noteItem.dart';
+import 'package:note_app/view_model/list_tag_viewmodel.dart';
+import 'package:note_app/view_model/tag_view_model.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:note_app/presentations/UI/custom_widget/custom_text_style.dart';
 
@@ -144,50 +147,53 @@ class HomeScreenState extends State<HomeScreen>
         contentCard:
             "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."));
     listNotes.add(Note(date: DateNote(dateNote: "12/04/2020"), list: notecard));
-    return Scaffold(
-      backgroundColor: Colors.white,
-      resizeToAvoidBottomPadding: false,
-      floatingActionButton: FloatingActionButton(
-          heroTag: "btnAdd",
-          backgroundColor: Colors.black,
-          child: Icon(Icons.add, size: 18),
-          onPressed: () {
-            Navigator.push(
-                context,
-                PageTransition(
-                    type: PageTransitionType.downToUp, child: CreateNote()));
-          }),
-      appBar: AppBar(
-        backgroundColor: Color.fromRGBO(255, 209, 16, 1.0),
-        elevation: 0.0,
-        title: _isSearching ? _buildSearchField() : null,
-        actions: _buildActions(),
-        leading: _isSearching
-            ? const BackButton(color: Colors.black)
-            : IconButton(
-                color: Colors.black,
-                icon: Icon(Icons.menu, size: 24),
-                onPressed: () {
-                  setState(() {
-                    if (isCollapsed)
-                      _controller.forward();
-                    else
-                      _controller.reverse();
+    return BaseView<TagCreatedModel>(
+        onModelReady: (tagCreated) => tagCreated.getTagCreated(),
+        builder: (context, tagCreated, child) => Scaffold(
+              backgroundColor: Colors.white,
+              resizeToAvoidBottomPadding: false,
+              floatingActionButton: FloatingActionButton(
+                  heroTag: "btnAdd",
+                  backgroundColor: Colors.black,
+                  child: Icon(Icons.add, size: 18),
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        PageTransition(
+                            type: PageTransitionType.downToUp,
+                            child: CreateNote()));
+                  }),
+              appBar: AppBar(
+                backgroundColor: Color.fromRGBO(255, 209, 16, 1.0),
+                elevation: 0.0,
+                title: _isSearching ? _buildSearchField() : null,
+                actions: _buildActions(),
+                leading: _isSearching
+                    ? const BackButton(color: Colors.black)
+                    : IconButton(
+                        color: Colors.black,
+                        icon: Icon(Icons.menu, size: 24),
+                        onPressed: () {
+                          setState(() {
+                            if (isCollapsed)
+                              _controller.forward();
+                            else
+                              _controller.reverse();
 
-                    isCollapsed = !isCollapsed;
-                  });
-                }),
-      ),
-      body: Stack(
-        children: <Widget>[
-          menu(context),
-          home(context),
-        ],
-      ),
-    );
+                            isCollapsed = !isCollapsed;
+                          });
+                        }),
+              ),
+              body: Stack(
+                children: <Widget>[
+                  menu(context),
+                  home(context, tagCreated),
+                ],
+              ),
+            ));
   }
 
-  Widget home(context) {
+  Widget home(context, TagCreatedModel model) {
     return AnimatedPositioned(
         duration: duration,
         top: 0,
@@ -200,7 +206,7 @@ class HomeScreenState extends State<HomeScreen>
                 scale: _scaleAnimation,
                 child: ListView(controller: mainController, // parent ListView
                     children: <Widget>[
-                      TagBar(mainController),
+                      TagBar(mainController, model),
                       SingleChildScrollView(
                           child: Container(
                         width: MediaQuery.of(context).size.width,
