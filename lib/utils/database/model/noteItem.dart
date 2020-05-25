@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:note_app/utils/database/model/TimeUtils.dart';
 
 enum NoteItemType { TEXT, IMAGE, AUDIO }
@@ -10,19 +12,14 @@ class NoteItem extends TimeUtils {
   String content;
   String type;
   String textColor;
-  String bgColor;
-
+//  String bgColor;
+  Color note_color;
   NoteItem(this.type) : super() {
     this.id = "noteItem" + ((++order).toString());
   }
 
-  NoteItem.withFullInfo(this.id,
-      this.type,
-      this.content,
-      this.textColor,
-      this.bgColor,
-      DateTime created_time,
-      DateTime modified_time) {
+  NoteItem.withFullInfo(this.id, this.type, this.content, this.textColor,
+      this.note_color, DateTime created_time, DateTime modified_time) {
     this.created_time = created_time;
     this.modified_time = modified_time;
   }
@@ -36,17 +33,23 @@ class NoteItem extends TimeUtils {
     this.textColor = color;
   }
 
-  void setBgColor(String color) {
-    this.bgColor = color;
+  void setBgColor(Color color) {
+    this.note_color = color;
   }
 
   String toString() {
-    return id.toString() + "  |  " +
-        type.toString() +" | "+
-        content.toString() + "  |  " +
-        bgColor.toString() + "  |  " +
-        textColor.toString() + "  |  " +
-        created_time.toString() + "  |  " +
+    return id.toString() +
+        "  |  " +
+        type.toString() +
+        " | " +
+        content.toString() +
+        "  |  " +
+        note_color.toString() +
+        "  |  " +
+        textColor.toString() +
+        "  |  " +
+        created_time.toString() +
+        "  |  " +
         modified_time.toString();
   }
 
@@ -58,7 +61,7 @@ class NoteItem extends TimeUtils {
       'type': type,
       'content': content,
       'textColor': textColor,
-      'bgColor': bgColor,
+      'bgColor': note_color.value,
       'created_time': formatter.format(created_time),
       'modified_time': formatter.format(modified_time)
     };
@@ -71,7 +74,7 @@ class NoteItem extends TimeUtils {
       'type': type,
       'content': content,
       'textColor': textColor,
-      'bgColor': bgColor,
+      'bgColor': note_color.value,
       'created_time': formatter.format(created_time),
       'modified_time': formatter.format(modified_time)
     };

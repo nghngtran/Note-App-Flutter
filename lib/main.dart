@@ -26,11 +26,13 @@
 //  }
 //}
 
+import 'package:camera/camera.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:note_app/application/constants.dart';
 import 'package:note_app/application/router.dart';
+import 'package:note_app/presentations/UI/page/base_view.dart';
 
 import 'package:note_app/presentations/UI/page/home_screen.dart';
 import 'package:note_app/presentations/UI/page/test.dart';
@@ -39,16 +41,20 @@ import 'package:note_app/utils/database/database.dart';
 import 'package:note_app/utils/database/model/note.dart';
 import 'package:provider/provider.dart';
 
-
-
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+// Obtain a list of the available cameras on the device.
+  final cameras = await availableCameras();
+
+// Get a specific camera from the list of available cameras.
+  final firstCamera = cameras.first;
   final originalCheck = Provider.debugCheckInvalidValueType;
   Provider.debugCheckInvalidValueType = <T>(T value) {
     if (value is Object) return;
     originalCheck<T>(value);
-
   };
+  setupDependencyAssembler();
   runApp(MyApp());
 
 //  runApp(
@@ -56,7 +62,6 @@ void main() {
 //      builder: (context) => MyApp(),
 //    ),
 //  );
-
 }
 
 class MyApp extends StatelessWidget {
@@ -64,25 +69,23 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     DatabaseApp db = new DatabaseApp();
-    return ChangeNotifierProvider(builder:(context) => Notes(),child: MaterialApp(
-      title: "Note App",
-      debugShowCheckedModeBanner: false,
+    return ChangeNotifierProvider(
+        create: (context) => Notes(),
+        child: MaterialApp(
+          title: "Note App",
+          debugShowCheckedModeBanner: false,
 
-      theme: ThemeData(),
+          theme: ThemeData(),
 //      initialRoute: RoutePaths.Pick_image,
-      onGenerateRoute: Router.generateRoute,
-      home:
-      TestWidget(),
-    ) );
+          onGenerateRoute: Router.generateRoute,
+          home: TestWidget(),
+        ));
   }
 }
 
 class TestWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-
-    return
-      HomeScreen();
+    return HomeScreen();
   }
 }
-
