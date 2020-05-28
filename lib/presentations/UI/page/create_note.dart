@@ -142,7 +142,7 @@ class CreateNoteState extends State<CreateNote> {
                             print(note.contents[0].toString());
                             note.title = noteViewModel.title;
                             note.tags = noteViewModel.tags;
-                            print(note.tags[0].toString());
+                            //print(note.tags[0].toString());
                             NoteDAO.insertNote(note);
                             Future<Notes> notedetail;
                             var listNotes = NoteDAO.getNotes();

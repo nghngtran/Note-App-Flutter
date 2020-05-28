@@ -38,19 +38,20 @@ class NoteItem extends TimeUtils {
   }
 
   String toString() {
-    return id.toString() +
-        "  |  " +
+    String text = "[NoteItem]"+"\nID: "+id.toString() +
+        "  | Type: " +
         type.toString() +
-        " | " +
+        " | Content: " +
         content.toString() +
-        "  |  " +
+        "  | Color: " +
         note_color.toString() +
-        "  |  " +
+        "  | TextColor: " +
         textColor.toString() +
-        "  |  " +
+        "  | Created_Time: " +
         created_time.toString() +
-        "  |  " +
-        modified_time.toString();
+        "  | Modified_Time: " +
+        modified_time.toString()+
+    "\n[/NoteItem]";
   }
 
   Map<String, dynamic> toMap(String note_id) {
