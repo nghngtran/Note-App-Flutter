@@ -1,7 +1,9 @@
 import 'dart:async';
 
+import 'package:flutter/cupertino.dart';
 import 'package:note_app/utils/database/dao/noteItem_dao.dart';
 import 'package:note_app/utils/database/dao/relative_dao.dart';
+import 'package:note_app/utils/database/dao/tag_dao.dart';
 import 'package:note_app/utils/database/dao/thumbnail_dao.dart';
 import 'package:note_app/utils/database/database.dart';
 import 'package:note_app/utils/database/db_commands.dart';
@@ -27,12 +29,10 @@ class NoteDAO {
       note.toMap(),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
-    LogHistory.trackLog("Note", "insert new note:" + note.id);
-    note.contents
-        .forEach((noteItem) => NoteItemDAO.insertNoteItem(noteItem, note.id));
-    note.tags.forEach((tag) => RelativeDAO.insertRelative(note.id, tag.id));
+    //LogHistory.trackLog("Note", "insert new note:" + note.id);
+    note.contents.forEach((noteItem) async => await NoteItemDAO.insertNoteItem(noteItem, note.id));
+    note.tags.forEach((tag) async => await RelativeDAO.insertRelative(note.id, tag.id));
 
-    print("Save content:"+note.contents[0].content);
     ThumbnailNote thumbnail = new ThumbnailNote(
         note.id, note.title, note.tags, note.contents[0].content, note.modified_time);
     ThumbnailNoteDAO.insertThumbnail(thumbnail);
@@ -70,7 +70,7 @@ class NoteDAO {
       where: "note_id = ?",
       whereArgs: [note_id],
     );
-    LogHistory.trackLog("Note", "insert new note:" + note_id);
+
     NoteItemDAO.deleteNoteItemsByNoteID(note_id);
     RelativeDAO.deleteRelativeByNoteID(note_id);
   }
@@ -99,7 +99,7 @@ class NoteDAO {
         return Tag.withFullInfo(
             join[i]['tag_id'],
             join[i]['title'],
-            join[i]['color'],
+            Color(join[i]['color']),
             DateTime.parse(join[i]['created_time']),
             DateTime.parse(join[i]['modified_time']));
       }));
@@ -111,8 +111,7 @@ class NoteDAO {
             noteItemList[i]['noteItem_id'],
             noteItemList[i]['type'],
             noteItemList[i]['content'],
-            noteItemList[i]['textColor'],
-            noteItemList[i]['bgColor'],
+            Color(noteItemList[i]['bgColor']),
             DateTime.parse(noteItemList[i]['created_time']),
             DateTime.parse(noteItemList[i]['modified_time']));
       }));
@@ -129,18 +128,17 @@ class NoteDAO {
 
     final List<Map<String, dynamic>> maps = await db.query('notes');
 
-    // Convert the List<Map<String, dynamic> into a List<Note>.
-    return List.generate(maps.length, (i) {
-      return Notes.withFullInfo(
-          maps[i]['note_id'],
-          maps[i]['title'],
-          DateTime.parse(maps[i]['created_time']),
-          DateTime.parse(maps[i]['modified_time']));
+    List<Notes> list = new List<Notes>();
+    var tags;
+    var noteItems;
+    maps.forEach((f) async => {
+      list.add(await NoteDAO.getNoteByID(f['note_id']))
     });
+    return list;
   }
 
   //Find note basic by Tag_id
-  static Future<List<Notes>> getNoteByTagID(String tag_id) async {
+  static Future<List<Notes>> getNotesByTagID(String tag_id) async {
     final Database db = await DatabaseApp.database;
 
     final List<Map<String, dynamic>> maps = await db.rawQuery(

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/cupertino.dart';
 import 'package:note_app/utils/database/database.dart';
 import 'package:note_app/utils/database/db_commands.dart';
 import 'package:note_app/utils/database/model/tag.dart';
@@ -77,7 +78,7 @@ class TagDAO {
     return maps.isEmpty? null : Tag.withFullInfo(
       maps[0]['tag_id'],
       maps[0]['title'],
-      maps[0]['color'],
+      Color(maps[0]['color']),
       DateTime.parse(maps[0]['created_time']),
       DateTime.parse(maps[0]['modified_time']),
     );
@@ -94,7 +95,7 @@ class TagDAO {
       return Tag.withFullInfo(
           join[i]['tag_id'],
           join[i]['title'],
-          join[i]['color'],
+          Color(join[i]['color']),
           DateTime.parse(join[i]['created_time']),
           DateTime.parse(join[i]['modified_time']));
     });
@@ -114,7 +115,7 @@ class TagDAO {
       return Tag.withFullInfo(
         maps[i]['tag_id'],
         maps[i]['title'],
-        maps[i]['color'],
+        Color(maps[i]['color']),
         DateTime.parse(maps[i]['created_time']),
         DateTime.parse(maps[i]['modified_time']),
       );

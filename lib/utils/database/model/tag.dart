@@ -43,16 +43,11 @@ class Tag extends TimeUtils with ChangeNotifier {
   }
 
   String toString() {
-    return "[Tag]"+"\nID:"+id.toString() +
-        "  | Title: " +
-        title.toString() +
-        "  | Color: " +
-        color.toString() +
-        "  | Created_Time: " +
-        created_time.toString() +
-        "  | Modified_Time: " +
-        modified_time.toString()+
-        "\n[/Tag]";
+    return "<Tag ID=\""+id+"\" Title=\"" +title +
+        "\" Color=\"" + color.value.toString() +
+        "\" Created_Time=\"" + created_time.toString() +
+        "\" Modified_Time=\"" + modified_time.toString()+
+        "\"/>";
   }
 
   Map<String, dynamic> toMap() {
@@ -60,7 +55,7 @@ class Tag extends TimeUtils with ChangeNotifier {
     return {
       'tag_id': id,
       'title': title,
-      'color': color,
+      'color': color == null ? 0 : color.value,
       'created_time': formatter.format(created_time),
       'modified_time': formatter.format(modified_time)
     };

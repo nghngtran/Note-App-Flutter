@@ -17,7 +17,7 @@ const String CREATE_TABLE_NOTE_FTS = "CREATE VIRTUAL TABLE notes_fts USING fts4(
 const String CREATE_TABLE_TAG = "CREATE VIRTUAL TABLE IF NOT EXISTS tags USING fts4("
     "tag_id TEXT PRIMARY KEY, "
     "title TEXT, "
-    "color TEXT, "
+    "color INTEGER, "
     "created_time DATETIME, "
     "modified_time DATETIME"
     ")";
@@ -30,8 +30,7 @@ const String CREATE_TABLE_NOTE_ITEM = "CREATE VIRTUAL TABLE noteItems USING fts4
     "note_id TEXT, "
     "content TEXT, "
     "type TEXT, "
-    "textColor TEXT, "
-    "bgColor TEXT, "
+    "bgColor INTEGER, "
     "created_time DATETIME, "
     "modified_time DATETIME"
     ")";

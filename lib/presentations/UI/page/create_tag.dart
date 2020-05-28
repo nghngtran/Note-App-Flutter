@@ -100,16 +100,17 @@ class CreateTag extends StatelessWidget {
                           tag.setTitle(textController.text);
 //                          Provider.of<Tag>(context, listen: false).setColor()
 //                              .setTitle(textController.text);
-                          Future<List<ThumbnailNote>> lists = ThumbnailNoteDAO.getThumbnails();
-                          print("Testtttttttttttttttttt");
-                          lists.then((value) => {
-                            value.forEach((f)=>{
-                              print(f.toString())
-                            })
-                          });
-                          print("Finish Testtttt");
+//                          Future<List<ThumbnailNote>> lists = ThumbnailNoteDAO.getThumbnails();
+//                          print("Testtttttttttttttttttt");
+//                          //Print Thumbnail test
+//                          lists.then((value) => {
+//                            value.forEach((f)=>{
+//                              print(f.toString())
+//                            })
+//                          });
+//                          print("Finish Testtttt");
                           TagDAO.insertTag(tag);
-                          print(tag);
+                          //print(tag);
                           var _listTags = TagDAO.getTags();
                           List<Tag> listTags = List<Tag>();
                           _listTags.then((list) =>

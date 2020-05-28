@@ -20,7 +20,7 @@ class DatabaseApp {
       // Set the path to the database. Note: Using the `join` function from the
       // `path` package is best practice to ensure the path is correctly
       // constructed for each platform.
-      join(await getDatabasesPath(), 'zennote_database23.db'),
+      join(await getDatabasesPath(), 'zennote_database191.db'),
       // When the database is first created, create a table to store dogs.
       onCreate: (db, version) async {
         await db.execute(DROP_TABLE_NOTE);

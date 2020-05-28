@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/cupertino.dart';
 import 'package:note_app/utils/database/database.dart';
 import 'package:note_app/utils/database/model/noteItem.dart';
 import 'package:sqflite/sqflite.dart';
@@ -88,8 +89,7 @@ class NoteItemDAO {
             maps[0]['noteItem_id'],
             maps[0]['type'],
             maps[0]['content'],
-            maps[0]['textColor'],
-            maps[0]['bgColor'],
+            Color(maps[0]['bgColor']),
             DateTime.parse(maps[0]['created_time']),
             DateTime.parse(maps[0]['modified_time'])
           );
@@ -113,8 +113,7 @@ class NoteItemDAO {
         maps[i]['noteItem_id'],
         maps[i]['type'],
         maps[i]['content'],
-        maps[i]['textColor'],
-        maps[i]['bgColor'],
+        Color(maps[i]['bgColor']),
         DateTime.parse(maps[i]['created_time']),
         DateTime.parse(maps[i]['modified_time'])
       );

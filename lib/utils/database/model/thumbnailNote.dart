@@ -16,15 +16,16 @@ class ThumbnailNote{
     String tag ="";
     if (tags != null) {
       tags.forEach((f) => {
-        tag = tag +"\n"+f.toString()
+        tag = tag + "\t\t"+f.toString() + "\n"
       });
     }
-    String text = "[Thumbnail]\nNote_id: "+note_id+
-                    "\nTitle: "+title+
-                    "\nContent: "+content+
-                    "\ntags: "+tag+
-                    "\nModified_Time: "+modified_time.toString()+
-                  "[/Thumbnail]";
+    String text = "<Thumbnail Note_id=\""+note_id+
+                    "\" Title=\""+title+
+                    "\" Content=\""+content+
+                    "\" Modified_Time=\""+modified_time.toString()+
+                    "\">\n\t<Tags>\n"+tag+
+                    "\t</Tags>\n"+
+                  "</Thumbnail>";
     return text;
   }
   Map<String,dynamic > toMap() {
