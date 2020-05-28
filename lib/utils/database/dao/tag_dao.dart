@@ -1,6 +1,8 @@
 import 'dart:async';
 
+import 'package:flutter/cupertino.dart';
 import 'package:note_app/utils/database/database.dart';
+import 'package:note_app/utils/database/db_commands.dart';
 import 'package:note_app/utils/database/model/tag.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -76,10 +78,27 @@ class TagDAO {
     return maps.isEmpty? null : Tag.withFullInfo(
       maps[0]['tag_id'],
       maps[0]['title'],
-      maps[0]['color'],
+      Color(maps[0]['color']),
       DateTime.parse(maps[0]['created_time']),
       DateTime.parse(maps[0]['modified_time']),
     );
+  }
+  static Future<List<Tag>> getTagsByNoteID(String note_id) async {
+    if(DatabaseApp.database == null){
+      print("LOG: TagDAO can't start because DatabaseApp not start! please start DatabaseApp");
+      return null;
+    }
+    final Database db = await DatabaseApp.database;
+    final List<Map<String, dynamic>> join = await db
+        .rawQuery(SELECT_TAG_RELATIVES_JOIN_TAGS, [note_id]);
+    return List.generate(join.length, (i) {
+      return Tag.withFullInfo(
+          join[i]['tag_id'],
+          join[i]['title'],
+          Color(join[i]['color']),
+          DateTime.parse(join[i]['created_time']),
+          DateTime.parse(join[i]['modified_time']));
+    });
   }
   //Get List Tag in Database
   static Future<List<Tag>> getTags() async {
@@ -96,7 +115,7 @@ class TagDAO {
       return Tag.withFullInfo(
         maps[i]['tag_id'],
         maps[i]['title'],
-        maps[i]['color'],
+        Color(maps[i]['color']),
         DateTime.parse(maps[i]['created_time']),
         DateTime.parse(maps[i]['modified_time']),
       );

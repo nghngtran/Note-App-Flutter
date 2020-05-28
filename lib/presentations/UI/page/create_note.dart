@@ -140,23 +140,18 @@ class CreateNoteState extends State<CreateNote> {
                             child: GestureDetector(
                           onTap: () {
                             note.contents = noteViewModel.contents;
-                            print(note.contents[0].toString());
                             note.title = noteViewModel.title;
                             note.tags = noteViewModel.tags;
-                            print(note.tags[0].toString());
                             NoteDAO.insertNote(note);
-                            Future<Notes> notedetail;
+                            //Print List Note
+                            print("\n[List Note]\n");
+//                            var notes = NoteDAO.getNoteByID(note.id);
+//                            notes.then((value)=> print(value.toString()));
                             var listNotes = NoteDAO.getNotes();
                             listNotes.then((list) => list.forEach((note) => {
                                   print(note.toString()),
-                                  notedetail = NoteDAO.getNoteByID(note.id),
-                                  notedetail.then((noteD) => {
-                                        noteD.tags.forEach((tag) =>
-                                            print("\t" + tag.toString())),
-                                        noteD.contents.forEach((noteItem) =>
-                                            print("\t" + noteItem.toString()))
-                                      })
-                                }));
+                            }));
+                            print("\n[/List Note]\n");
                             Navigator.of(context).pushNamedAndRemoveUntil(
                                 '/', (Route<dynamic> route) => false);
                           },

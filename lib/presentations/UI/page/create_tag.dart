@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:note_app/application/constants.dart';
 import 'package:note_app/utils/database/dao/note_dao.dart';
 import 'package:note_app/utils/database/dao/tag_dao.dart';
+import 'package:note_app/utils/database/dao/thumbnail_dao.dart';
 import 'package:note_app/utils/database/database.dart';
 import 'package:note_app/utils/database/model/note.dart';
 import 'package:note_app/utils/database/model/noteItem.dart';
 import 'package:note_app/utils/database/model/tag.dart';
+import 'package:note_app/utils/database/model/thumbnailNote.dart';
 import 'package:note_app/view_model/list_tag_viewmodel.dart';
 import 'package:note_app/presentations/UI/custom_widget/custom_text_style.dart';
 
@@ -98,8 +100,17 @@ class CreateTag extends StatelessWidget {
                           tag.setTitle(textController.text);
 //                          Provider.of<Tag>(context, listen: false).setColor()
 //                              .setTitle(textController.text);
+//                          Future<List<ThumbnailNote>> lists = ThumbnailNoteDAO.getThumbnails();
+//                          print("Testtttttttttttttttttt");
+//                          //Print Thumbnail test
+//                          lists.then((value) => {
+//                            value.forEach((f)=>{
+//                              print(f.toString())
+//                            })
+//                          });
+//                          print("Finish Testtttt");
                           TagDAO.insertTag(tag);
-                          print(tag);
+                          //print(tag);
                           var _listTags = TagDAO.getTags();
                           List<Tag> listTags = List<Tag>();
                           _listTags.then((list) =>
