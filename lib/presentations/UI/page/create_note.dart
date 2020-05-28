@@ -10,7 +10,6 @@ import 'package:note_app/presentations/UI/custom_widget/custom_text_style.dart';
 import 'package:note_app/presentations/UI/custom_widget/tab_bar_note.dart';
 import 'package:note_app/presentations/UI/page/MoreOptionsSheet.dart';
 import 'package:note_app/presentations/UI/page/base_view.dart';
-import 'package:note_app/presentations/UI/page/camera.dart';
 import 'package:note_app/presentations/UI/page/camera_access.dart';
 import 'package:note_app/presentations/UI/page/create_tag.dart';
 import 'package:note_app/presentations/UI/page/customPaint.dart';
@@ -297,7 +296,8 @@ class NoteItemWidget extends StatelessWidget {
             onPressed: () {
               Navigator.push(context,
                   MaterialPageRoute(builder: (BuildContext context) {
-                return CameraScreen();
+                var cameras = CameraDescription();
+                return TakePictureScreen(camera: cameras);
               }));
             },
           ),
