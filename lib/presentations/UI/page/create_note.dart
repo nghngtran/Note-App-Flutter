@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:camera/camera.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:keyboard_avoider/keyboard_avoider.dart';
 import 'package:note_app/application/constants.dart';
 import 'package:note_app/presentations/UI/custom_widget/FAB.dart';
 import 'package:note_app/presentations/UI/custom_widget/choose_title.dart';
@@ -28,7 +29,7 @@ class CreateNote extends StatefulWidget {
 }
 
 class CreateNoteState extends State<CreateNote> {
-  ScrollController mainController = ScrollController();
+//  ScrollController mainController = ScrollController();
   TagCreatedModel tagCreatedModel;
 
   var note = new Notes();
@@ -38,7 +39,7 @@ class CreateNoteState extends State<CreateNote> {
 
   @override
   void dispose() {
-    mainController.dispose();
+//    mainController.dispose();
     super.dispose();
   }
 
@@ -107,7 +108,6 @@ class CreateNoteState extends State<CreateNote> {
                                               borderRadius:
                                                   BorderRadius.circular(5)),
                                           child: ChooseTitle(noteViewModel)));
-//                      print(note.title);
                                 },
                                 child: Container(
                                   child: Row(
@@ -115,9 +115,6 @@ class CreateNoteState extends State<CreateNote> {
                                     children: <Widget>[
                                       SizedBox(width: w * 4),
                                       Text(
-//                                        Provider.of<Notes>(context,
-//                                                listen: true)
-//                                            .title,
                                         noteViewModel.title,
                                         style: Theme.of(context)
                                             .textTheme
@@ -170,7 +167,9 @@ class CreateNoteState extends State<CreateNote> {
                   TagBarOfNote(noteViewModel),
                   (noteViewModel.contents.length != null)
                       ? Expanded(
-                          child: Container(child: ListNoteItems(noteViewModel)))
+                          child: Container(
+                              width: w * 100,
+                              child: ListNoteItems(noteViewModel)))
                       : Text("")
                 ])));
   }
@@ -182,15 +181,17 @@ class ListNoteItems extends StatelessWidget {
 //  ListNoteItems(Notes _note) : note = _note;
   final NoteViewModel model;
   ListNoteItems(this.model);
-  ScrollController _controller = new ScrollController();
+  ScrollController _controller = ScrollController();
   @override
   Widget build(BuildContext context) {
-    Timer(Duration(milliseconds: 1000),
-        () => _controller.jumpTo(_controller.position.maxScrollExtent));
-    return ListView(
-      controller: _controller,
-      children: getChildrenNotes(),
-    );
+//    Timer(Duration(milliseconds: 1000),
+//        () => _controller.jumpTo(_controller.position.maxScrollExtent));
+    return KeyboardAvoider(
+        autoScroll: true,
+        child: ListView(
+          controller: _controller,
+          children: getChildrenNotes(),
+        ));
   }
 
   List<Widget> getChildrenNotes() {
@@ -249,6 +250,7 @@ class EditTextState extends State<EditText> {
     return InkWell(
         onLongPress: () {
           bottomSheet(context);
+          FocusScope.of(context).unfocus();
         },
         child: Padding(
             padding: EdgeInsets.fromLTRB(w * 4, h / 2, w * 2, h),
@@ -271,7 +273,7 @@ class EditTextState extends State<EditText> {
                   onSaved: (value) {
                     widget.item.setContent(txtController.text);
                     widget.item.setBgColor(note_color);
-
+                    FocusScope.of(context).unfocus();
                     print(widget.item.content);
                   })
             ])));
