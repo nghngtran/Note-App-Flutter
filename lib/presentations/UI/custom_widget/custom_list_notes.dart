@@ -1,28 +1,31 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:note_app/presentations/UI/custom_widget/custom_note_card.dart';
+
 class Note extends StatelessWidget {
   DateNote dateNote = DateNote();
   List<NoteCardModel> listNote = List<NoteCardModel>();
-  Note({@required DateNote date, @required List<NoteCardModel> list}):
-      dateNote = date,
-      listNote = list;
+  Note({@required DateNote date, @required List<NoteCardModel> list})
+      : dateNote = date,
+        listNote = list;
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        SizedBox(height: MediaQuery.of(context).size.height/100*2),
-        Padding(padding:EdgeInsets.only(left:4 * MediaQuery.of(context).size.width / 100),
-            child:Text(dateNote.date,style: Theme.of(context)
-        .textTheme
-        .body2
-        .copyWith(color: Colors.black,fontSize: 20))),
-        noteGridBuilder(context,listNote)
-        ],
+        SizedBox(height: MediaQuery.of(context).size.height / 100 * 2),
+        Padding(
+            padding: EdgeInsets.only(
+                left: 4 * MediaQuery.of(context).size.width / 100),
+            child: Text(dateNote.date,
+                style: Theme.of(context).textTheme.body2.copyWith(
+                    color: Theme.of(context).iconTheme.color, fontSize: 20))),
+        noteGridBuilder(context, listNote)
+      ],
     );
   }
 }
+
 Widget noteGridBuilder(BuildContext context, List<NoteCardModel> indexes) {
   List<Widget> columnOne = List<Widget>();
   List<Widget> columnTwo = List<Widget>();
@@ -54,27 +57,31 @@ Widget noteGridBuilder(BuildContext context, List<NoteCardModel> indexes) {
             children: secondColumnFirst ? columnTwo : columnOne,
           ),
         ),
-        Expanded(child:Container(
-          width: MediaQuery.of(context).size.width / 2 - 4,
-          child: Column(
-            children: secondColumnFirst ? columnOne : columnTwo,
+        Expanded(
+          child: Container(
+            width: MediaQuery.of(context).size.width / 2 - 4,
+            child: Column(
+              children: secondColumnFirst ? columnOne : columnTwo,
+            ),
           ),
-        ),
-        )],
+        )
+      ],
     );
   } else
     return null;
 }
-class NoteGrid extends StatelessWidget{
+
+class NoteGrid extends StatelessWidget {
   List<Note> _note = List<Note>();
   NoteGrid(List<Note> note) : _note = note;
-  Widget build(BuildContext context)
-  {
-    return Container (width:MediaQuery.of(context).size.width, child:
-      ListView.builder(itemCount: _note.length,
-        itemBuilder: (context, index){
-      final item = _note[index];
-      return item;
-    }));
+  Widget build(BuildContext context) {
+    return Container(
+        width: MediaQuery.of(context).size.width,
+        child: ListView.builder(
+            itemCount: _note.length,
+            itemBuilder: (context, index) {
+              final item = _note[index];
+              return item;
+            }));
   }
 }

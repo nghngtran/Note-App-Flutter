@@ -70,8 +70,9 @@ class TagBar extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(5)),
                             child: CreateTag(model)));
                   },
-                  child: Icon(Icons.add, size: 20, color: Colors.black),
-                  backgroundColor: Colors.white)),
+                  child: Icon(Icons.add,
+                      size: 20, color: Theme.of(context).backgroundColor),
+                  backgroundColor: Theme.of(context).iconTheme.color)),
 //      SizedBox (width: MediaQuery.of(context).size.width / 100 * 2),
           model.listTagCreated.length > 0
               ? Container(

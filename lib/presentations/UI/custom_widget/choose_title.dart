@@ -26,7 +26,7 @@ class ChooseTitle extends StatelessWidget {
         height: MediaQuery.of(context).size.height / 100 * 22,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(5)),
-          color: ColorTheme.colorBar,
+          color: Theme.of(context).iconTheme.color,
         ),
         padding: EdgeInsets.only(
             top: MediaQuery.of(context).size.height / 100 * 2,
@@ -34,10 +34,9 @@ class ChooseTitle extends StatelessWidget {
         child: Column(
           children: <Widget>[
             Text("Choose title",
-                style: Theme.of(context)
-                    .textTheme
-                    .title
-                    .copyWith(fontWeight: Font.SemiBold)),
+                style: Theme.of(context).textTheme.title.copyWith(
+                    fontWeight: Font.SemiBold,
+                    color: Theme.of(context).backgroundColor)),
             SizedBox(height: MediaQuery.of(context).size.height / 100 * 2),
             Row(children: <Widget>[
               SizedBox(width: MediaQuery.of(context).size.width / 100 * 3),
@@ -45,19 +44,24 @@ class ChooseTitle extends StatelessWidget {
                   child: TextField(
                 controller: textController,
                 textAlign: TextAlign.start,
-                style: TextStyle(fontSize: 18),
+                style: TextStyle(fontSize: 18, color: Colors.black),
                 decoration: InputDecoration(
                     alignLabelWithHint: true,
                     enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(5),
-                        borderSide:
-                            BorderSide(color: Colors.black38, width: 1)),
+                        borderSide: BorderSide(
+                            color: Theme.of(context).backgroundColor,
+                            width: 1)),
                     focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(5),
-                        borderSide: BorderSide(color: Colors.black, width: 1)),
+                        borderSide: BorderSide(
+                            color: Theme.of(context).backgroundColor,
+                            width: 1)),
                     hintText: "Title",
                     contentPadding: EdgeInsets.fromLTRB(5, 15, 0, 15),
-                    hintStyle: TextStyle(color: Colors.black, fontSize: 14)),
+                    hintStyle: TextStyle(
+                        color: Theme.of(context).iconTheme.color,
+                        fontSize: 14)),
               )),
               SizedBox(width: MediaQuery.of(context).size.width / 100 * 2),
             ]),

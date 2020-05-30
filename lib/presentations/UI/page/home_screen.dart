@@ -86,9 +86,10 @@ class HomeScreenState extends State<HomeScreen>
       decoration: const InputDecoration(
         hintText: 'Search...',
         border: InputBorder.none,
-        hintStyle: TextStyle(color: Colors.black45),
+        hintStyle: TextStyle(color: Colors.black),
       ),
-      style: const TextStyle(color: Colors.black, fontSize: 18.0),
+      style: TextStyle(
+          color: Theme.of(context).textTheme.caption.color, fontSize: 18.0),
       onChanged: updateSearchQuery,
     );
   }
@@ -103,7 +104,7 @@ class HomeScreenState extends State<HomeScreen>
     if (_isSearching) {
       return <Widget>[
         IconButton(
-          color: Colors.black,
+          color: Theme.of(context).iconTheme.color,
           icon: const Icon(Icons.clear, size: 24),
           onPressed: () {
             if (_searchQuery == null || _searchQuery.text.isEmpty) {
@@ -121,7 +122,7 @@ class HomeScreenState extends State<HomeScreen>
         onPressed: _startSearch,
         icon: Icon(Icons.search),
         iconSize: 24,
-        color: Colors.black,
+        color: Theme.of(context).primaryColor,
       )
     ];
   }
@@ -154,8 +155,14 @@ class HomeScreenState extends State<HomeScreen>
               resizeToAvoidBottomPadding: false,
               floatingActionButton: FloatingActionButton(
                   heroTag: "btnAdd",
-                  backgroundColor: Colors.black,
-                  child: Icon(Icons.add, size: 18),
+                  backgroundColor: Theme.of(context)
+                      .floatingActionButtonTheme
+                      .backgroundColor,
+                  splashColor: Theme.of(context)
+                      .floatingActionButtonTheme
+                      .backgroundColor,
+                  child: Icon(Icons.add,
+                      size: 18, color: Theme.of(context).iconTheme.color),
                   onPressed: () {
                     Navigator.push(
                         context,
@@ -164,14 +171,14 @@ class HomeScreenState extends State<HomeScreen>
                             child: CreateNote()));
                   }),
               appBar: AppBar(
-                backgroundColor: Color.fromRGBO(255, 209, 16, 1.0),
+//                backgroundColor: Color.fromRGBO(255, 209, 16, 1.0),
                 elevation: 0.0,
                 title: _isSearching ? _buildSearchField() : null,
                 actions: _buildActions(),
                 leading: _isSearching
-                    ? const BackButton(color: Colors.black)
+                    ? BackButton(color: Theme.of(context).primaryColor)
                     : IconButton(
-                        color: Colors.black,
+                        color: Theme.of(context).primaryColor,
                         icon: Icon(Icons.menu, size: 24),
                         onPressed: () {
                           setState(() {

@@ -22,6 +22,7 @@ import 'package:note_app/utils/database/model/noteItem.dart';
 import 'package:note_app/view_model/list_tag_viewmodel.dart';
 import 'package:note_app/view_model/note_view_model.dart';
 import 'package:provider/provider.dart';
+import 'package:unicorndial/unicorndial.dart';
 
 class CreateNote extends StatefulWidget {
   CreateNoteState createState() => CreateNoteState();
@@ -40,6 +41,46 @@ class CreateNoteState extends State<CreateNote> {
   void dispose() {
     mainController.dispose();
     super.dispose();
+  }
+
+  List<UnicornButton> _getProfileMenu(NoteViewModel model) {
+    List<UnicornButton> children = [];
+    children.add(_profileOption(
+        iconData: Icons.create,
+        onPressed: () {
+          final NoteItem noteItem = NoteItem("Text");
+          Provider.of<Notes>(context, listen: true).addNoteItem(noteItem);
+
+          model.addNoteItem(noteItem);
+        },
+        hero: "txt"));
+    children.add(_profileOption(
+        iconData: Icons.camera_alt,
+        onPressed: () {
+          final NoteItem noteItem = NoteItem("Image");
+          model.addNoteItem(noteItem);
+        },
+        hero: "img"));
+    children.add(_profileOption(
+        iconData: Icons.audiotrack,
+        onPressed: () {
+          final NoteItem noteItem = NoteItem("Audio");
+          model.addNoteItem(noteItem);
+        },
+        hero: "sound"));
+
+    return children;
+  }
+
+  Widget _profileOption({IconData iconData, Function onPressed, String hero}) {
+    return UnicornButton(
+        currentButton: FloatingActionButton(
+      heroTag: hero,
+      backgroundColor: Theme.of(context).backgroundColor,
+      mini: true,
+      child: Icon(iconData, color: Theme.of(context).iconTheme.color),
+      onPressed: onPressed,
+    ));
   }
 
   Future<void> _handleClickMe() async {
@@ -76,15 +117,19 @@ class CreateNoteState extends State<CreateNote> {
     return BaseView<NoteViewModel>(
         onModelReady: (noteViewModel) => noteViewModel.getListItems(),
         builder: (context, noteViewModel, child) => Scaffold(
-            backgroundColor: Colors.white,
+            backgroundColor: Theme.of(context).backgroundColor,
             resizeToAvoidBottomPadding: false,
-            floatingActionButton: FancyFab(noteViewModel),
+            floatingActionButton: UnicornDialer(
+              parentButtonBackground: Colors.blue,
+              orientation: UnicornOrientation.VERTICAL,
+              parentButton: Icon(Icons.add),
+              childButtons: _getProfileMenu(noteViewModel),
+            ),
             appBar: AppBar(
                 title: Text('Create new note',
-                    style: TextStyle(color: Colors.black)),
-                backgroundColor: Color.fromRGBO(255, 209, 16, 1.0),
+                    style: TextStyle(color: Theme.of(context).primaryColor)),
                 leading: BackButton(
-                  color: Colors.black,
+                  color: Theme.of(context).primaryColor,
                   onPressed: () {
                     _handleClickMe();
                   },
@@ -123,16 +168,16 @@ class CreateNoteState extends State<CreateNote> {
                                             .textTheme
                                             .subhead
                                             .copyWith(
-                                                color: Colors.black,
+                                                color: Theme.of(context)
+                                                    .iconTheme
+                                                    .color,
                                                 fontWeight: Font.Regular),
                                       ),
                                       SizedBox(width: w * 2),
-                                      Image.asset(
-                                        "assets/edit.png",
-                                        fit: BoxFit.contain,
-                                        width: w * 5,
-                                        height: w * 5,
-                                      )
+                                      Icon(Icons.edit,
+                                          size: 20,
+                                          color:
+                                              Theme.of(context).iconTheme.color)
                                     ],
                                   ),
                                 ))),
@@ -150,7 +195,7 @@ class CreateNoteState extends State<CreateNote> {
                             var listNotes = NoteDAO.getNotes();
                             listNotes.then((list) => list.forEach((note) => {
                                   print(note.toString()),
-                            }));
+                                }));
                             print("\n[/List Note]\n");
                             Navigator.of(context).pushNamedAndRemoveUntil(
                                 '/', (Route<dynamic> route) => false);
@@ -158,7 +203,7 @@ class CreateNoteState extends State<CreateNote> {
                           child: Text(
                             "Save",
                             style: Theme.of(context).textTheme.title.copyWith(
-                                color: Colors.blue, fontWeight: Font.SemiBold),
+                                color: Colors.blue, fontWeight: Font.Regular),
                           ),
                         ))
                       ]),
@@ -180,8 +225,8 @@ class ListNoteItems extends StatelessWidget {
   ScrollController _controller = new ScrollController();
   @override
   Widget build(BuildContext context) {
-    Timer(Duration(milliseconds: 1000),
-        () => _controller.jumpTo(_controller.position.maxScrollExtent));
+//    Timer(Duration(milliseconds: 1000),
+//        () => _controller.jumpTo(_controller.position.maxScrollExtent));
     return ListView(
       controller: _controller,
       children: getChildrenNotes(),
@@ -241,35 +286,38 @@ class EditTextState extends State<EditText> {
     double w = MediaQuery.of(context).size.width / 100;
     double h = MediaQuery.of(context).size.height / 100;
     widget.item.setContent(txtController.text);
-    return InkWell(
-        onLongPress: () {
-          bottomSheet(context);
-        },
-        child: Padding(
-            padding: EdgeInsets.fromLTRB(w * 4, h / 2, w * 2, h),
-            child: Wrap(children: <Widget>[
-              TextFormField(
-                  autocorrect: false,
-                  decoration: InputDecoration(
-                      contentPadding: EdgeInsets.fromLTRB(w, h, w, h),
-                      fillColor: note_color,
-                      filled: true,
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10)))),
-                  maxLength: null,
-                  maxLines: null,
-                  controller: txtController,
-                  style: TextStyle(
-                      fontSize: 17,
-                      fontStyle: FontStyle.normal,
-                      color: Colors.black),
-                  onSaved: (value) {
-                    widget.item.setContent(txtController.text);
-                    widget.item.setBgColor(note_color);
+    return SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: InkWell(
+            onLongPress: () {
+              bottomSheet(context);
+            },
+            child: Padding(
+                padding: EdgeInsets.fromLTRB(w * 4, h / 2, w * 2, h),
+                child: Wrap(children: <Widget>[
+                  TextFormField(
+                      autocorrect: false,
+                      decoration: InputDecoration(
+                          contentPadding: EdgeInsets.fromLTRB(w, h, w, h),
+                          fillColor: note_color,
+                          filled: true,
+                          border: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10)))),
+                      maxLength: null,
+                      maxLines: null,
+                      controller: txtController,
+                      style: TextStyle(
+                          fontSize: 17,
+                          fontStyle: FontStyle.normal,
+                          color: Theme.of(context).primaryColor),
+                      onSaved: (value) {
+                        widget.item.setContent(txtController.text);
+                        widget.item.setBgColor(note_color);
 
-                    print(widget.item.content);
-                  })
-            ])));
+                        print(widget.item.content);
+                      })
+                ]))));
   }
 }
 

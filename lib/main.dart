@@ -55,7 +55,8 @@ void main() async {
     originalCheck<T>(value);
   };
   setupDependencyAssembler();
-  runApp(MyApp());
+  runApp(ChangeNotifierProvider<AppStateNotifier>(
+      create: (context) => AppStateNotifier(), child: MyApp()));
 
 //  runApp(
 //    DevicePreview(
@@ -71,15 +72,21 @@ class MyApp extends StatelessWidget {
     DatabaseApp db = new DatabaseApp();
     return ChangeNotifierProvider(
         create: (context) => Notes(),
-        child: MaterialApp(
-          title: "Note App",
-          debugShowCheckedModeBanner: false,
-
-          theme: ThemeData(),
+        child: Consumer<AppStateNotifier>(builder: (context, appState, child) {
+          return MaterialApp(
+            title: "Note App",
+            debugShowCheckedModeBanner: false,
+            theme:
+                AppTheme.lightTheme, // ThemeData(primarySwatch: Colors.blue),
+            darkTheme:
+                AppTheme.darkTheme, // ThemeData(primarySwatch: Colors.blue),
+//            ThemeData(),
 //      initialRoute: RoutePaths.Pick_image,
-          onGenerateRoute: Router.generateRoute,
-          home: TestWidget(),
-        ));
+            onGenerateRoute: Router.generateRoute,
+            home: TestWidget(),
+            themeMode: appState.isDarkMode ? ThemeMode.dark : ThemeMode.light,
+          );
+        }));
   }
 }
 
@@ -87,5 +94,93 @@ class TestWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return HomeScreen();
+  }
+}
+
+class AppTheme {
+  AppTheme._();
+  static final ThemeData lightTheme = ThemeData.light().copyWith(
+    backgroundColor: Colors.white,
+    scaffoldBackgroundColor: Colors.white,
+    primaryColor: Colors.black,
+    appBarTheme: AppBarTheme(
+      color: Color.fromRGBO(255, 209, 16, 1.0),
+      iconTheme: IconThemeData(
+        color: Colors.black,
+      ),
+    ),
+    colorScheme: ColorScheme.light(
+      primary: Colors.white,
+      onPrimary: Colors.white,
+      primaryVariant: Colors.white38,
+      secondary: Colors.black,
+    ),
+    floatingActionButtonTheme:
+        FloatingActionButtonThemeData(backgroundColor: Colors.blue),
+    iconTheme: IconThemeData(
+      color: Colors.black,
+    ),
+    focusColor: Colors.black,
+    textTheme: TextTheme(
+        title: TextStyle(
+          color: Colors.black,
+          fontSize: 17,
+          fontFamily: Font.Name,
+          fontWeight: Font.Medium,
+        ),
+        subtitle: TextStyle(
+          color: Colors.black,
+          fontSize: 13,
+          fontFamily: Font.Name,
+          fontWeight: Font.Regular,
+        ),
+        caption: TextStyle(color: Colors.black, fontSize: 12)),
+  );
+
+  static final ThemeData darkTheme = ThemeData.dark().copyWith(
+    backgroundColor: Colors.black,
+    scaffoldBackgroundColor: Colors.black,
+    appBarTheme: AppBarTheme(
+      color: Colors.black,
+      iconTheme: IconThemeData(
+        color: Colors.white,
+      ),
+    ),
+    primaryColor: Colors.white,
+    floatingActionButtonTheme:
+        FloatingActionButtonThemeData(backgroundColor: Colors.black),
+    colorScheme: ColorScheme.dark(
+      primary: Colors.black,
+      onPrimary: Colors.black,
+      primaryVariant: Colors.black,
+      secondary: Colors.red,
+    ),
+    cardTheme: CardTheme(
+      color: Colors.black,
+    ),
+    iconTheme: IconThemeData(
+      color: Colors.white,
+    ),
+    focusColor: Colors.black12.withOpacity(0.3),
+    textTheme: TextTheme(
+        title: TextStyle(
+          color: Colors.white,
+          fontSize: 17.0,
+        ),
+        subtitle: TextStyle(
+          color: Colors.white,
+          fontSize: 13.0,
+        ),
+        caption: TextStyle(color: Colors.white, fontSize: 12)),
+  );
+}
+
+class AppStateNotifier extends ChangeNotifier {
+  //
+  bool isDarkMode = true;
+
+  void updateTheme(bool isDarkMode) {
+    this.isDarkMode = isDarkMode;
+    notifyListeners();
   }
 }

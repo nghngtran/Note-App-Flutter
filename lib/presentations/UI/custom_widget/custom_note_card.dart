@@ -48,7 +48,7 @@ class NoteCardState extends State<NoteCard> {
               width: 45 * MediaQuery.of(context).size.width / 100,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(5)),
-                color: Colors.yellow.withAlpha(20),
+                color: Colors.white,
 //              boxShadow: [
 //                BoxShadow(
 //                  color: Colors.black38,

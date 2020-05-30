@@ -29,7 +29,7 @@ class CreateTagNote extends StatelessWidget {
                 style: Theme.of(context)
                     .textTheme
                     .title
-                    .copyWith(fontWeight: Font.SemiBold)),
+                    .copyWith(fontWeight: Font.SemiBold, color: Colors.black)),
             SizedBox(height: MediaQuery.of(context).size.height / 100 * 2),
             Expanded(
                 child: Row(
@@ -42,7 +42,9 @@ class CreateTagNote extends StatelessWidget {
                       child: TextField(
                         controller: textController,
                         textAlign: TextAlign.start,
-                        style: TextStyle(fontSize: 18),
+                        style: TextStyle(
+                            fontSize: 18,
+                            color: Theme.of(context).backgroundColor),
                         decoration: InputDecoration(
                             alignLabelWithHint: true,
                             enabledBorder: OutlineInputBorder(
@@ -55,8 +57,9 @@ class CreateTagNote extends StatelessWidget {
                                     BorderSide(color: Colors.black, width: 1)),
                             hintText: "Enter tag's name",
                             contentPadding: EdgeInsets.fromLTRB(5, 15, 0, 15),
-                            hintStyle:
-                                TextStyle(color: Colors.black, fontSize: 13)),
+                            hintStyle: TextStyle(
+                                color: Theme.of(context).backgroundColor,
+                                fontSize: 13)),
                       )),
                   SizedBox(width: MediaQuery.of(context).size.width / 100 * 2),
                 ])),

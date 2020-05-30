@@ -14,10 +14,12 @@ import 'package:note_app/presentations/UI/custom_widget/custom_text_style.dart';
 
 class CreateTag extends StatelessWidget {
   Tag tag = new Tag();
+
   final textController = TextEditingController();
   final TagCreatedModel tagCreatedModel;
   CreateTag(this.tagCreatedModel);
   Widget build(BuildContext context) {
+    tag.setColor(Colors.green);
     return Container(
         width: MediaQuery.of(context).size.width / 100 * 80,
         height: MediaQuery.of(context).size.height / 100 * 20,
@@ -34,7 +36,7 @@ class CreateTag extends StatelessWidget {
                 style: Theme.of(context)
                     .textTheme
                     .title
-                    .copyWith(fontWeight: Font.SemiBold)),
+                    .copyWith(fontWeight: Font.SemiBold, color: Colors.black)),
             SizedBox(height: MediaQuery.of(context).size.height / 100 * 2),
             Expanded(
                 child: Row(
@@ -47,7 +49,9 @@ class CreateTag extends StatelessWidget {
                       child: TextField(
                         controller: textController,
                         textAlign: TextAlign.start,
-                        style: TextStyle(fontSize: 18),
+                        style: TextStyle(
+                            fontSize: 18,
+                            color: Theme.of(context).backgroundColor),
                         decoration: InputDecoration(
                             alignLabelWithHint: true,
                             enabledBorder: OutlineInputBorder(
@@ -162,6 +166,7 @@ class _DropDownButtonState extends State<DropDownButton> {
           onChanged: (value) {
             setState(() {
               _value = value;
+              print(_value.toString());
 //              Provider.of<Tag>(context, listen: true).setColor(value);
               widget.tag.setColor(_value);
             });
