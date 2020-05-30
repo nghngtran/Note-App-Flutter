@@ -13,6 +13,7 @@ class CreateTagNote extends StatelessWidget {
   final NoteViewModel noteModel;
   CreateTagNote(this.noteModel);
   Widget build(BuildContext context) {
+    tag.setColor(Colors.green);
     return Container(
         width: MediaQuery.of(context).size.width / 100 * 80,
         height: MediaQuery.of(context).size.height / 100 * 20,
