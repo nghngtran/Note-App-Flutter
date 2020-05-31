@@ -187,9 +187,10 @@ class CreateNoteState extends State<CreateNote> {
                         Expanded(
                             child: GestureDetector(
                           onTap: () {
-                            note.contents = noteViewModel.contents;
-                            note.title = noteViewModel.title;
-                            note.tags = noteViewModel.tags;
+                            note.setListNoteItems(noteViewModel.contents);
+                            note.setTitle(noteViewModel.title);
+                            note.setTag(noteViewModel.tags);
+
                             NoteDAO.insertNote(note);
                             print(note.contents);
                             print(note.contents.length);

@@ -25,7 +25,8 @@ class Notes extends TimeUtils with ChangeNotifier {
     this.history = new List<String>();
     this.history.add(TimeUtils.formatter.format(DateTime.now()));
   }
-  Notes.fullData(this.id,this.title,this.tags,this.contents,DateTime create_time, DateTime modified_time){
+  Notes.fullData(this.id, this.title, this.tags, this.contents,
+      DateTime create_time, DateTime modified_time) {
     this.created_time = create_time;
     this.modified_time = modified_time;
   }
@@ -97,27 +98,29 @@ class Notes extends TimeUtils with ChangeNotifier {
   }
 
   String toString() {
-    String tag ="";
+    String tag = "";
     if (tags != null) {
-      tags.forEach((f) => {
-        tag = tag +"\t\t"+f.toString()+"\n"
-      });
+      tags.forEach((f) => {tag = tag + "\t\t" + f.toString() + "\n"});
     }
     String noteItem = "";
     if (contents != null) {
-      contents.forEach((f) => {
-        noteItem = noteItem + "\t\t"+f.toString() +"\n"
-      });
+      contents
+          .forEach((f) => {noteItem = noteItem + "\t\t" + f.toString() + "\n"});
     }
-    return "<Note ID=\""+id+"\" Title=\"" +title +
-        "\" Created_Time=\"" +created_time.toString() +
-        "\" Modified_Time=\"" +modified_time.toString()+
-        "\">\n\t<Tags>\n"+
-        tag+
-        "\t</Tags>\n"+
-        "\t<NoteItems>\n"+
-        noteItem+
-        "\t</NoteItems>\n"+
+    return "<Note ID=\"" +
+        id +
+        "\" Title=\"" +
+        title +
+        "\" Created_Time=\"" +
+        created_time.toString() +
+        "\" Modified_Time=\"" +
+        modified_time.toString() +
+        "\">\n\t<Tags>\n" +
+        tag +
+        "\t</Tags>\n" +
+        "\t<NoteItems>\n" +
+        noteItem +
+        "\t</NoteItems>\n" +
         "</Note>";
   }
 
@@ -133,4 +136,7 @@ class Notes extends TimeUtils with ChangeNotifier {
 
   UnmodifiableListView<NoteItem> get allTasks =>
       UnmodifiableListView(this.contents);
+  void setListNoteItems(List<NoteItem> listNoteItem) {
+    this.contents = listNoteItem;
+  }
 }
