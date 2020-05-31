@@ -1,7 +1,7 @@
 import 'dart:collection';
 
 import 'package:flutter/cupertino.dart';
-import 'package:note_app/utils/database/model/TimeUtils.dart';
+import 'package:note_app/utils/model/TimeUtils.dart';
 
 import 'noteItem.dart';
 import 'tag.dart';
@@ -25,12 +25,13 @@ class Notes extends TimeUtils with ChangeNotifier {
     this.history = new List<String>();
     this.history.add(TimeUtils.formatter.format(DateTime.now()));
   }
+
   Notes.fullData(this.id, this.title, this.tags, this.contents,
       DateTime create_time, DateTime modified_time) {
     this.created_time = create_time;
     this.modified_time = modified_time;
   }
-  Notes.withFullInfo(
+  Notes.withBasicInfo(
       this.id, this.title, DateTime created_time, DateTime modified_time) {
     this.tags = new List<Tag>();
     this.contents = new List<NoteItem>();
@@ -124,7 +125,12 @@ class Notes extends TimeUtils with ChangeNotifier {
         "</Note>";
   }
 
-  Map<String, dynamic> toMap() {
+  factory Notes.fromDatabaseJson(Map<String, dynamic> data) => Notes.withBasicInfo(
+      data['note_id'],
+      data['title'],
+      DateTime.parse(data['created_time']),
+      DateTime.parse(data['modified_time']));
+  Map<String, dynamic> toDatabaseJson() {
     var formatter = TimeUtils.formatter;
     return {
       'note_id': id,

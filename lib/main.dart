@@ -38,7 +38,7 @@ import 'package:note_app/presentations/UI/page/home_screen.dart';
 import 'package:note_app/presentations/UI/page/test.dart';
 
 import 'package:note_app/utils/database/database.dart';
-import 'package:note_app/utils/database/model/note.dart';
+import 'package:note_app/utils/model/note.dart';
 import 'package:provider/provider.dart';
 
 void main() async {

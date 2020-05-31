@@ -1,5 +1,8 @@
-import 'package:note_app/utils/database/model/TimeUtils.dart';
-import 'package:note_app/utils/database/model/tag.dart';
+
+
+import 'package:note_app/utils/model/TimeUtils.dart';
+import 'package:note_app/utils/model/tag.dart';
+
 
 class ThumbnailNote{
   final String note_id;
@@ -8,7 +11,9 @@ class ThumbnailNote{
   final String content;
   final DateTime modified_time;
   ThumbnailNote(this.note_id, this.title, this.tags, this.content, this.modified_time);
-  ThumbnailNote.withOutTag(this.note_id,this.title,this.content,this.modified_time);
+  ThumbnailNote.withOutTag(this.note_id,this.title,this.content,this.modified_time){
+    this.tags = new List<Tag>();
+  }
   void setTag(List<Tag> tags) {
     this.tags.addAll(tags);
   }
@@ -28,6 +33,13 @@ class ThumbnailNote{
                   "</Thumbnail>";
     return text;
   }
+  ThumbnailNote.withBasicInfo(this.note_id,this.title,this.content,this.modified_time);
+  factory ThumbnailNote.fromDatabaseJson(Map<String, dynamic> data) => ThumbnailNote.withBasicInfo(
+      data['note_id'],
+      data['title'],
+      data['content'],
+      DateTime.parse(data['modified_time']));
+
   Map<String,dynamic > toMap() {
     var formatter = TimeUtils.formatter;
     return {

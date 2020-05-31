@@ -1,14 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:note_app/application/constants.dart';
-import 'package:note_app/utils/database/dao/note_dao.dart';
-import 'package:note_app/utils/database/dao/tag_dao.dart';
-import 'package:note_app/utils/database/dao/thumbnail_dao.dart';
+import 'package:note_app/utils/dao/note_dao.dart';
+import 'package:note_app/utils/dao/tag_dao.dart';
+import 'package:note_app/utils/dao/thumbnail_dao.dart';
 import 'package:note_app/utils/database/database.dart';
-import 'package:note_app/utils/database/model/note.dart';
-import 'package:note_app/utils/database/model/noteItem.dart';
-import 'package:note_app/utils/database/model/tag.dart';
-import 'package:note_app/utils/database/model/thumbnailNote.dart';
+import 'package:note_app/utils/model/note.dart';
+import 'package:note_app/utils/model/noteItem.dart';
+import 'package:note_app/utils/model/tag.dart';
+import 'package:note_app/utils/model/thumbnailNote.dart';
 import 'package:note_app/view_model/list_tag_viewmodel.dart';
 import 'package:note_app/presentations/UI/custom_widget/custom_text_style.dart';
 

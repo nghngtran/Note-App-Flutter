@@ -2,8 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:note_app/application/constants.dart';
 import 'package:note_app/presentations/UI/custom_widget/custom_type_tag.dart';
-import 'package:note_app/utils/database/dao/tag_dao.dart';
-import 'package:note_app/utils/database/model/tag.dart';
+import 'package:note_app/utils/dao/tag_dao.dart';
+import 'package:note_app/utils/model/tag.dart';
 import 'package:note_app/view_model/note_view_model.dart';
 import 'package:note_app/presentations/UI/custom_widget/custom_text_style.dart';
 

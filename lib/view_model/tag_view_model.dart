@@ -1,4 +1,4 @@
-import 'package:note_app/utils/database/model/tag.dart';
+import 'package:note_app/utils/model/tag.dart';
 import 'package:note_app/view_model/list_tag_viewmodel.dart';
 
 class NoteTagsViewModel extends BaseModel {

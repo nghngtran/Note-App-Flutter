@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
-import 'package:note_app/utils/database/model/TimeUtils.dart';
 import 'package:intl/intl.dart';
+import 'package:note_app/utils/model/TimeUtils.dart';
 
 class Tag extends TimeUtils with ChangeNotifier {
   static int order = 0;
@@ -60,4 +60,11 @@ class Tag extends TimeUtils with ChangeNotifier {
       'modified_time': formatter.format(modified_time)
     };
   }
+
+  factory Tag.fromDatabaseJson(Map<String, dynamic> data) => Tag.withFullInfo(
+      data['note_id'],
+      data['title'],
+      data['color'],
+      DateTime.parse(data['created_time']),
+      DateTime.parse(data['modified_time']));
 }

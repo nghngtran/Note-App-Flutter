@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'package:note_app/utils/database/model/TimeUtils.dart';
+import 'package:note_app/utils/model/TimeUtils.dart';
 
 enum NoteItemType { TEXT, IMAGE, AUDIO }
 

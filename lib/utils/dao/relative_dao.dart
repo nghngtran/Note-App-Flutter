@@ -1,16 +1,11 @@
 import 'dart:async';
 import 'package:note_app/utils/database/database.dart';
-import 'package:note_app/utils/database/log_history.dart';
+import 'package:note_app/utils/log_history.dart';
 import 'package:sqflite/sqflite.dart';
 
 class RelativeDAO {
   static Future<void> insertRelative(String note_id, String tag_id) async {
-    if (DatabaseApp.database == null) {
-      print(
-          "LOG: RelativeDAO can't start because DatabaseApp not start! please start DatabaseApp");
-      return null;
-    }
-    final Database db = await DatabaseApp.database;
+    final Database db = await DatabaseApp.dbProvider.database;
 
     await db.insert(
       'relatives',
@@ -20,11 +15,7 @@ class RelativeDAO {
     LogHistory.trackLog("Relative", "insert new relative note:"+note_id+" with tag:"+tag_id);
   }
   static Future<void> deleteRelative(String note_id, String tag_id) async {
-    if(DatabaseApp.database == null){
-      print("LOG: RelativeDAO can't start because DatabaseApp not start! please start DatabaseApp");
-      return null;
-    }
-    final Database db = await DatabaseApp.database;
+    final Database db = await DatabaseApp.dbProvider.database;
 
     await db.delete(
       'relatives',
@@ -34,11 +25,7 @@ class RelativeDAO {
     LogHistory.trackLog("Relative", "delete relative note:"+note_id+" with tag:"+tag_id);
   }
   static Future<void> deleteRelativeByTagID(String tag_id) async{
-    if(DatabaseApp.database == null){
-      print("LOG: RelativeDAO can't start because DatabaseApp not start! please start DatabaseApp");
-      return null;
-    }
-    final Database db = await DatabaseApp.database;
+    final Database db = await DatabaseApp.dbProvider.database;
 
     await db.delete(
       'relatives',
@@ -48,11 +35,7 @@ class RelativeDAO {
     LogHistory.trackLog("Relative", "delete all relative of tag:"+tag_id);
   }
   static Future<void> deleteRelativeByNoteID(String note_id) async{
-    if(DatabaseApp.database == null){
-      print("LOG: RelativeDAO can't start because DatabaseApp not start! please start DatabaseApp");
-      return null;
-    }
-    final Database db = await DatabaseApp.database;
+    final Database db = await DatabaseApp.dbProvider.database;
 
     await db.delete(
       'relatives',
@@ -62,11 +45,7 @@ class RelativeDAO {
     LogHistory.trackLog("Relative", "delete all relative of note:"+note_id);
   }
   static Future<List<Relative>> getRelativesByNoteID(String note_id) async {
-    if(DatabaseApp.database == null){
-      print("LOG: RelativeDAO can't start because DatabaseApp not start! please start DatabaseApp");
-      return null;
-    }
-    final Database db = await DatabaseApp.database;
+    final Database db = await DatabaseApp.dbProvider.database;
 
     // Query the table for all The NoteItem of identify Note.
     final List<Map<String, dynamic>> maps =

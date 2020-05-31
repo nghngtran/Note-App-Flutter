@@ -2,17 +2,12 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:note_app/utils/database/database.dart';
-import 'package:note_app/utils/database/model/noteItem.dart';
+import 'package:note_app/utils/model/noteItem.dart';
 import 'package:sqflite/sqflite.dart';
 
 class NoteItemDAO {
   static Future<void> insertNoteItem(NoteItem noteItem,String note_id) async {
-    // Get a reference to the database.
-    if(DatabaseApp.database == null){
-      print("LOG: NoteItemDAO can't start because DatabaseApp not start! please start DatabaseApp");
-      return null;
-    }
-    final Database db = await DatabaseApp.database;
+    final Database db = await DatabaseApp.dbProvider.database;
 
     await db.insert(
       'noteItems',
@@ -22,12 +17,7 @@ class NoteItemDAO {
   }
 
   static Future<void> updateNoteItem(NoteItem noteItem) async {
-    //Get a reference to the database.
-    if(DatabaseApp.database == null){
-      print("LOG: NoteItemDAO can't start because DatabaseApp not start! please start DatabaseApp");
-      return null;
-    }
-    final Database db = await DatabaseApp.database;
+    final Database db = await DatabaseApp.dbProvider.database;
 
     // Update the given NoteItem.
     await db.update(
@@ -41,12 +31,7 @@ class NoteItemDAO {
   }
 
   static Future<void> deleteNoteItem(NoteItem noteItem) async {
-    // Get a reference to the database.
-    if(DatabaseApp.database == null){
-      print("LOG: NoteItemDAO can't start because DatabaseApp not start! please start DatabaseApp");
-      return null;
-    }
-    final Database db = await DatabaseApp.database;
+    final Database db = await DatabaseApp.dbProvider.database;
 
     // Remove the NoteItem from the database.
     await db.delete(
@@ -59,11 +44,7 @@ class NoteItemDAO {
   }
 
   static Future<void> deleteNoteItemsByNoteID(String note_id) async {
-    if(DatabaseApp.database == null){
-      print("LOG: NoteItemDAO can't start because DatabaseApp not start! please start DatabaseApp");
-      return null;
-    }
-    final Database db = await DatabaseApp.database;
+    final Database db = await DatabaseApp.dbProvider.database;
 
     // Remove the NoteItem from the database.
     await db.delete(
@@ -76,11 +57,7 @@ class NoteItemDAO {
   }
 
   static Future<NoteItem> getNoteItem(String noteItem_id) async {
-    if(DatabaseApp.database == null){
-      print("LOG: NoteItemDAO can't start because DatabaseApp not start! please start DatabaseApp");
-      return null;
-    }
-    final Database db = await DatabaseApp.database;
+    final Database db = await DatabaseApp.dbProvider.database;
     final List<Map<String, dynamic>> maps = await db
         .query('notes', where: "noteItem_id = ?", whereArgs: [noteItem_id]);
     return maps.isEmpty
@@ -96,12 +73,7 @@ class NoteItemDAO {
   }
 
   static Future<List<NoteItem>> getNoteItemsByNoteID(String note_id) async {
-    // Get a reference to the database.
-    if(DatabaseApp.database == null){
-      print("LOG: NoteItemDAO can't start because DatabaseApp not start! please start DatabaseApp");
-      return null;
-    }
-    final Database db = await DatabaseApp.database;
+    final Database db = await DatabaseApp.dbProvider.database;
 
     // Query the table for all The NoteItem of identify Note.
     final List<Map<String, dynamic>> maps =

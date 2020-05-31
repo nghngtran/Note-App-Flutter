@@ -7,7 +7,7 @@ import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:note_app/application/constants.dart';
 import 'package:note_app/presentations/UI/page/create_note.dart';
-import 'package:note_app/utils/database/model/note.dart';
+import 'package:note_app/utils/model/note.dart';
 import 'package:painter2/painter2.dart';
 import 'package:provider/provider.dart';
 

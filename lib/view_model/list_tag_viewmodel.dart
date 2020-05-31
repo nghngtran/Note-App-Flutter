@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:note_app/utils/database/model/tag.dart';
+import 'package:note_app/utils/model/tag.dart';
 
 enum ViewState { Idle, Busy }
 
