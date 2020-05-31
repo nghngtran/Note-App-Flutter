@@ -34,24 +34,12 @@ class HomeScreenState extends State<HomeScreen>
   bool visible = true;
   bool isCollapsed = true;
 
-//  double screenWidth, screenHeight;
-//  final Duration duration = const Duration(milliseconds: 300);
-//  AnimationController _controller;
-//  Animation<double> _scaleAnimation;
-//  Animation<double> _menuScaleAnimation;
-//  Animation<Offset> _slideAnimation;
   bool _light = true;
   ScrollController mainController = ScrollController();
 
   void initState() {
     super.initState();
-//    _searchQuery = new TextEditingController();
-//    _controller = AnimationController(vsync: this, duration: duration);
-//    _scaleAnimation = Tween<double>(begin: 1, end: 0).animate(_controller);
-////    _menuScaleAnimation =
-////        Tween<double>(begin: 0, end: 0.5).animate(_controller);
-//    _slideAnimation = Tween<Offset>(begin: Offset(-0.5, 0), end: Offset(1, 0))
-//        .animate(_controller);
+    _searchQuery = new TextEditingController();
   }
 
   @override
@@ -91,7 +79,7 @@ class HomeScreenState extends State<HomeScreen>
       decoration: const InputDecoration(
         hintText: 'Search...',
         border: InputBorder.none,
-        hintStyle: TextStyle(color: Colors.black),
+        hintStyle: TextStyle(color: Colors.white10),
       ),
       style: TextStyle(
           color: Theme.of(context).textTheme.caption.color, fontSize: 18.0),
@@ -127,7 +115,7 @@ class HomeScreenState extends State<HomeScreen>
         onPressed: _startSearch,
         icon: Icon(Icons.search),
         iconSize: 24,
-        color: Theme.of(context).primaryColor,
+        color: Theme.of(context).iconTheme.color,
       )
     ];
   }
@@ -156,6 +144,7 @@ class HomeScreenState extends State<HomeScreen>
     return BaseView<TagCreatedModel>(
         onModelReady: (tagCreated) => tagCreated.getTagCreated(),
         builder: (context, tagCreated, child) => Scaffold(
+            backgroundColor: Theme.of(context).backgroundColor,
             drawer: Drawer(
               child: ListView(
                   // Important: Remove any padding from the ListView.
@@ -168,13 +157,14 @@ class HomeScreenState extends State<HomeScreen>
                             color: Colors.transparent),
                         child: Text("Settings your app",
                             style: TextStyle(
-                                color: Theme.of(context).primaryColor,
+                                color: Theme.of(context).iconTheme.color,
                                 fontSize: 20))),
                     MergeSemantics(
                       child: ListTile(
                         title: Text('Dark Theme',
                             style: TextStyle(
-                                color: Theme.of(context).primaryColor)),
+                                color: Theme.of(context).iconTheme.color,
+                                fontSize: 16)),
                         trailing: CupertinoSwitch(
                           value:
                               Provider.of<AppStateNotifier>(context).isDarkMode,
@@ -194,7 +184,7 @@ class HomeScreenState extends State<HomeScreen>
                     )
                   ]),
             ),
-            backgroundColor: Colors.white,
+//            backgroundColor: Colors.white,
             resizeToAvoidBottomPadding: false,
             floatingActionButton: FloatingActionButton(
                 heroTag: "btnAdd",

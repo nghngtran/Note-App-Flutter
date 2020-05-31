@@ -113,7 +113,7 @@ class CreateNoteState extends State<CreateNote> {
   Widget build(BuildContext context) {
     double w = MediaQuery.of(context).size.width / 100;
     double h = MediaQuery.of(context).size.height / 100;
-    print(note.contents.length);
+
     return BaseView<NoteViewModel>(
         onModelReady: (noteViewModel) => noteViewModel.getListItems(),
         builder: (context, noteViewModel, child) => Scaffold(
@@ -148,6 +148,9 @@ class CreateNoteState extends State<CreateNote> {
                                   showDialog(
                                       context: context,
                                       builder: (BuildContext context) => Dialog(
+                                          elevation: 0.0,
+                                          backgroundColor:
+                                              Theme.of(context).backgroundColor,
                                           shape: RoundedRectangleBorder(
                                               borderRadius:
                                                   BorderRadius.circular(5)),
@@ -188,6 +191,8 @@ class CreateNoteState extends State<CreateNote> {
                             note.title = noteViewModel.title;
                             note.tags = noteViewModel.tags;
                             NoteDAO.insertNote(note);
+                            print(note.contents);
+                            print(note.contents.length);
                             //Print List Note
                             print("\n[List Note]\n");
 //                            var notes = NoteDAO.getNoteByID(note.id);
@@ -207,7 +212,7 @@ class CreateNoteState extends State<CreateNote> {
                           ),
                         ))
                       ]),
-                  TagBarOfNote(noteViewModel),
+                  TagBarOfNote(noteViewModel, heroTag: "TagNote"),
                   (noteViewModel.contents.length != null)
                       ? Expanded(
                           child: Container(child: ListNoteItems(noteViewModel)))
@@ -310,7 +315,7 @@ class EditTextState extends State<EditText> {
                       style: TextStyle(
                           fontSize: 17,
                           fontStyle: FontStyle.normal,
-                          color: Theme.of(context).primaryColor),
+                          color: Theme.of(context).iconTheme.color),
                       onSaved: (value) {
                         widget.item.setContent(txtController.text);
                         widget.item.setBgColor(note_color);

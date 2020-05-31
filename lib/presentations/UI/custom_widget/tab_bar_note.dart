@@ -19,7 +19,7 @@ class CreateTagNote extends StatelessWidget {
         height: MediaQuery.of(context).size.height / 100 * 20,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(5)),
-          color: ColorTheme.colorBar,
+          color: Theme.of(context).backgroundColor,
         ),
         padding:
             EdgeInsets.only(top: MediaQuery.of(context).size.height / 100 * 2),
@@ -27,10 +27,9 @@ class CreateTagNote extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             Text("Create new tag",
-                style: Theme.of(context)
-                    .textTheme
-                    .title
-                    .copyWith(fontWeight: Font.SemiBold, color: Colors.black)),
+                style: Theme.of(context).textTheme.title.copyWith(
+                    fontWeight: Font.SemiBold,
+                    color: Theme.of(context).iconTheme.color)),
             SizedBox(height: MediaQuery.of(context).size.height / 100 * 2),
             Expanded(
                 child: Row(
@@ -45,21 +44,23 @@ class CreateTagNote extends StatelessWidget {
                         textAlign: TextAlign.start,
                         style: TextStyle(
                             fontSize: 18,
-                            color: Theme.of(context).backgroundColor),
+                            color: Theme.of(context).iconTheme.color),
                         decoration: InputDecoration(
                             alignLabelWithHint: true,
                             enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(5),
                                 borderSide: BorderSide(
-                                    color: Colors.black38, width: 1)),
+                                    color: Theme.of(context).iconTheme.color,
+                                    width: 1)),
                             focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(5),
-                                borderSide:
-                                    BorderSide(color: Colors.black, width: 1)),
+                                borderSide: BorderSide(
+                                    color: Theme.of(context).iconTheme.color,
+                                    width: 1)),
                             hintText: "Enter tag's name",
                             contentPadding: EdgeInsets.fromLTRB(5, 15, 0, 15),
                             hintStyle: TextStyle(
-                                color: Theme.of(context).backgroundColor,
+                                color: Theme.of(context).iconTheme.color,
                                 fontSize: 13)),
                       )),
                   SizedBox(width: MediaQuery.of(context).size.width / 100 * 2),
@@ -72,8 +73,8 @@ class CreateTagNote extends StatelessWidget {
                   Expanded(
                       flex: 1,
                       child: FlatButton(
-                        color: Colors.white,
-                        textColor: Colors.black,
+                        color: Colors.transparent,
+                        textColor: Theme.of(context).iconTheme.color,
                         child: Text("Cancel",
                             style: Theme.of(context).textTheme.headline7),
                         onPressed: () {
@@ -81,13 +82,14 @@ class CreateTagNote extends StatelessWidget {
                         },
                         shape: RoundedRectangleBorder(
                             borderRadius: new BorderRadius.circular(5),
-                            side: BorderSide(color: Colors.white, width: 0.5)),
+                            side: BorderSide(
+                                color: Colors.transparent, width: 0.5)),
                       )),
                   Expanded(
                       flex: 1,
                       child: FlatButton(
-                        color: Colors.white,
-                        textColor: Colors.black,
+                        color: Colors.transparent,
+                        textColor: Theme.of(context).iconTheme.color,
                         child: Text("Save",
                             style: Theme.of(context)
                                 .textTheme
@@ -114,7 +116,8 @@ class CreateTagNote extends StatelessWidget {
                         },
                         shape: RoundedRectangleBorder(
                             borderRadius: new BorderRadius.circular(5),
-                            side: BorderSide(color: Colors.white, width: 0.5)),
+                            side: BorderSide(
+                                color: Colors.transparent, width: 0.5)),
                       ))
                 ])),
           ],
@@ -133,32 +136,32 @@ class _DropDownButtonNoteState extends State<DropDownButtonNote> {
   var _value = Colors.green;
 
   DropdownButton dropdownBtn() => DropdownButton<Color>(
-          items: [
-            DropdownMenuItem(
-                value: Colors.green,
-                child: Icon(Icons.local_offer, color: Colors.green, size: 18)),
-            DropdownMenuItem(
-                value: Colors.blue,
-                child: Icon(Icons.local_offer, color: Colors.blue, size: 18)),
-            DropdownMenuItem(
-                value: Colors.purple,
-                child: Icon(Icons.local_offer, color: Colors.purple, size: 18)),
-            DropdownMenuItem(
-                value: Colors.pink,
-                child: Icon(Icons.local_offer, color: Colors.pink, size: 18)),
-            DropdownMenuItem(
-                value: Colors.yellow,
-                child: Icon(Icons.local_offer, color: Colors.yellow, size: 18)),
-          ],
-          onChanged: (value) {
-            setState(() {
-              _value = value;
-//              Provider.of<Tag>(context, listen: true).setColor(value);
-              widget.tag.setColor(_value);
-            });
-          },
-          value: _value,
-          hint: Text("Pick color"));
+      elevation: 0,
+      items: [
+        DropdownMenuItem(
+            value: Colors.green,
+            child: Icon(Icons.local_offer, color: Colors.green, size: 18)),
+        DropdownMenuItem(
+            value: Colors.blue,
+            child: Icon(Icons.local_offer, color: Colors.blue, size: 18)),
+        DropdownMenuItem(
+            value: Colors.purple,
+            child: Icon(Icons.local_offer, color: Colors.purple, size: 18)),
+        DropdownMenuItem(
+            value: Colors.pink,
+            child: Icon(Icons.local_offer, color: Colors.pink, size: 18)),
+        DropdownMenuItem(
+            value: Colors.yellow,
+            child: Icon(Icons.local_offer, color: Colors.yellow, size: 18)),
+      ],
+      onChanged: (value) {
+        setState(() {
+          _value = value;
+          widget.tag.setColor(_value);
+        });
+      },
+      value: _value,
+      hint: Text("Pick color"));
 
   Widget build(BuildContext context) {
     return DropdownButtonHideUnderline(
@@ -181,26 +184,30 @@ class TagBarOfNote extends StatelessWidget {
         children: <Widget>[
           SizedBox(width: MediaQuery.of(context).size.width / 100 * 3),
           Container(
+              color: Theme.of(context).backgroundColor,
               width: MediaQuery.of(context).size.width / 100 * 10,
               height: MediaQuery.of(context).size.width / 100 * 9,
               margin: EdgeInsets.only(
                   top: MediaQuery.of(context).size.height / 100 * 2,
                   bottom: MediaQuery.of(context).size.height / 100),
               child: FloatingActionButton(
-                  heroTag: "createTag",
-                  onPressed: () {
-                    showDialog(
-                        context: context,
-                        builder: (BuildContext context) => Dialog(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(5)),
-                            child: CreateTagNote(model)));
-                  },
-                  child: Icon(Icons.add, size: 20, color: Colors.black),
-                  backgroundColor: Colors.white)),
-//      SizedBox (width: MediaQuery.of(context).size.width / 100 * 2),
-//          model.tags.length > 0
-//              ?
+                elevation: 0.0,
+                heroTag: "createTag",
+                onPressed: () {
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) => Dialog(
+                          elevation: 0.0,
+                          backgroundColor: Theme.of(context).backgroundColor,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5)),
+                          child:
+                              Stack(children: <Widget>[CreateTagNote(model)])));
+                },
+                child: Icon(Icons.add,
+                    size: 20, color: Theme.of(context).iconTheme.color),
+              )),
+
           Container(
               width: MediaQuery.of(context).size.width / 100 * 85,
               height: MediaQuery.of(context).size.height / 100 * 6,

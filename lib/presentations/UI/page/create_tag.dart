@@ -25,7 +25,7 @@ class CreateTag extends StatelessWidget {
         height: MediaQuery.of(context).size.height / 100 * 20,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(5)),
-          color: ColorTheme.colorBar,
+          color: Theme.of(context).backgroundColor,
         ),
         padding:
             EdgeInsets.only(top: MediaQuery.of(context).size.height / 100 * 2),
@@ -33,10 +33,9 @@ class CreateTag extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             Text("Create new tag",
-                style: Theme.of(context)
-                    .textTheme
-                    .title
-                    .copyWith(fontWeight: Font.SemiBold, color: Colors.black)),
+                style: Theme.of(context).textTheme.title.copyWith(
+                    fontWeight: Font.SemiBold,
+                    color: Theme.of(context).iconTheme.color)),
             SizedBox(height: MediaQuery.of(context).size.height / 100 * 2),
             Expanded(
                 child: Row(
@@ -51,7 +50,7 @@ class CreateTag extends StatelessWidget {
                         textAlign: TextAlign.start,
                         style: TextStyle(
                             fontSize: 18,
-                            color: Theme.of(context).backgroundColor),
+                            color: Theme.of(context).iconTheme.color),
                         decoration: InputDecoration(
                             alignLabelWithHint: true,
                             enabledBorder: OutlineInputBorder(
@@ -60,12 +59,14 @@ class CreateTag extends StatelessWidget {
                                     color: Colors.black38, width: 1)),
                             focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(5),
-                                borderSide:
-                                    BorderSide(color: Colors.black, width: 1)),
+                                borderSide: BorderSide(
+                                    color: Theme.of(context).iconTheme.color,
+                                    width: 1)),
                             hintText: "Enter tag's name",
                             contentPadding: EdgeInsets.fromLTRB(5, 15, 0, 15),
-                            hintStyle:
-                                TextStyle(color: Colors.black, fontSize: 13)),
+                            hintStyle: TextStyle(
+                                color: Theme.of(context).iconTheme.color,
+                                fontSize: 13)),
                       )),
                   SizedBox(width: MediaQuery.of(context).size.width / 100 * 2),
                 ])),
@@ -77,8 +78,8 @@ class CreateTag extends StatelessWidget {
                   Expanded(
                       flex: 1,
                       child: FlatButton(
-                        color: Colors.white,
-                        textColor: Colors.black,
+                        color: Colors.transparent,
+                        textColor: Theme.of(context).iconTheme.color,
                         child: Text("Cancel",
                             style: Theme.of(context).textTheme.headline7),
                         onPressed: () {
@@ -86,13 +87,14 @@ class CreateTag extends StatelessWidget {
                         },
                         shape: RoundedRectangleBorder(
                             borderRadius: new BorderRadius.circular(5),
-                            side: BorderSide(color: Colors.white, width: 0.5)),
+                            side: BorderSide(
+                                color: Colors.transparent, width: 0.5)),
                       )),
                   Expanded(
                       flex: 1,
                       child: FlatButton(
-                        color: Colors.white,
-                        textColor: Colors.black,
+                        color: Colors.transparent,
+                        textColor: Theme.of(context).iconTheme.color,
                         child: Text("Save",
                             style: Theme.of(context)
                                 .textTheme
@@ -127,7 +129,8 @@ class CreateTag extends StatelessWidget {
                         },
                         shape: RoundedRectangleBorder(
                             borderRadius: new BorderRadius.circular(5),
-                            side: BorderSide(color: Colors.white, width: 0.5)),
+                            side: BorderSide(
+                                color: Colors.transparent, width: 0.5)),
                       ))
                 ])),
           ],

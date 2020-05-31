@@ -26,7 +26,7 @@ class ChooseTitle extends StatelessWidget {
         height: MediaQuery.of(context).size.height / 100 * 22,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(5)),
-          color: Theme.of(context).iconTheme.color,
+          color: Theme.of(context).backgroundColor,
         ),
         padding: EdgeInsets.only(
             top: MediaQuery.of(context).size.height / 100 * 2,
@@ -36,7 +36,7 @@ class ChooseTitle extends StatelessWidget {
             Text("Choose title",
                 style: Theme.of(context).textTheme.title.copyWith(
                     fontWeight: Font.SemiBold,
-                    color: Theme.of(context).backgroundColor)),
+                    color: Theme.of(context).iconTheme.color)),
             SizedBox(height: MediaQuery.of(context).size.height / 100 * 2),
             Row(children: <Widget>[
               SizedBox(width: MediaQuery.of(context).size.width / 100 * 3),
@@ -44,18 +44,19 @@ class ChooseTitle extends StatelessWidget {
                   child: TextField(
                 controller: textController,
                 textAlign: TextAlign.start,
-                style: TextStyle(fontSize: 18, color: Colors.black),
+                style: TextStyle(
+                    fontSize: 18, color: Theme.of(context).iconTheme.color),
                 decoration: InputDecoration(
                     alignLabelWithHint: true,
                     enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(5),
                         borderSide: BorderSide(
-                            color: Theme.of(context).backgroundColor,
+                            color: Theme.of(context).iconTheme.color,
                             width: 1)),
                     focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(5),
                         borderSide: BorderSide(
-                            color: Theme.of(context).backgroundColor,
+                            color: Theme.of(context).iconTheme.color,
                             width: 1)),
                     hintText: "Title",
                     contentPadding: EdgeInsets.fromLTRB(5, 15, 0, 15),
@@ -74,8 +75,8 @@ class ChooseTitle extends StatelessWidget {
                 Expanded(
                     flex: 1,
                     child: FlatButton(
-                      color: Colors.white,
-                      textColor: Colors.black,
+                      color: Colors.transparent,
+                      textColor: Theme.of(context).iconTheme.color,
                       child: Text("Cancel",
                           style: Theme.of(context).textTheme.headline7),
                       onPressed: () {
@@ -83,14 +84,14 @@ class ChooseTitle extends StatelessWidget {
                       },
                       shape: RoundedRectangleBorder(
                           borderRadius: new BorderRadius.circular(5),
-                          side: BorderSide(color: Colors.white)),
+                          side: BorderSide(color: Colors.transparent)),
                     )),
 //                    SizedBox(
 //                        width: MediaQuery.of(context).size.width / 100 * 5),
                 Expanded(
-                    flex: 1,
-                    child: FlatButton(
-                      color: Colors.white,
+                  flex: 1,
+                  child: FlatButton(
+                      color: Colors.transparent,
                       textColor: Colors.blue,
                       child: Text("Save",
                           style: Theme.of(context).textTheme.headline7),
@@ -103,11 +104,12 @@ class ChooseTitle extends StatelessWidget {
                         Navigator.of(context).pop();
                       },
                       shape: RoundedRectangleBorder(
-                          borderRadius: new BorderRadius.circular(5),
-                          side: BorderSide(color: Colors.white)),
-                    )),
+                        borderRadius: new BorderRadius.circular(5),
+                        side: BorderSide(color: Colors.transparent),
+                      )),
 //                    SizedBox(
 //                        width: MediaQuery.of(context).size.width / 100 * 10),
+                )
               ],
             )),
           ],

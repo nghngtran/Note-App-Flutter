@@ -56,23 +56,27 @@ class TagBar extends StatelessWidget {
         children: <Widget>[
           SizedBox(width: MediaQuery.of(context).size.width / 100 * 3),
           Container(
+              color: Theme.of(context).backgroundColor,
               width: MediaQuery.of(context).size.width / 100 * 10,
               height: MediaQuery.of(context).size.width / 100 * 9,
               margin: EdgeInsets.only(
                   top: MediaQuery.of(context).size.height / 100 * 2,
                   bottom: MediaQuery.of(context).size.height / 100),
               child: FloatingActionButton(
-                  onPressed: () {
-                    showDialog(
-                        context: context,
-                        builder: (BuildContext context) => Dialog(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(5)),
-                            child: CreateTag(model)));
-                  },
-                  child: Icon(Icons.add,
-                      size: 20, color: Theme.of(context).backgroundColor),
-                  backgroundColor: Theme.of(context).iconTheme.color)),
+                elevation: 0.0,
+                onPressed: () {
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) => Dialog(
+                          elevation: 0.0,
+                          backgroundColor: Theme.of(context).backgroundColor,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5)),
+                          child: CreateTag(model)));
+                },
+                child: Icon(Icons.add,
+                    size: 20, color: Theme.of(context).iconTheme.color),
+              )),
 //      SizedBox (width: MediaQuery.of(context).size.width / 100 * 2),
           model.listTagCreated.length > 0
               ? Container(

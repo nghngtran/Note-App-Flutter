@@ -100,27 +100,27 @@ class TestWidget extends StatelessWidget {
 class AppTheme {
   AppTheme._();
   static final ThemeData lightTheme = ThemeData.light().copyWith(
+    dialogBackgroundColor: Colors.white70,
     backgroundColor: Colors.white,
     scaffoldBackgroundColor: Colors.white,
-    primaryColor: Colors.black,
+    primaryColor: Colors.white,
     appBarTheme: AppBarTheme(
       color: Color.fromRGBO(255, 209, 16, 1.0),
       iconTheme: IconThemeData(
         color: Colors.black,
       ),
     ),
-    colorScheme: ColorScheme.light(
-      primary: Colors.white,
-      onPrimary: Colors.white,
-      primaryVariant: Colors.white38,
-      secondary: Colors.black,
-    ),
+//    colorScheme: ColorScheme.light(
+//      primary: Colors.black,
+//      onPrimary: Colors.white,
+//      primaryVariant: Colors.white38,
+//      secondary: Colors.black,
+//    ),
     floatingActionButtonTheme:
         FloatingActionButtonThemeData(backgroundColor: Colors.blue),
     iconTheme: IconThemeData(
       color: Colors.black,
     ),
-    focusColor: Colors.black,
     textTheme: TextTheme(
         title: TextStyle(
           color: Colors.black,
@@ -138,10 +138,11 @@ class AppTheme {
   );
 
   static final ThemeData darkTheme = ThemeData.dark().copyWith(
-    backgroundColor: Colors.black,
-    scaffoldBackgroundColor: Colors.black,
+    dialogBackgroundColor: Colors.transparent,
+    backgroundColor: Color.fromRGBO(34, 34, 34, 1.0),
+    scaffoldBackgroundColor: Color.fromRGBO(34, 34, 34, 1.0),
     appBarTheme: AppBarTheme(
-      color: Colors.black,
+      color: Colors.black54,
       iconTheme: IconThemeData(
         color: Colors.white,
       ),
@@ -149,18 +150,20 @@ class AppTheme {
     primaryColor: Colors.white,
     floatingActionButtonTheme:
         FloatingActionButtonThemeData(backgroundColor: Colors.black),
-    colorScheme: ColorScheme.dark(
-      primary: Colors.black,
-      onPrimary: Colors.black,
-      primaryVariant: Colors.black,
-      secondary: Colors.red,
-    ),
+//    colorScheme: ColorScheme.dark(
+//      primary: Colors.white,
+//      onPrimary: Colors.black,
+//      primaryVariant: Colors.black,
+//      secondary: Colors.red,
+//    ),
+
     cardTheme: CardTheme(
       color: Colors.black,
     ),
     iconTheme: IconThemeData(
       color: Colors.white,
     ),
+//    focusColor: Colors.black54,
     focusColor: Colors.black12.withOpacity(0.3),
     textTheme: TextTheme(
         title: TextStyle(
