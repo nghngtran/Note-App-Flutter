@@ -18,9 +18,6 @@ class ChooseTitle extends StatelessWidget {
   }
 
   Widget build(BuildContext context) {
-//    return BaseView<NoteViewModel>(
-//        onModelReady: (noteViewModel) => noteViewModel.getListItems(),
-//        builder: (context, noteViewModel, child) =>
     return Container(
         width: MediaQuery.of(context).size.width / 100 * 80,
         height: MediaQuery.of(context).size.height / 100 * 22,
@@ -70,15 +67,16 @@ class ChooseTitle extends StatelessWidget {
                 child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
-//                    SizedBox(
-//                        width: MediaQuery.of(context).size.width / 100 * 10),
                 Expanded(
                     flex: 1,
                     child: FlatButton(
                       color: Colors.transparent,
                       textColor: Theme.of(context).iconTheme.color,
                       child: Text("Cancel",
-                          style: Theme.of(context).textTheme.headline7),
+                          style: TextStyle(
+                              fontSize: 17,
+                              fontFamily: Font.Name,
+                              fontWeight: Font.Regular)),
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
@@ -86,15 +84,16 @@ class ChooseTitle extends StatelessWidget {
                           borderRadius: new BorderRadius.circular(5),
                           side: BorderSide(color: Colors.transparent)),
                     )),
-//                    SizedBox(
-//                        width: MediaQuery.of(context).size.width / 100 * 5),
                 Expanded(
                   flex: 1,
                   child: FlatButton(
                       color: Colors.transparent,
                       textColor: Colors.blue,
                       child: Text("Save",
-                          style: Theme.of(context).textTheme.headline7),
+                          style: TextStyle(
+                              fontSize: 17,
+                              fontFamily: Font.Name,
+                              fontWeight: Font.Regular)),
                       onPressed: () {
                         print(textController.text);
                         noteViewModel.setTitle(textController.text);

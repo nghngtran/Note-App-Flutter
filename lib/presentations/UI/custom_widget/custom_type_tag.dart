@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:note_app/application/constants.dart';
 
 import 'package:note_app/presentations/UI/page/create_tag.dart';
 import 'package:note_app/utils/database/dao/tag_dao.dart';
@@ -32,10 +33,11 @@ class CustomTag extends StatelessWidget {
               child: Center(
                   child: Text(
                 "#" + tag.title,
-                style: Theme.of(context)
-                    .textTheme
-                    .headline7
-                    .copyWith(color: Colors.white),
+                style: TextStyle(
+                    fontSize: 17,
+                    fontFamily: Font.Name,
+                    fontWeight: Font.Regular,
+                    color: Colors.white),
               )))
         ]));
   }

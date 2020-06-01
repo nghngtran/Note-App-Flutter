@@ -7,6 +7,8 @@ import 'package:note_app/presentations/UI/page/create_tag.dart';
 import 'package:note_app/presentations/UI/page/customPaint.dart';
 import 'package:note_app/presentations/UI/page/home_screen.dart';
 import 'package:note_app/presentations/UI/page/image_pick.dart';
+import 'package:note_app/presentations/UI/page/open_file_audio.dart';
+import 'package:note_app/presentations/UI/page/record_audio.dart';
 
 class Router {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -17,16 +19,22 @@ class Router {
 //      case RoutePaths.Create_tag:
 //        return MaterialPageRoute(
 //            builder: (BuildContext context) => CreateTag());
-      case RoutePaths.Pick_image:
+//      case RoutePaths.Pick_image:
+//        return MaterialPageRoute(
+//            builder: (BuildContext context) => PickImage());
+      case RoutePaths.Camera:
         return MaterialPageRoute(
-            builder: (BuildContext context) => PickImage());
-//      case RoutePaths.Camera:
-//        return MaterialPageRoute(builder: (BuildContext context) => TakePictureScreen());
+            builder: (BuildContext context) => TakePictureScreen());
 //      case RoutePaths.Paint:
 //        return MaterialPageRoute(builder: (BuildContext context) => CustomPaintPage());
       case RoutePaths.Create_note:
         return MaterialPageRoute(
             builder: (BuildContext context) => CreateNote());
+//      case RoutePaths.Record:
+//        return MaterialPageRoute(builder: (BuildContext context) => Record());
+//      case RoutePaths.ChooseFileSound:
+//        return MaterialPageRoute(
+//            builder: (BuildContext context) => ChooseFileAudio());
       default:
         return MaterialPageRoute(
             builder: (_) => Scaffold(

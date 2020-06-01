@@ -3,12 +3,15 @@ import 'dart:typed_data';
 import 'package:esys_flutter_share/esys_flutter_share.dart';
 import 'package:flutter/material.dart';
 import 'package:note_app/presentations/UI/page/customPaint.dart';
+import 'package:note_app/view_model/note_view_model.dart';
 import 'package:path/path.dart';
 
 class PreviewImageScreen extends StatefulWidget {
+  final NoteViewModel model;
   final String imagePath;
 
-  PreviewImageScreen({this.imagePath});
+  PreviewImageScreen({this.imagePath, NoteViewModel modelView})
+      : model = modelView;
 
   @override
   _PreviewImageScreenState createState() => _PreviewImageScreenState();
@@ -29,7 +32,8 @@ class _PreviewImageScreenState extends State<PreviewImageScreen> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => CustomPaintPage(tmp)));
+                          builder: (context) =>
+                              CustomPaintPage(tmp, widget.model)));
                 },
                 child: Image.file(File(widget.imagePath), fit: BoxFit.cover))));
   }

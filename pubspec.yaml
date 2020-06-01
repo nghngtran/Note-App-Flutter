@@ -25,7 +25,7 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2
   shared_preferences: any
-  provider: ^3.1.0
+  provider: ^4.1.0
   flutter_svg: ^0.17.4
   intl: ^0.16.1
   device_preview: ^0.3.0+1
@@ -48,7 +48,13 @@ dev_dependencies:
     sdk: flutter
   #floor_generator: ^0.12.0
   build_runner: ^1.7.3
-
+  flutter_sound: ^4.0.0
+  record_mp3: ^2.0.0
+  audioplayers: ^0.15.1
+  permission_handler: ^5.0.0+hotfix.8
+  assets_audio_player: ^1.6.4+4
+  flutter_audio_query: ^0.3.4+1
+  simple_permissions: ^0.1.9
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

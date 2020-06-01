@@ -103,7 +103,8 @@ class AppTheme {
     dialogBackgroundColor: Colors.white70,
     backgroundColor: Colors.white,
     scaffoldBackgroundColor: Colors.white,
-    primaryColor: Colors.white,
+//    primaryColor: Colors.white,
+//    primaryColor: Color.fromRGBO(184, 13, 87, 1.0),
     appBarTheme: AppBarTheme(
       color: Color.fromRGBO(255, 209, 16, 1.0),
       iconTheme: IconThemeData(
@@ -116,6 +117,7 @@ class AppTheme {
 //      primaryVariant: Colors.white38,
 //      secondary: Colors.black,
 //    ),
+
     floatingActionButtonTheme:
         FloatingActionButtonThemeData(backgroundColor: Colors.blue),
     iconTheme: IconThemeData(
@@ -147,7 +149,7 @@ class AppTheme {
         color: Colors.white,
       ),
     ),
-    primaryColor: Colors.white,
+//    primaryColor: Color.fromRGBO(184, 13, 87, 1.0),
     floatingActionButtonTheme:
         FloatingActionButtonThemeData(backgroundColor: Colors.black),
 //    colorScheme: ColorScheme.dark(
