@@ -37,7 +37,6 @@ class _BaseViewState<T extends BaseModel> extends State<BaseView<T>> {
 GetIt dependencyAssembler = GetIt.instance;
 
 void setupDependencyAssembler() {
-//  dependencyAssembler.registerLazySingleton(() => API());
   dependencyAssembler.registerFactory(() => NoteViewModel());
   dependencyAssembler.registerFactory(() => TagCreatedModel());
 }

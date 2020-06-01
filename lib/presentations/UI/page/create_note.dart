@@ -155,7 +155,6 @@ class CreateNoteState extends State<CreateNote> {
                                               borderRadius:
                                                   BorderRadius.circular(5)),
                                           child: ChooseTitle(noteViewModel)));
-//                      print(note.title);
                                 },
                                 child: Container(
                                   child: Row(
@@ -372,10 +371,11 @@ class NoteItemWidget extends StatelessWidget {
             Icon(Icons.audiotrack, size: 20, color: Colors.black),
             SizedBox(width: w * 2),
             Text("Em Gai Mua audio",
-                style: Theme.of(context)
-                    .textTheme
-                    .headline7
-                    .copyWith(color: Colors.black))
+                style: TextStyle(
+                    fontSize: 15,
+                    fontFamily: Font.Name,
+                    fontWeight: Font.Regular,
+                    color: Colors.black))
           ],
         ));
   }

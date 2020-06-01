@@ -78,7 +78,11 @@ class ChooseTitle extends StatelessWidget {
                       color: Colors.transparent,
                       textColor: Theme.of(context).iconTheme.color,
                       child: Text("Cancel",
-                          style: Theme.of(context).textTheme.headline7),
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontFamily: Font.Name,
+                            fontWeight: Font.Regular,
+                          )),
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
@@ -94,7 +98,11 @@ class ChooseTitle extends StatelessWidget {
                       color: Colors.transparent,
                       textColor: Colors.blue,
                       child: Text("Save",
-                          style: Theme.of(context).textTheme.headline7),
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontFamily: Font.Name,
+                            fontWeight: Font.Regular,
+                          )),
                       onPressed: () {
                         print(textController.text);
                         noteViewModel.setTitle(textController.text);
