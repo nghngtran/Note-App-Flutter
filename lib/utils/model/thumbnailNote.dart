@@ -14,8 +14,9 @@ class ThumbnailNote{
   ThumbnailNote.withOutTag(this.note_id,this.title,this.content,this.modified_time){
     this.tags = new List<Tag>();
   }
-  void setTag(List<Tag> tags) {
+  ThumbnailNote setTag(List<Tag> tags) {
     this.tags.addAll(tags);
+    return this;
   }
   String toString(){
     String tag ="";
@@ -33,14 +34,16 @@ class ThumbnailNote{
                   "</Thumbnail>";
     return text;
   }
-  ThumbnailNote.withBasicInfo(this.note_id,this.title,this.content,this.modified_time);
+  ThumbnailNote.withBasicInfo(this.note_id,this.title,this.content,this.modified_time){
+    this.tags = new List<Tag>();
+  }
   factory ThumbnailNote.fromDatabaseJson(Map<String, dynamic> data) => ThumbnailNote.withBasicInfo(
       data['note_id'],
       data['title'],
       data['content'],
       DateTime.parse(data['modified_time']));
 
-  Map<String,dynamic > toMap() {
+  Map<String,dynamic > toDatabaseJson() {
     var formatter = TimeUtils.formatter;
     return {
       'note_id':note_id,
@@ -49,4 +52,11 @@ class ThumbnailNote{
       'modified_time':formatter.format(modified_time)
     };
   }
+
+  factory ThumbnailNote.fromDatabaseJsonWithTags(Map<String, dynamic> data,List<Tag> tags) => ThumbnailNote(
+      data['note_id'],
+      data['title'],
+      tags,
+      data['content'],
+      DateTime.parse(data['modified_time']));
 }

@@ -27,7 +27,6 @@
 //}
 
 import 'package:camera/camera.dart';
-import 'package:device_preview/device_preview.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:note_app/application/constants.dart';
@@ -35,7 +34,6 @@ import 'package:note_app/application/router.dart';
 import 'package:note_app/presentations/UI/page/base_view.dart';
 
 import 'package:note_app/presentations/UI/page/home_screen.dart';
-import 'package:note_app/presentations/UI/page/test.dart';
 
 import 'package:note_app/utils/database/database.dart';
 import 'package:note_app/utils/model/note.dart';

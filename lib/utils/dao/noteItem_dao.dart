@@ -4,20 +4,24 @@ import 'package:flutter/cupertino.dart';
 import 'package:note_app/utils/database/database.dart';
 import 'package:note_app/utils/model/noteItem.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:note_app/utils/log_history.dart';
 
 class NoteItemDAO {
-  static Future<void> insertNoteItem(NoteItem noteItem,String note_id) async {
-    final Database db = await DatabaseApp.dbProvider.database;
+  final dbProvider = DatabaseApp.dbProvider;
 
-    await db.insert(
+  Future<void> insertNoteItem(NoteItem noteItem,String note_id) async {
+    final db = await dbProvider.database;
+    var result = await db.insert(
       'noteItems',
       noteItem.toMap(note_id),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
+    LogHistory.trackLog("[NoteItem]", "INSERT new note item:"+noteItem.id+" - "+note_id);
+    return result;
   }
 
-  static Future<void> updateNoteItem(NoteItem noteItem) async {
-    final Database db = await DatabaseApp.dbProvider.database;
+  Future<void> updateNoteItem(NoteItem noteItem) async {
+    final db = await dbProvider.database;
 
     // Update the given NoteItem.
     await db.update(
@@ -28,10 +32,11 @@ class NoteItemDAO {
       // Pass the NoteItem's id as a whereArg to prevent SQL injection.
       whereArgs: [noteItem.id],
     );
+    LogHistory.trackLog("[NoteItem]", "UPDATE note item:"+noteItem.id);
   }
 
-  static Future<void> deleteNoteItem(NoteItem noteItem) async {
-    final Database db = await DatabaseApp.dbProvider.database;
+  Future<void> deleteNoteItem(NoteItem noteItem) async {
+    final db = await dbProvider.database;
 
     // Remove the NoteItem from the database.
     await db.delete(
@@ -41,10 +46,11 @@ class NoteItemDAO {
       // Pass the NoteItem's id as a whereArg to prevent SQL injection.
       whereArgs: [noteItem.id],
     );
+    LogHistory.trackLog("[NoteItem]", "DELETE note item:"+noteItem.id);
   }
 
-  static Future<void> deleteNoteItemsByNoteID(String note_id) async {
-    final Database db = await DatabaseApp.dbProvider.database;
+   Future<void> deleteNoteItemsByNoteID(String note_id) async {
+    final db = await dbProvider.database;
 
     // Remove the NoteItem from the database.
     await db.delete(
@@ -54,12 +60,14 @@ class NoteItemDAO {
       // Pass the NoteItem's id as a whereArg to prevent SQL injection.
       whereArgs: [note_id],
     );
+    LogHistory.trackLog("[NoteItem]", "DELETE note item by note id:"+note_id);
   }
 
-  static Future<NoteItem> getNoteItem(String noteItem_id) async {
-    final Database db = await DatabaseApp.dbProvider.database;
+   Future<NoteItem> getNoteItem(String noteItem_id) async {
+    final db = await dbProvider.database;
     final List<Map<String, dynamic>> maps = await db
         .query('notes', where: "noteItem_id = ?", whereArgs: [noteItem_id]);
+
     return maps.isEmpty
         ? null
         : NoteItem.withFullInfo(
@@ -72,8 +80,8 @@ class NoteItemDAO {
           );
   }
 
-  static Future<List<NoteItem>> getNoteItemsByNoteID(String note_id) async {
-    final Database db = await DatabaseApp.dbProvider.database;
+  Future<List<NoteItem>> getNoteItemsByNoteID(String note_id) async {
+    final db = await dbProvider.database;
 
     // Query the table for all The NoteItem of identify Note.
     final List<Map<String, dynamic>> maps =

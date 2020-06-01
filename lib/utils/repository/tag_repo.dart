@@ -2,17 +2,17 @@ import 'package:note_app/utils/dao/tag_dao.dart';
 import 'package:note_app/utils/model/tag.dart';
 
 class TagRepository {
-  final TagDao = TagDAO();
+  final tagDao = TagDAO();
 
-  Future getAllTags({String query}) => TagDao.getTags(query: query);
+  Future getAllTags({String query}) => tagDao.getTags(query: query);
 
-  Future getTag(String id) => TagDao.getTagByID(id);
+  Future getTag(String id) => tagDao.getTagByID(id);
 
-  Future insertTags(Tag note) => TagDao.createTag(note);
-  Future updateTags(Tag note) => TagDao.updateTag(note);
+  Future insertTag(Tag tag) => tagDao.createTag(tag);
+  Future updateTags(Tag tag) => tagDao.updateTag(tag);
 
-  Future deleteTagById(String id) => TagDao.deleteTag(id);
+  Future deleteTagById(String id) => tagDao.deleteTag(id);
 
   //We are not going to use this in the demo
-  Future deleteAllTags() => TagDao.deleteAllTags();
+  Future deleteAllTags() => tagDao.deleteAllTags();
 }

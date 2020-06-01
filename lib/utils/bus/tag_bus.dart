@@ -21,11 +21,13 @@ class TagBUS {
   getTags({String query}) async {
     //sink is a way of adding data reactively to the stream
     //by registering a new event
-    _tagController.sink.add(await _tagRepository.getAllTags(query: query));
+    var res = await _tagRepository.getAllTags(query: query);
+    _tagController.sink.add(res);
+    return res;
   }
 
   addTag(Tag tag) async {
-    await _tagRepository.insertTags(tag);
+    await _tagRepository.insertTag(tag);
     getTags();
   }
 
@@ -42,3 +44,4 @@ class TagBUS {
   dispose() {
     _tagController.close();
   }
+}

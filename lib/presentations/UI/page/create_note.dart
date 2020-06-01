@@ -16,6 +16,8 @@ import 'package:note_app/presentations/UI/page/create_tag.dart';
 import 'package:note_app/presentations/UI/page/customPaint.dart';
 import 'package:note_app/presentations/UI/page/home_screen.dart';
 import 'package:note_app/presentations/UI/page/image_pick.dart';
+import 'package:note_app/utils/bus/note_bus.dart';
+import 'package:note_app/utils/bus/thumbnail_bus.dart';
 import 'package:note_app/utils/dao/note_dao.dart';
 import 'package:note_app/utils/dao/thumbnail_dao.dart';
 import 'package:note_app/utils/model/note.dart';
@@ -192,18 +194,13 @@ class CreateNoteState extends State<CreateNote> {
                             note.setTitle(noteViewModel.title);
                             note.setTag(noteViewModel.tags);
 
-                            NoteDAO.insertNote(note);
+                            final NoteBUS noteBus = NoteBUS();
+                            noteBus.addNote(note);
                             print(note.contents);
                             print(note.contents.length);
                             //Print List Note
-                            print("\n[List Note]\n");
 //                            var notes = NoteDAO.getNoteByID(note.id);
 //                            notes.then((value)=> print(value.toString()));
-                            var listNotes = ThumbnailNoteDAO.getThumbnails();
-                            listNotes.then((list) => list.forEach((note) => {
-                                  print(note.toString()),
-                                }));
-                            print("\n[/List Note]\n");
                             Navigator.of(context).pushNamedAndRemoveUntil(
                                 '/', (Route<dynamic> route) => false);
                           },

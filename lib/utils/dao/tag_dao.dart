@@ -5,6 +5,7 @@ import 'package:note_app/utils/database/database.dart';
 import 'package:note_app/utils/db_commands.dart';
 import 'package:note_app/utils/model/tag.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:note_app/utils/log_history.dart';
 
 class TagDAO {
   final dbProvider = DatabaseApp.dbProvider;
@@ -18,6 +19,7 @@ class TagDAO {
       tag.toMap(),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
+    LogHistory.trackLog("[TAG]", "INSERT tag:"+tag.id);
     return result;
   }
   //Update Tag with another Tag with same tag_id
@@ -30,6 +32,7 @@ class TagDAO {
       where: "tag_id = ?",
       whereArgs: [tag.id],
     );
+    LogHistory.trackLog("[TAG]", "UPDATE tag:" + tag.id);
     return result;
   }
   //Delete exist Tag with Tag
@@ -41,6 +44,7 @@ class TagDAO {
       where: "tag_id = ?",
       whereArgs: [tag_id],
     );
+    LogHistory.trackLog("[TAG]", "DELETE tag:" + tag_id);
     return result;
   }
   //Delete All Note Record
@@ -49,13 +53,13 @@ class TagDAO {
     var result = await db.delete(
       'tags',
     );
+    LogHistory.trackLog("[TAG]", "DELETE all tag");
     return result;
   }
 
   //Find Tag by tag_id
   Future<Tag> getTagByID(String tag_id) async {
     final db = await dbProvider.database;
-
     final List<Map<String, dynamic>> maps =
     await db.query('tags', where: "tag_id = ?", whereArgs: [tag_id]);
 
@@ -64,23 +68,16 @@ class TagDAO {
     }
     return null;
   }
-//  static Future<List<Tag>> getTagsByNoteID(String note_id) async {
-//    if(DatabaseApp.dbProvider == null){
-//      print("LOG: TagDAO can't start because DatabaseApp not start! please start DatabaseApp");
-//      return null;
-//    }
-//    final Database db = await DatabaseApp.dbProvider;
-//    final List<Map<String, dynamic>> join = await db
-//        .rawQuery(SELECT_TAG_RELATIVES_JOIN_TAGS, [note_id]);
-//    return List.generate(join.length, (i) {
-//      return Tag.withFullInfo(
-//          join[i]['tag_id'],
-//          join[i]['title'],
-//          Color(join[i]['color']),
-//          DateTime.parse(join[i]['created_time']),
-//          DateTime.parse(join[i]['modified_time']));
-//    });
-//  }
+  Future<List<Tag>> getTagsByNoteID(String note_id) async {
+    final db = await dbProvider.database;
+
+    final List<Map<String, dynamic>> result = await db
+        .rawQuery(SELECT_TAG_RELATIVES_JOIN_TAGS, [note_id]);
+    List<Tag> tags = result.isNotEmpty
+        ? result.map((item) => Tag.fromDatabaseJson(item)).toList()
+        : [];
+    return tags;
+  }
   //Get List Tag in Database
   Future<List<Tag>> getTags({List<String> columns, String query}) async {
     final db = await dbProvider.database;

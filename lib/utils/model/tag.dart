@@ -43,7 +43,7 @@ class Tag extends TimeUtils with ChangeNotifier {
   }
 
   String toString() {
-    return "<Tag ID=\""+id+"\" Title=\"" +title +
+    return "<Tag ID=\""+id.toString()+"\" Title=\"" +title.toString()  +
         "\" Color=\"" + color.value.toString() +
         "\" Created_Time=\"" + created_time.toString() +
         "\" Modified_Time=\"" + modified_time.toString()+
@@ -62,9 +62,9 @@ class Tag extends TimeUtils with ChangeNotifier {
   }
 
   factory Tag.fromDatabaseJson(Map<String, dynamic> data) => Tag.withFullInfo(
-      data['note_id'],
+      data['tag_id'],
       data['title'],
-      data['color'],
+      Color(data['color']),
       DateTime.parse(data['created_time']),
       DateTime.parse(data['modified_time']));
 }
