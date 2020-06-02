@@ -5,13 +5,13 @@ import 'package:note_app/utils/model/tag.dart';
 
 
 class ThumbnailNote{
-  final String note_id;
+  final int noteId;
   final String title;
   List<Tag> tags;
   final String content;
   final DateTime modified_time;
-  ThumbnailNote(this.note_id, this.title, this.tags, this.content, this.modified_time);
-  ThumbnailNote.withOutTag(this.note_id,this.title,this.content,this.modified_time){
+  ThumbnailNote(this.noteId, this.title, this.tags, this.content, this.modified_time);
+  ThumbnailNote.withOutTag(this.noteId,this.title,this.content,this.modified_time){
     this.tags = new List<Tag>();
   }
   ThumbnailNote setTag(List<Tag> tags) {
@@ -25,7 +25,7 @@ class ThumbnailNote{
         tag = tag + "\t\t"+f.toString() + "\n"
       });
     }
-    String text = "<Thumbnail Note_id=\""+note_id+
+    String text = "<Thumbnail Note_id=\""+noteId.toString()+
                     "\" Title=\""+title+
                     "\" Content=\""+content+
                     "\" Modified_Time=\""+modified_time.toString()+
@@ -34,7 +34,7 @@ class ThumbnailNote{
                   "</Thumbnail>";
     return text;
   }
-  ThumbnailNote.withBasicInfo(this.note_id,this.title,this.content,this.modified_time){
+  ThumbnailNote.withBasicInfo(this.noteId,this.title,this.content,this.modified_time){
     this.tags = new List<Tag>();
   }
   factory ThumbnailNote.fromDatabaseJson(Map<String, dynamic> data) => ThumbnailNote.withBasicInfo(
@@ -46,7 +46,7 @@ class ThumbnailNote{
   Map<String,dynamic > toDatabaseJson() {
     var formatter = TimeUtils.formatter;
     return {
-      'note_id':note_id,
+      'note_id':noteId,
       'title':title,
       'content':content,
       'modified_time':formatter.format(modified_time)

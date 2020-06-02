@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:note_app/utils/dao/tag_dao.dart';
+import 'package:note_app/utils/db_commands.dart';
 import 'package:note_app/utils/model/thumbnailNote.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -14,24 +15,24 @@ class ThumbnailNoteDAO {
   //Insert new Thumbnail
   Future<int> createThumbnail(ThumbnailNote thumbnail) async {
     final db = await dbProvider.database;
-    var result = await db.insert(
+    var thumbId = await db.insert(
       'thumbnails',
       thumbnail.toDatabaseJson(),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
     LogHistory.trackLog(
-        "[Thumbnail]", "INSERT new thumbnail note:" + thumbnail.note_id);
-    return result;
+        "[Thumbnail]", "INSERT new thumbnail note:" + thumbnail.noteId.toString());
+    return thumbId;
   }
 
-  Future<ThumbnailNote> getThumbnailByID(String note_id) async {
+  Future<ThumbnailNote> getThumbnailByID(int noteId) async {
     final db = await dbProvider.database;
     // Get List Note
     List<Map<String, dynamic>> maps = await db
-        .query('thumbnails', where: "note_id = ?", whereArgs: [note_id]);
+        .query('thumbnails', where: "note_id = ?", whereArgs: [noteId]);
     // Case Found
     if (maps.isNotEmpty) {
-      var tags = await tagDao.getTagsByNoteID(note_id);
+      var tags = await tagDao.getTagsByNoteID(noteId);
       var result = ThumbnailNote.fromDatabaseJson(maps[0]);
       result.setTag(tags);
       return result;
@@ -54,47 +55,65 @@ class ThumbnailNoteDAO {
     } else {
       result = await db.query('thumbnails', columns: columns);
     }
-    var tags;
+
     List<ThumbnailNote> thumbs = result.isNotEmpty
-        ? result.map((item) =>
-                  ThumbnailNote.fromDatabaseJson(item)).toList()
+        ? result.map((item) => ThumbnailNote.fromDatabaseJson(item)).toList()
         : [];
-    for( var thumb in thumbs){
-      var tags = await tagDao.getTagsByNoteID(thumb.note_id);
-      thumb.setTag(tags);
+    if (thumbs.isNotEmpty) {
+      for (var thumb in thumbs) {
+        var tags = await tagDao.getTagsByNoteID(thumb.noteId);
+        print(tags);
+        thumb.setTag(tags);
+      }
+    }
+    return thumbs;
+  }
+
+  Future<List<ThumbnailNote>> findThumbnailByKeyWord(String keyword) async {
+    final db = await dbProvider.database;
+    //Using full text search sql table Note
+    final List<Map<String, dynamic>> notes =
+        await db.rawQuery(FTS_NOTE, [keyword]);
+
+    List<ThumbnailNote> thumbs = new List<ThumbnailNote>();
+
+    for (var note in notes) {
+      var thumb = await getThumbnailByID(note['note_id']);
+      thumbs.add(thumb);
     }
     return thumbs;
   }
 
   Future deleteAllThumbnails() async {
     final db = await dbProvider.database;
-    var result = await db.delete(
-      'thumbnails',
-    );
+    var result = await db.delete('thumbnails');
     LogHistory.trackLog("[Thumbnail]", "DELETE All thumbnail");
     return result;
   }
 
-  Future<int> deleteThumbnail(String note_id) async {
+  Future<int> deleteThumbnail(int noteId) async {
     final db = await dbProvider.database;
     var result = await db
-        .delete('thumbnails', where: "note_id = ?", whereArgs: [note_id]);
-    LogHistory.trackLog("[Thumbnail]", "DELETE thumbnail of note: " + note_id);
+        .delete('thumbnails', where: "note_id = ?", whereArgs: [noteId]);
+    LogHistory.trackLog("[Thumbnail]", "DELETE thumbnail of note: " + noteId.toString());
     return result;
   }
 
   Future<int> updateThumbnail(ThumbnailNote thumbnail) async {
     final db = await dbProvider.database;
-    //deleteNoteByID(note.id);
-    //insertNote(note);
     var result = await db.update(
       'thumbnails',
       thumbnail.toDatabaseJson(),
       where: "note_id = ?",
-      whereArgs: [thumbnail.note_id],
+      whereArgs: [thumbnail.noteId],
     );
     LogHistory.trackLog(
-        "[Note]", "UPDATE thumbnail of note:" + thumbnail.note_id);
+        "[Note]", "UPDATE thumbnail of note:" + thumbnail.noteId.toString());
     return result;
+  }
+  Future<int> getCounts() async {
+    final db = await dbProvider.database;
+    int count = Sqflite.firstIntValue(await db.rawQuery(COUNT,['thumbnails']));
+    return count;
   }
 }

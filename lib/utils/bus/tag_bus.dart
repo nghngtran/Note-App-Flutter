@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:note_app/utils/repository/tag_repo.dart';
 import 'package:note_app/utils/model/tag.dart';
+import 'package:note_app/utils/repository/tag_repo.dart';
 
 class TagBUS {
   final _tagRepository = TagRepository();
@@ -17,7 +17,19 @@ class TagBUS {
   TagBloc() {
     getTags();
   }
-
+  //Check tag Exist
+  //Required: Tag
+  //case tag exist return true;
+  //case tag not exist return false;
+  isTagExist(Tag tag) async {
+    var res = await _tagRepository.getTagByTitle(tag.title);
+    if (res == null) return false;
+    else return true;
+  }
+  //Get list tag
+  //Required: optional {query}
+  //case not found return []
+  //case found return List<Tag>
   getTags({String query}) async {
     //sink is a way of adding data reactively to the stream
     //by registering a new event
@@ -25,18 +37,37 @@ class TagBUS {
     _tagController.sink.add(res);
     return res;
   }
-
+  //Get Tag from database
+  //Required tagId
+  //case tag exist return tag
+  //case tag not exist return null
+  getTagById(int tagId) async {
+    var res = await _tagRepository.getTag(tagId);
+    return res;
+  }
+  //Add Tag to database
+  //case exist tag won't add and return -1
+  //case non-exist tag will add and return tagId
   addTag(Tag tag) async {
-    await _tagRepository.insertTag(tag);
-    getTags();
+    //if (!(await isTagExist(tag))) {
+      var tagId = await _tagRepository.insertTag(tag);
+      getTags();
+      return tagId;
+    //}
+    //return -1;
   }
-
+  //Update Tag
+  //Required: Tag
   updateTag(Tag tag) async {
-    await _tagRepository.updateTags(tag);
-    getTags();
+    if (!isTagExist(tag)) {
+      var count = await _tagRepository.updateTags(tag);
+      getTags();
+      return count;
+    }
+    return -1;
   }
 
-  deleteTagById(String id) async {
+  deleteTagById(int id) async {
     _tagRepository.deleteTagById(id);
     getTags();
   }

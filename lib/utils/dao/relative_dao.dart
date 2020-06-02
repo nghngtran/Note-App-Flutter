@@ -1,74 +1,104 @@
 import 'dart:async';
+
 import 'package:note_app/utils/database/database.dart';
+import 'package:note_app/utils/db_commands.dart';
 import 'package:note_app/utils/log_history.dart';
+import 'package:note_app/utils/model/tag.dart';
 import 'package:sqflite/sqflite.dart';
 
 class RelativeDAO {
   final dbProvider = DatabaseApp.dbProvider;
 
-  Future<void> insertRelative(String note_id, String tag_id) async {
+  Future<int> insertRelative(int noteId, int tagId) async {
     final db = await dbProvider.database;
 
-    await db.insert(
+    var res = await db.insert(
       'relatives',
-      toMap(note_id, tag_id),
+      toMap(noteId, tagId),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
-    LogHistory.trackLog("[Relative]", "INSERT new relative note:"+note_id.toString()+" with tag:"+tag_id.toString());
+    LogHistory.trackLog(
+        "[Relative]",
+        "INSERT new relative note:" +
+            noteId.toString() +
+            " with tag:" +
+            tagId.toString());
+    return res;
   }
-  Future<void> deleteRelative(String note_id, String tag_id) async {
+  Future<void> insertRelativesFromTagList(int noteId, List<Tag> tags) async{
+    for(var tag in tags){
+      await insertRelative(noteId, tag.id);
+    }
+  }
+  Future<int> deleteRelative(int noteId, int tagId) async {
     final db = await dbProvider.database;
 
-    await db.delete(
+    var res = await db.delete(
       'relatives',
       where: "note_id = ? and tag_id = ?",
-      whereArgs: [note_id,tag_id],
+      whereArgs: [noteId, tagId],
     );
-    LogHistory.trackLog("[Relative]", "DELETE relative note:"+note_id+" with tag:"+tag_id);
+    LogHistory.trackLog("[Relative]",
+        "DELETE relative note:" + noteId.toString() + " with tag:" + tagId.toString());
+    return res;
   }
-  Future<void> deleteRelativeByTagID(String tag_id) async{
+
+  Future<int> deleteRelativesByTagID(int tagId) async {
     final db = await dbProvider.database;
 
-    await db.delete(
+    var res = await db.delete(
       'relatives',
       where: "tag_id = ?",
-      whereArgs: [tag_id],
+      whereArgs: [tagId],
     );
-    LogHistory.trackLog("[Relative]", "DELETE all relative of tag:"+tag_id);
+    LogHistory.trackLog("[Relative]", "DELETE all relative of tag:" + tagId.toString());
+    return res;
   }
-  Future<void> deleteRelativeByNoteID(String note_id) async{
+
+  Future<int> deleteRelativesByNoteID(int noteId) async {
     final db = await dbProvider.database;
 
-    await db.delete(
+    var res = await db.delete(
       'relatives',
       where: "note_id = ?",
-      whereArgs: [note_id],
+      whereArgs: [noteId],
     );
-    LogHistory.trackLog("[Relative]", "DELETE all relative of note:"+note_id);
+    LogHistory.trackLog("[Relative]", "DELETE all relative of note:" + noteId.toString());
+    return res;
   }
-  Future<List<Relative>> getRelativesByNoteID(String note_id) async {
+
+  Future<int> deleteAllRelatives() async {
+    final db = await dbProvider.database;
+
+    var res = await db.delete('relatives');
+    LogHistory.trackLog("[Relative]", "DELETE all relative");
+    return res;
+  }
+
+  Future<List<Relative>> getRelativesByNoteID(int noteId) async {
     final db = await dbProvider.database;
 
     // Query the table for all The NoteItem of identify Note.
     final List<Map<String, dynamic>> maps =
-        await db.query('relatives', where: "note_id = ?", whereArgs: [note_id]);
+        await db.query('relatives', where: "note_id = ?", whereArgs: [noteId]);
     return List.generate(maps.length, (i) {
-      return Relative(
-        maps[i]['note_id'],
-        maps[i]['tag_id']
-      );
+      return Relative(maps[i]['note_id'], maps[i]['tag_id']);
     });
   }
 
-  static Map<String, dynamic> toMap(String note_id, String tag_id) {
-    return {
-      'note_id': note_id,
-      'tag_id': tag_id
-    };
+  Map<String, dynamic> toMap(int noteId, int tagId) {
+    return {'note_id': noteId, 'tag_id': tagId};
+  }
+  Future<int> getCounts() async {
+    final db = await dbProvider.database;
+    int count = Sqflite.firstIntValue(await db.rawQuery(COUNT,['relatives']));
+    return count;
   }
 }
-class Relative{
-  String note_id;
-  String tag_id;
-  Relative(this.note_id,this.tag_id);
+
+class Relative {
+  int noteId;
+  int tagId;
+
+  Relative(this.noteId, this.tagId);
 }

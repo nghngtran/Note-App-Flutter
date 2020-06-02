@@ -1,102 +1,111 @@
 import 'dart:async';
 
-import 'package:flutter/cupertino.dart';
 import 'package:note_app/utils/database/database.dart';
+import 'package:note_app/utils/db_commands.dart';
+import 'package:note_app/utils/log_history.dart';
 import 'package:note_app/utils/model/noteItem.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:note_app/utils/log_history.dart';
 
 class NoteItemDAO {
   final dbProvider = DatabaseApp.dbProvider;
 
-  Future<void> insertNoteItem(NoteItem noteItem,String note_id) async {
+  //Insert NoteItem with note ID
+  Future<int> insertNoteItem(NoteItem noteItem, int noteId) async {
     final db = await dbProvider.database;
-    var result = await db.insert(
+    var noteItemId = await db.insert(
       'noteItems',
-      noteItem.toMap(note_id),
+      noteItem.toDatabaseJson(noteId),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
-    LogHistory.trackLog("[NoteItem]", "INSERT new note item:"+noteItem.id+" - "+note_id);
-    return result;
+    LogHistory.trackLog(
+        "[NoteItem]", "INSERT new note item:" + noteItemId.toString() + " of note: " + noteId.toString());
+    return noteItemId;
   }
 
-  Future<void> updateNoteItem(NoteItem noteItem) async {
+  //Update NoteItem with noteItem
+  Future<int> updateNoteItem(NoteItem noteItem) async {
     final db = await dbProvider.database;
 
     // Update the given NoteItem.
-    await db.update(
+    var count = await db.update(
       'noteItems',
-      noteItem.toMapWithOutNoteID(),
+      noteItem.toDatabaseJsonWithOutNoteID(),
       // Ensure that the NoteItem has a matching id.
       where: "noteItem_id = ?",
       // Pass the NoteItem's id as a whereArg to prevent SQL injection.
       whereArgs: [noteItem.id],
     );
-    LogHistory.trackLog("[NoteItem]", "UPDATE note item:"+noteItem.id);
+    LogHistory.trackLog("[NoteItem]", "UPDATE note item:" + noteItem.id.toString());
+    return count;
   }
 
-  Future<void> deleteNoteItem(NoteItem noteItem) async {
+  //Delete NoteItem
+  Future<int> deleteNoteItem(int noteItemId) async {
     final db = await dbProvider.database;
 
     // Remove the NoteItem from the database.
-    await db.delete(
+    var res = await db.delete(
       'noteItems',
       // Use a `where` clause to delete a specific NoteItem.
       where: "noteItem_id = ?",
       // Pass the NoteItem's id as a whereArg to prevent SQL injection.
-      whereArgs: [noteItem.id],
+      whereArgs: [noteItemId],
     );
-    LogHistory.trackLog("[NoteItem]", "DELETE note item:"+noteItem.id);
+    LogHistory.trackLog("[NoteItem]", "DELETE note item:" + noteItemId.toString());
+    return res;
   }
 
-   Future<void> deleteNoteItemsByNoteID(String note_id) async {
+  //Delete NoteItem by NoteID
+  Future<void> deleteNoteItemsByNoteID(int noteId) async {
     final db = await dbProvider.database;
 
     // Remove the NoteItem from the database.
-    await db.delete(
+    var res = await db.delete(
       'noteItems',
       // Use a `where` clause to delete a specific NoteItem.
       where: "note_id = ?",
       // Pass the NoteItem's id as a whereArg to prevent SQL injection.
-      whereArgs: [note_id],
+      whereArgs: [noteId],
     );
-    LogHistory.trackLog("[NoteItem]", "DELETE note item by note id:"+note_id);
+    LogHistory.trackLog("[NoteItem]", "DELETE note item by note id:" + noteId.toString());
+    return res;
   }
 
-   Future<NoteItem> getNoteItem(String noteItem_id) async {
+  //Delete All NoteItem
+  Future<void> deleteAllNoteItem() async {
     final db = await dbProvider.database;
-    final List<Map<String, dynamic>> maps = await db
-        .query('notes', where: "noteItem_id = ?", whereArgs: [noteItem_id]);
 
-    return maps.isEmpty
-        ? null
-        : NoteItem.withFullInfo(
-            maps[0]['noteItem_id'],
-            maps[0]['type'],
-            maps[0]['content'],
-            Color(maps[0]['bgColor']),
-            DateTime.parse(maps[0]['created_time']),
-            DateTime.parse(maps[0]['modified_time'])
-          );
+    // Remove the NoteItem from the database.
+    var res = await db.delete('noteItems');
+    LogHistory.trackLog("[NoteItem]", "DELETE All note item");
+    return res;
   }
 
-  Future<List<NoteItem>> getNoteItemsByNoteID(String note_id) async {
+  //Get Single NoteItem
+  Future<NoteItem> getNoteItem(int noteId) async {
+    final db = await dbProvider.database;
+    final List<Map<String, dynamic>> maps =
+        await db.query('notes', where: "noteItem_id = ?", whereArgs: [noteId]);
+
+    return maps.isEmpty ? null : NoteItem.fromDatabaseJson(maps[0]);
+  }
+
+  Future<List<NoteItem>> getNoteItemsByNoteID(int noteId) async {
     final db = await dbProvider.database;
 
     // Query the table for all The NoteItem of identify Note.
     final List<Map<String, dynamic>> maps =
-        await db.query('noteItems', where: "note_id = ?", whereArgs: [note_id]);
+        await db.query('noteItems', where: "note_id = ?", whereArgs: [noteId]);
 
     // Convert the List<Map<String, dynamic> into a List<NoteItem>.
-    return List.generate(maps.length, (i) {
-      return NoteItem.withFullInfo(
-        maps[i]['noteItem_id'],
-        maps[i]['type'],
-        maps[i]['content'],
-        Color(maps[i]['bgColor']),
-        DateTime.parse(maps[i]['created_time']),
-        DateTime.parse(maps[i]['modified_time'])
-      );
-    });
+    List<NoteItem> note = maps.isNotEmpty
+        ? maps.map((item) => NoteItem.fromDatabaseJson(item)).toList()
+        : [];
+    return note;
+  }
+  Future<int> getCounts() async {
+    final db = await dbProvider.database;
+    int count = Sqflite.firstIntValue(await db.rawQuery(COUNT,['noteItems']));
+    return count;
   }
 }

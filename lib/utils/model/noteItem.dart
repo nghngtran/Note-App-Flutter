@@ -5,22 +5,18 @@ import 'package:note_app/utils/model/TimeUtils.dart';
 enum NoteItemType { TEXT, IMAGE, AUDIO }
 
 class NoteItem extends TimeUtils {
-  static int order = 0;
 
   //@primaryKey
-  String id;
+  int id;
   String content;
   String type;
-//  String bgColor;
-  Color note_color;
-  NoteItem(this.type) : super() {
-    this.id = "noteItem" + ((++order).toString());
-  }
+  Color noteColor;
+  NoteItem(this.type) : super();
 
   NoteItem.withFullInfo(this.id, this.type, this.content,
-      this.note_color, DateTime created_time, DateTime modified_time) {
-    this.created_time = created_time;
-    this.modified_time = modified_time;
+      this.noteColor, DateTime createdTime, DateTime modifiedTime) {
+    this.created_time = createdTime;
+    this.modified_time = modifiedTime;
   }
 
   //SetAttribute
@@ -30,40 +26,45 @@ class NoteItem extends TimeUtils {
 
 
   void setBgColor(Color color) {
-    this.note_color = color;
+    this.noteColor = color;
   }
 
   String toString() {
-    return "<NoteItem ID=\""+id+"\" Type=\"" +type +
+    return "<NoteItem ID=\""+id.toString()+"\" Type=\"" +type +
         "\" Content=\"" + content.toString() +
-        "\" Color=\"" + note_color.toString() +
+        "\" Color=\"" + noteColor.toString() +
         "\" Created_Time=\"" + created_time.toString() +
         "\" Modified_Time=\"" + modified_time.toString()+
         "\"/>";
   }
 
-  Map<String, dynamic> toMap(String note_id) {
+  Map<String, dynamic> toDatabaseJson(int noteId) {
     var formatter = TimeUtils.formatter;
     return {
-      'noteItem_id': id,
-      'note_id': note_id,
+      'note_id': noteId,
       'type': type,
       'content': content,
-      'bgColor': note_color == null? 0: note_color.value,
+      'note_color': noteColor == null? 0: noteColor.value,
       'created_time': formatter.format(created_time),
       'modified_time': formatter.format(modified_time)
     };
   }
 
-  Map<String, dynamic> toMapWithOutNoteID() {
+  Map<String, dynamic> toDatabaseJsonWithOutNoteID() {
     var formatter = TimeUtils.formatter;
     return {
-      'noteItem_id': id,
       'type': type,
       'content': content,
-      'bgColor': note_color == null? 0: note_color.value,
+      'note_color': noteColor == null? 0: noteColor.value,
       'created_time': formatter.format(created_time),
       'modified_time': formatter.format(modified_time)
     };
   }
+  factory NoteItem.fromDatabaseJson(Map<String, dynamic> data) => NoteItem.withFullInfo(
+      data['noteItem_id'],
+      data['type'],
+      data['content'],
+      Color(data['note_color']),
+      DateTime.parse(data['created_time']),
+      DateTime.parse(data['modified_time']));
 }

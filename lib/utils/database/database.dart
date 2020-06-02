@@ -25,8 +25,7 @@ class DatabaseApp {
   }
   createDatabase() async {
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
-    //"ReactiveTodo.db is our database instance named
-    String path = join(documentsDirectory.path, "RekdcccasdkkdddsafctivdedTodos12.db");
+    String path = join(documentsDirectory.path, "test21.db");
     var database = await openDatabase(path,
         version: 1, onCreate: initDB, onUpgrade: onUpgrade);
     return database;
@@ -38,11 +37,13 @@ class DatabaseApp {
     await database.execute(DROP_TABLE_RELATIVE);
     await database.execute(DROP_TABLE_THUMBNAIL);
 
-    await database.execute(CREATE_TABLE_TAG);
+
+    await database.execute(CREATE_TABLE_RELATIVE);
     await database.execute(CREATE_TABLE_THUMBNAIL_NOTE);
     await database.execute(CREATE_TABLE_NOTE_ITEM);
     await database.execute(CREATE_TABLE_NOTE);
-    await database.execute(CREATE_TABLE_RELATIVE);
+    await database.execute(CREATE_TABLE_TAG);
+
   }
   //This is optional, and only used for changing DB schema migrations
   void onUpgrade(Database database, int oldVersion, int newVersion) {

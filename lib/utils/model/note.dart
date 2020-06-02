@@ -7,10 +7,9 @@ import 'noteItem.dart';
 import 'tag.dart';
 
 class Notes extends TimeUtils with ChangeNotifier {
-  static int order = 0;
 
   //@primaryKey
-  String id;
+  int id;
   String title;
   List<Tag> tags;
   List<NoteItem> contents;
@@ -18,7 +17,6 @@ class Notes extends TimeUtils with ChangeNotifier {
 
   //Constructor
   Notes() : super() {
-    this.id = "note" + ((++order).toString());
     this.title = "New untitled note";
     this.tags = new List<Tag>();
     this.contents = new List<NoteItem>();
@@ -39,7 +37,6 @@ class Notes extends TimeUtils with ChangeNotifier {
     this.modified_time = modified_time;
   }
   Notes.withTitle(String title) {
-    this.id = "note" + ((++order).toString());
     this.tags = new List<Tag>();
     this.contents = new List<NoteItem>();
     this.history = new List<String>();
@@ -48,7 +45,6 @@ class Notes extends TimeUtils with ChangeNotifier {
   }
 
   Notes.withTag(Tag tag) : super() {
-    this.id = "note" + ((++order).toString());
     this.title = "New Note";
     this.tags = new List<Tag>();
     this.contents = new List<NoteItem>();
@@ -109,7 +105,7 @@ class Notes extends TimeUtils with ChangeNotifier {
           .forEach((f) => {noteItem = noteItem + "\t\t" + f.toString() + "\n"});
     }
     return "<Note ID=\"" +
-        id +
+        id.toString() +
         "\" Title=\"" +
         title +
         "\" Created_Time=\"" +
@@ -133,7 +129,6 @@ class Notes extends TimeUtils with ChangeNotifier {
   Map<String, dynamic> toDatabaseJson() {
     var formatter = TimeUtils.formatter;
     return {
-      'note_id': id,
       'title': title,
       'created_time': formatter.format(created_time),
       'modified_time': formatter.format(modified_time)

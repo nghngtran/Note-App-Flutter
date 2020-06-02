@@ -119,19 +119,22 @@ class CreateTag extends StatelessWidget {
 //                          });
 //                          print("Finish Testtttt");
                           TagBUS tagbus = new TagBUS();
-                          tagbus.addTag(tag);
+                          var stt = await tagbus.addTag(tag);
+                          print("stt:"+stt.toString());
                           //print(tag);
-                          //var _listTags = await tagbus.getTags();
-                          //List<Tag> listTags = List<Tag>();
-                          //_listTags.forEach((tag) => listTags.add(tag));
-                          //listTags.forEach((listT) => print(listT));
+                          print("|TAG|");
+                          var _listTags = await tagbus.getTags();
+                          List<Tag> listTags = List<Tag>();
+                          _listTags.forEach((tag) => listTags.add(tag));
+                          listTags.forEach((listT) => print(listT));
+                          print("|TAG|");
+////
+//                             ThumbnailBUS thumbnailbus = new ThumbnailBUS();
+////                          ThumbnailNote thumb = new ThumbnailNote("note1", "day la thumbnail", listTags, "day la noi dung", DateTime.now());
+////                          thumbnailbus.addThumbnail(thumb);
 //
-                             ThumbnailBUS thumbnailbus = new ThumbnailBUS();
-//                          ThumbnailNote thumb = new ThumbnailNote("note1", "day la thumbnail", listTags, "day la noi dung", DateTime.now());
-//                          thumbnailbus.addThumbnail(thumb);
-
-                          var _listThumbnail = await thumbnailbus.getThumbnails();
-                          _listThumbnail.forEach((thumbnail) => print(thumbnail));
+//                          var _listThumbnail = await thumbnailbus.getThumbnails();
+//                          _listThumbnail.forEach((thumbnail) => print(thumbnail));
 //                          Provider.of<TagCreated>(context, listen: true)
 //                              .addTag(tag);
                           tagCreatedModel.addToList(tag);

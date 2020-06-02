@@ -13,7 +13,9 @@ class NoteBUS {
   final _noteController = StreamController<List<Notes>>.broadcast();
 
   get notes => _noteController.stream;
-
+//  NoteBUS(){
+//    getNotes();
+//  }
   NoteBloc() {
     getNotes();
   }
@@ -21,22 +23,29 @@ class NoteBUS {
   getNotes({String query}) async {
     //sink is a way of adding data reactively to the stream
     //by registering a new event
-    _noteController.sink.add(await _noteRepository.getAllNotes(query: query));
+    var result = await _noteRepository.getAllNotes(query: query);
+    _noteController.sink.add(result);
+    return result;
   }
-
+  getNoteById(int note_id) async {
+    return await _noteRepository.getNote(note_id);
+  }
   addNote(Notes note) async {
-    await _noteRepository.insertNotes(note);
+    var code = await _noteRepository.insertNotes(note);
     getNotes();
+    return code;
   }
 
   updateNote(Notes note) async {
-    await _noteRepository.updateNotes(note);
+    var code = await _noteRepository.updateNotes(note);
     getNotes();
+    return code;
   }
 
-  deleteNoteById(String id) async {
-    _noteRepository.deleteNotesById(id);
+  deleteNoteById(int id) async {
+    var code = _noteRepository.deleteNotesById(id);
     getNotes();
+    return code;
   }
 
   dispose() {

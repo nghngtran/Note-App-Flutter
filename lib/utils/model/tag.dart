@@ -1,33 +1,24 @@
 import 'package:flutter/cupertino.dart';
-import 'package:intl/intl.dart';
 import 'package:note_app/utils/model/TimeUtils.dart';
 
 class Tag extends TimeUtils with ChangeNotifier {
-  static int order = 0;
 
   //@primaryKey
-  String id;
+  int id;
   String title;
   Color color;
 
   Tag() : super() {
-    this.id = "tag" + ((++order).toString());
     this.title = "New Tag";
   }
-//  String toString() {
-//    return title;
-//  }
 
-  Tag.withFullInfo(this.id, this.title, this.color, DateTime created_time,
-      DateTime modified_time) {
-    this.created_time = created_time;
-    this.modified_time = modified_time;
+  Tag.withFullInfo(this.id, this.title, this.color, DateTime createdTime,
+      DateTime modifiedTime) {
+    this.created_time = createdTime;
+    this.modified_time = modifiedTime;
     notifyListeners();
   }
-  Tag.withTitle(String title, this.id) : super() {
-    this.id = "tag" + ((++order).toString());
-    this.title = title;
-  }
+
   void setTitle(String title) {
     this.title = title;
     notifyListeners();
@@ -38,9 +29,9 @@ class Tag extends TimeUtils with ChangeNotifier {
     notifyListeners();
   }
 
-  Tag getTag() {
-    return this;
-  }
+//  Tag getTag() {
+//    return this;
+//  }
 
   String toString() {
     return "<Tag ID=\""+id.toString()+"\" Title=\"" +title.toString()  +
@@ -50,10 +41,9 @@ class Tag extends TimeUtils with ChangeNotifier {
         "\"/>";
   }
 
-  Map<String, dynamic> toMap() {
+  Map<String, dynamic> toDatabaseJson() {
     var formatter = TimeUtils.formatter;
     return {
-      'tag_id': id,
       'title': title,
       'color': color == null ? 0 : color.value,
       'created_time': formatter.format(created_time),
