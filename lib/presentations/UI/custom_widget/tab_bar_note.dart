@@ -209,17 +209,18 @@ class TagBarOfNote extends StatelessWidget {
                     size: 20, color: Theme.of(context).iconTheme.color),
               )),
 
-          Container(
-              width: MediaQuery.of(context).size.width / 100 * 85,
-              height: MediaQuery.of(context).size.height / 100 * 6,
-              child: ListView.builder(
-                  controller: horizontal,
-                  scrollDirection: Axis.horizontal,
-                  itemCount: model.tags.length,
-                  itemBuilder: (context, index) {
-                    final item = model.tags[index];
-                    return CustomTagNote(item);
-                  }))
+          Expanded(
+              child: Container(
+                  width: MediaQuery.of(context).size.width / 100 * 85,
+                  height: MediaQuery.of(context).size.height / 100 * 6,
+                  child: ListView.builder(
+                      controller: horizontal,
+                      scrollDirection: Axis.horizontal,
+                      itemCount: model.tags.length,
+                      itemBuilder: (context, index) {
+                        final item = model.tags[index];
+                        return CustomTagNote(item);
+                      })))
 //              : Container()
         ]);
   }

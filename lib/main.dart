@@ -27,6 +27,7 @@
 //}
 
 import 'package:camera/camera.dart';
+import 'package:device_preview/device_preview.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:note_app/application/constants.dart';
@@ -53,14 +54,15 @@ void main() async {
     originalCheck<T>(value);
   };
   setupDependencyAssembler();
-  runApp(ChangeNotifierProvider<AppStateNotifier>(
-      create: (context) => AppStateNotifier(), child: MyApp()));
+//  runApp(ChangeNotifierProvider<AppStateNotifier>(
+//      create: (context) => AppStateNotifier(), child: MyApp()));
 
-//  runApp(
-//    DevicePreview(
-//      builder: (context) => MyApp(),
-//    ),
-//  );
+  runApp(
+    DevicePreview(
+      builder: (context) => ChangeNotifierProvider<AppStateNotifier>(
+          create: (context) => AppStateNotifier(), child: MyApp()),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {

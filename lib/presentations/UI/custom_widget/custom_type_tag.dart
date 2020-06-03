@@ -79,17 +79,18 @@ class TagBar extends StatelessWidget {
               )),
 //      SizedBox (width: MediaQuery.of(context).size.width / 100 * 2),
           model.listTagCreated.length > 0
-              ? Container(
-                  width: MediaQuery.of(context).size.width / 100 * 85,
-                  height: MediaQuery.of(context).size.height / 100 * 6,
-                  child: ListView.builder(
-                      controller: horizontal,
-                      scrollDirection: Axis.horizontal,
-                      itemCount: model.listTagCreated.length,
-                      itemBuilder: (context, index) {
-                        final item = model.listTagCreated[index];
-                        return CustomTag(item);
-                      }))
+              ? Expanded(
+                  child: Container(
+                      width: MediaQuery.of(context).size.width / 100 * 85,
+                      height: MediaQuery.of(context).size.height / 100 * 6,
+                      child: ListView.builder(
+                          controller: horizontal,
+                          scrollDirection: Axis.horizontal,
+                          itemCount: model.listTagCreated.length,
+                          itemBuilder: (context, index) {
+                            final item = model.listTagCreated[index];
+                            return CustomTag(item);
+                          })))
               : Container()
         ]);
   }
