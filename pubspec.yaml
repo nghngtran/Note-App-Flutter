@@ -40,7 +40,7 @@ dependencies:
   esys_flutter_share: ^1.0.2
   image_picker: ^0.6.5+2
   get_it: ^3.0.3
-#  flutter_plugin_android_lifecycle: ^1.0.7
+#  flutter_plugin_android_lifecycle: ^1.0.8
 
   unicorndial: ^1.1.5
 dev_dependencies:
@@ -51,10 +51,9 @@ dev_dependencies:
   flutter_sound: ^4.0.0
   record_mp3: ^2.0.0
   audioplayers: ^0.15.1
-  permission_handler: ^5.0.0+hotfix.8
+#  permission_handler: ^5.0.0+hotfix.8
   assets_audio_player: ^1.6.4+4
-  flutter_audio_query: ^0.3.4+1
-  simple_permissions: ^0.1.9
+
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

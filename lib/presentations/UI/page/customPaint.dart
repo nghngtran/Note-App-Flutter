@@ -1,12 +1,6 @@
-import 'dart:io';
 import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:note_app/application/constants.dart';
-import 'package:note_app/presentations/UI/page/create_note.dart';
 import 'package:note_app/utils/database/model/note.dart';
 import 'package:note_app/utils/database/model/noteItem.dart';
 import 'package:note_app/view_model/note_view_model.dart';
@@ -33,6 +27,7 @@ class _CustomPaintPageState extends State<CustomPaintPage> {
     _controller = _newController();
   }
 
+  @override
   PainterController _newController() {
     PainterController controller = new PainterController();
     controller.thickness = 5.0;
@@ -42,7 +37,6 @@ class _CustomPaintPageState extends State<CustomPaintPage> {
     return controller;
   }
 
-  @override
   Widget build(BuildContext context) {
     List<Widget> actions;
     if (_finished) {
@@ -94,15 +88,19 @@ class _CustomPaintPageState extends State<CustomPaintPage> {
                           icon: Icon(Icons.check),
                           onPressed: () {
                             NoteItem tmp = NoteItem("Image");
+                            print(widget.model.getListItems().length);
                             tmp.content = widget.path.toString();
-                            Provider.of<Notes>(context, listen: true)
+                            Provider.of<Notes>(context, listen: false)
                                 .addNoteItem(tmp);
-                            widget.model
-                                .setContentChildItem(widget.path.toString());
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (BuildContext context) {
-                              return CreateNote();
-                            }));
+                            widget.model.addNoteItem(tmp);
+//                            widget.model
+//                                .setContentChildItem(widget.path.toString());
+
+//                            Navigator.of(context).push(MaterialPageRoute(
+//                                builder: (BuildContext context) {
+//                              return CreateNote();
+                            Navigator.popAndPushNamed(context, 'create_note');
+//                            }));
                           })
                     ],
                     elevation: 0.0,

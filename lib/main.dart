@@ -41,8 +41,12 @@ import 'package:note_app/utils/database/database.dart';
 import 'package:note_app/utils/database/model/note.dart';
 import 'package:provider/provider.dart';
 
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+//  await SimplePermissions.requestPermission(Permission.WriteExternalStorage);
+//
+//  await SimplePermissions.requestPermission(Permission.ReadExternalStorage);
 
 // Obtain a list of the available cameras on the device.
   final cameras = await availableCameras();

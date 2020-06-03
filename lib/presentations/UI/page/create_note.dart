@@ -1,8 +1,11 @@
 import 'dart:async';
+import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:note_app/application/constants.dart';
 import 'package:note_app/presentations/UI/custom_widget/FAB.dart';
 import 'package:note_app/presentations/UI/custom_widget/choose_title.dart';
@@ -23,6 +26,7 @@ import 'package:note_app/utils/database/model/note.dart';
 import 'package:note_app/utils/database/model/noteItem.dart';
 import 'package:note_app/view_model/list_tag_viewmodel.dart';
 import 'package:note_app/view_model/note_view_model.dart';
+import 'package:painter2/painter2.dart';
 import 'package:provider/provider.dart';
 import 'package:unicorndial/unicorndial.dart';
 
@@ -79,21 +83,21 @@ class CreateNoteState extends State<CreateNote> {
           CupertinoDialogAction(
             child: Text('Record'),
             onPressed: () {
-              Navigator.
-//              popAndPushNamed(context, 'record');
-                  push(context,
-                      MaterialPageRoute(builder: (BuildContext context) {
-                return Record(model);
-              }));
+//              Navigator.
+////              popAndPushNamed(context, 'record');
+//                  push(context,
+//                      MaterialPageRoute(builder: (BuildContext context) {
+//                return Record(model);
+//              }));
             },
           ),
           CupertinoDialogAction(
               child: Text('Mp3'),
               onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (BuildContext context) {
-                  return ChooseFileAudio(model);
-                }));
+//                Navigator.push(context,
+//                    MaterialPageRoute(builder: (BuildContext context) {
+//                  return ChooseFileAudio(model);
+//                }));
               })
         ]);
   }
@@ -374,7 +378,6 @@ class EditTextState extends State<EditText> {
                       onSaved: (value) {
                         widget.item.setContent(txtController.text);
                         widget.item.setBgColor(note_color);
-
                         print(widget.item.content);
                       })
                 ]))));
@@ -384,6 +387,14 @@ class EditTextState extends State<EditText> {
 class NoteItemWidget extends StatelessWidget {
   final NoteItem item;
   NoteItemWidget(NoteItem _item) : item = _item;
+  Uint8List bytes;
+  void enCodeImg() {
+    final picker = ImagePicker();
+    File imgFile = File(item.content);
+    print(item.content);
+    ImagePicker.pickImage(source: ImageSource.gallery);
+    bytes = imgFile.readAsBytesSync();
+  }
 
   Widget build(BuildContext context) {
     double w = MediaQuery.of(context).size.width / 100;
@@ -391,6 +402,8 @@ class NoteItemWidget extends StatelessWidget {
     if (item.type == "Text") {
       return EditText(item);
     } else if (item.type == "Image") {
+      enCodeImg();
+
       return Container(
           width: w * 100,
           height: w * 100,
@@ -400,7 +413,7 @@ class NoteItemWidget extends StatelessWidget {
               border: Border.all(width: 1, color: Colors.black),
               borderRadius: BorderRadius.all(Radius.circular(10)),
               color: Colors.white),
-          child: Image.asset(item.content));
+          child: Image.memory(bytes));
     }
     return Container(
         height: h * 5,

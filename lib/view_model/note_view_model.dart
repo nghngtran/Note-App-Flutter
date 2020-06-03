@@ -23,6 +23,7 @@ class NoteViewModel extends BaseModel {
 
   void setContentChildItem(String content) {
     this.contents.last.setContent(content);
+    notifyListeners();
   }
 
   List<NoteItem> getListItems() {
@@ -92,6 +93,7 @@ class NoteViewModel extends BaseModel {
 
   void setNoteItem(List<NoteItem> noteItems) {
     this.contents.addAll(noteItems);
+    notifyListeners();
   }
 
   void addNoteItem(NoteItem noteItem) {
@@ -104,10 +106,10 @@ class NoteViewModel extends BaseModel {
     notifyListeners();
   }
 
-//  NoteItem getNoteItemAt(index) {
-//    return this.contents[index];
-//  }
-//
+  NoteItem getNoteItemAt(index) {
+    return this.contents[index];
+  }
+
 //  String toString() {
 //    return id + "  |  " + title + "  |  ";
 //        created_time.toString() +

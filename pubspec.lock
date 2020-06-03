@@ -35,7 +35,7 @@ packages:
       name: assets_audio_player
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.6.4+4"
+    version: "1.6.4+5"
   async:
     dependency: transitive
     description:
@@ -209,13 +209,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_audio_query:
-    dependency: "direct dev"
-    description:
-      name: flutter_audio_query
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.3.4+2"
   flutter_colorpicker:
     dependency: "direct main"
     description:
@@ -479,7 +472,7 @@ packages:
     source: hosted
     version: "1.9.0"
   permission_handler:
-    dependency: "direct dev"
+    dependency: transitive
     description:
       name: permission_handler
       url: "https://pub.dartlang.org"
@@ -604,13 +597,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.2.3"
-  simple_permissions:
-    dependency: "direct dev"
-    description:
-      name: simple_permissions
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.1.9"
   sky_engine:
     dependency: transitive
     description: flutter

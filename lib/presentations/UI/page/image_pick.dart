@@ -12,7 +12,7 @@ import 'package:provider/provider.dart';
 
 class PickImage extends StatefulWidget {
   final NoteViewModel model;
-  PickImage(NoteViewModel _model):model=_model;
+  PickImage(NoteViewModel _model) : model = _model;
   @override
   _PickImageState createState() => _PickImageState();
 }
@@ -39,7 +39,8 @@ class _PickImageState extends State<PickImage> {
                 Image tmp = new Image.file(snapshot.data);
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => CustomPaintPage(tmp,widget.model)),
+                  MaterialPageRoute(
+                      builder: (context) => CustomPaintPage(tmp, widget.model)),
                 );
               },
               child: Container(
@@ -86,7 +87,6 @@ class _PickImageState extends State<PickImage> {
                     Provider.of<Notes>(context, listen: true).contents.last;
                 Provider.of<Notes>(context, listen: true)
                     .removeNoteItem(noteItem);
-
                 Navigator.of(context).pop();
               },
             )),

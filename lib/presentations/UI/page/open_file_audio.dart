@@ -9,7 +9,7 @@ import 'package:note_app/view_model/note_view_model.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:simple_permissions/simple_permissions.dart';
+//import 'package:simple_permissions/simple_permissions.dart';
 
 class ChooseFileAudio extends StatelessWidget {
   final NoteViewModel model;
@@ -28,21 +28,21 @@ class ChooseFileAudio extends StatelessWidget {
   Widget build(BuildContext context) {
     double w = MediaQuery.of(context).size.width / 100;
     double h = MediaQuery.of(context).size.height / 100;
-    SimplePermissions.requestPermission(Permission.ReadExternalStorage)
-        .then((value) {
-      if (value == PermissionStatus.authorized) {
-        localPath.then((String value) {
-          print("True");
-          Directory dir = Directory('/storage/emulated/0/Download');
+//    SimplePermissions.requestPermission(Permission.ReadExternalStorage)
+//        .then((value) {
+//      if (value == PermissionStatus.authorized) {
+//        localPath.then((String value) {
+//          print("True");
+    Directory dir = Directory('/storage/emulated/0/Download');
 
-          _files = dir.listSync(recursive: true, followLinks: false);
-          for (FileSystemEntity entity in _files) {
-            String path = entity.path;
-            if (path.endsWith('.mp3')) _songs.add(entity);
-          }
-        });
-      }
-    });
+    _files = dir.listSync(recursive: true, followLinks: false);
+    for (FileSystemEntity entity in _files) {
+      String path = entity.path;
+      if (path.endsWith('.mp3')) _songs.add(entity);
+    }
+//        });
+//      }
+//    });
     print(_songs.length.toString());
     return Scaffold(
         backgroundColor: Theme.of(context).backgroundColor,
