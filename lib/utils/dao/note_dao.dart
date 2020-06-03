@@ -27,11 +27,13 @@ class NoteDAO {
       note.toDatabaseJson(),
       //conflictAlgorithm: ConflictAlgorithm.replace,
     );
+    //Insert NoteItem
     for(var noteItem in note.contents){
-      noteItem.id = await noteItemDao.insertNoteItem(noteItem, note.id);
+      await noteItemDao.insertNoteItem(noteItem, note.id);
     }
+    //Insert Tag Relative
     for(var tag in note.tags){
-      tag.id = await tagDao.createTag(tag);
+      //tag.id = await tagDao.createTag(tag);
       await relativeDao.insertRelative(note.id, tag.id);
     }
 
