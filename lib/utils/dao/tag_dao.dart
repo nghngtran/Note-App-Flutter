@@ -17,8 +17,8 @@ class TagDAO {
 
     var tagId = await db.insert(
       'tags',
-      tag.toDatabaseJson(),
-      conflictAlgorithm: ConflictAlgorithm.abort,
+      tag.toDatabaseJson()
+      //conflictAlgorithm: ConflictAlgorithm.abort,
     );
 
     LogHistory.trackLog("[TAG]", "INSERT tag:" + tagId.toString());

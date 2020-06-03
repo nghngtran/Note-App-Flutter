@@ -201,11 +201,11 @@ class CreateNoteState extends State<CreateNote> {
                             //print(note.contents.length);
 
                             //Print List Note
-                            print("|Load Notes|");
-                            var notes = await noteBus.getNotes();
-                            for(var note1 in notes)
-                              print(note1.toString());
-                            print("|Load Notes|");
+//                            print("|Load Notes|");
+//                            var notes = await noteBus.getNotes();
+//                            for(var note1 in notes)
+//                              print(note1.toString());
+//                            print("|Load Notes|");
 
                             final TagBUS tagBus = TagBUS();
                             print("|Load Tag|");
@@ -214,12 +214,12 @@ class CreateNoteState extends State<CreateNote> {
                               print(tag1.toString());
                             }
                             print("|Load Tag|");
-                            final ThumbnailBUS thumbBus = ThumbnailBUS();
-                            print("|Load Thumbnails|");
-                            var thumbs = await thumbBus.getThumbnails();
-                            for(var thumb in thumbs)
-                              print(thumb.toString());
-                            print("|Load Thumbnails|");
+//                            final ThumbnailBUS thumbBus = ThumbnailBUS();
+//                            print("|Load Thumbnails|");
+//                            var thumbs = await thumbBus.getThumbnails();
+//                            for(var thumb in thumbs)
+//                              print(thumb.toString());
+//                            print("|Load Thumbnails|");
 
 
                             Navigator.of(context).pushNamedAndRemoveUntil(

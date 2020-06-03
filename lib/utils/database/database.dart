@@ -25,7 +25,7 @@ class DatabaseApp {
   }
   createDatabase() async {
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
-    String path = join(documentsDirectory.path, "test48.db");
+    String path = join(documentsDirectory.path, "test55.db");
     print(path);
     var database = await openDatabase(path,
         version: 1, onCreate: initDB, onUpgrade: onUpgrade);

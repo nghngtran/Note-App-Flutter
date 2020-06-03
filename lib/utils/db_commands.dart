@@ -13,8 +13,8 @@ const String CREATE_TABLE_THUMBNAIL_NOTE = "CREATE TABLE IF NOT EXISTS thumbnail
     "modified_time DATETIME"
     ")";
 const String CREATE_TABLE_TAG = "CREATE VIRTUAL TABLE IF NOT EXISTS tags USING fts4("
-    "tag_id TEXT, "
-    "title TEXT PRIMARY KEY, "
+    "tag_id TEXT PRIMARY KEY, "
+    "title TEXT, "
     "color INTEGER, "
     "created_time DATETIME, "
     "modified_time DATETIME, "

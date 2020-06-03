@@ -49,12 +49,12 @@ class TagBUS {
   //case exist tag won't add and return -1
   //case non-exist tag will add and return tagId
   addTag(Tag tag) async {
-    //if (!(await isTagExist(tag))) {
+    if (!(await isTagExist(tag))) {
       var tagId = await _tagRepository.insertTag(tag);
       getTags();
-      return tagId;
-    //}
-    //return -1;
+      return true;
+    }
+    return false;
   }
   //Update Tag
   //Required: Tag
