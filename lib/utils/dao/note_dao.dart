@@ -41,7 +41,7 @@ class NoteDAO {
         note.contents[0].content, note.modified_time);
     thumbnailNoteDao.createThumbnail(thumbnail);
 
-    LogHistory.trackLog("[Note]", "INSERT new note:" + noteId.toString());
+    LogHistory.trackLog("[Note]", "INSERT new note:" + note.id.toString());
     return noteId.toString();
   }
 

@@ -59,14 +59,15 @@ class ThumbnailNoteDAO {
     List<ThumbnailNote> thumbs = result.isNotEmpty
         ? result.map((item) => ThumbnailNote.fromDatabaseJson(item)).toList()
         : [];
+
     if (thumbs.isNotEmpty) {
       for (var thumb in thumbs) {
         var tags = await tagDao.getTagsByNoteID(thumb.noteId);
-        //print(tags);
         thumb.setTag(tags);
       }
+      return thumbs;
     }
-    return thumbs;
+    else return thumbs;
   }
 
   Future<List<ThumbnailNote>> findThumbnailByKeyWord(String keyword) async {

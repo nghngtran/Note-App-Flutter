@@ -21,7 +21,7 @@ class TagDAO {
       //conflictAlgorithm: ConflictAlgorithm.abort,
     );
 
-    LogHistory.trackLog("[TAG]", "INSERT tag:" + tagId.toString());
+    LogHistory.trackLog("[TAG]", "INSERT tag:" + tag.id.toString());
     return tagId.toString();
   }
 

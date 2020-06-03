@@ -18,7 +18,7 @@ class NoteItemDAO {
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
     LogHistory.trackLog(
-        "[NoteItem]", "INSERT new note item:" + noteItemId.toString() + " of note: " + noteId.toString());
+        "[NoteItem]", "INSERT new note item:" + noteItem.id.toString() + " of note: " + noteId.toString());
     return noteItemId.toString();
   }
 

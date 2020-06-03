@@ -196,7 +196,7 @@ class CreateNoteState extends State<CreateNote> {
                             note.setTag(noteViewModel.tags);
 
                             final NoteBUS noteBus = NoteBUS();
-                            note.id = await noteBus.addNote(note);
+                            await noteBus.addNote(note);
                             //print(note.contents);
                             //print(note.contents.length);
 
@@ -214,13 +214,14 @@ class CreateNoteState extends State<CreateNote> {
                               print(tag1.toString());
                             }
                             print("|Load Tag|");
-//                            final ThumbnailBUS thumbBus = ThumbnailBUS();
-//                            print("|Load Thumbnails|");
-//                            var thumbs = await thumbBus.getThumbnails();
-//                            for(var thumb in thumbs)
-//                              print(thumb.toString());
-//                            print("|Load Thumbnails|");
 
+                            final ThumbnailBUS thumbBus = ThumbnailBUS();
+                            print("|Load Thumbnails|");
+                            var thumbs = await thumbBus.getThumbnails();
+
+                            for(var thumb in thumbs)
+                              print(thumb.toString());
+                            print("|Load Thumbnails|");
 
                             Navigator.of(context).pushNamedAndRemoveUntil(
                                 '/', (Route<dynamic> route) => false);
