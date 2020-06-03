@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:flutter/cupertino.dart';
 import 'package:note_app/utils/model/TimeUtils.dart';
 
 enum NoteItemType { TEXT, IMAGE, AUDIO }
@@ -7,11 +8,13 @@ enum NoteItemType { TEXT, IMAGE, AUDIO }
 class NoteItem extends TimeUtils {
 
   //@primaryKey
-  int id;
+  String id;
   String content;
   String type;
   Color noteColor;
-  NoteItem(this.type) : super();
+  NoteItem(this.type) : super(){
+    this.id = "noteItem-"+UniqueKey().toString();
+  }
 
   NoteItem.withFullInfo(this.id, this.type, this.content,
       this.noteColor, DateTime createdTime, DateTime modifiedTime) {
@@ -38,9 +41,10 @@ class NoteItem extends TimeUtils {
         "\"/>";
   }
 
-  Map<String, dynamic> toDatabaseJson(int noteId) {
+  Map<String, dynamic> toDatabaseJson(String noteId) {
     var formatter = TimeUtils.formatter;
     return {
+      'noteItem_id':id,
       'note_id': noteId,
       'type': type,
       'content': content,
@@ -53,6 +57,7 @@ class NoteItem extends TimeUtils {
   Map<String, dynamic> toDatabaseJsonWithOutNoteID() {
     var formatter = TimeUtils.formatter;
     return {
+      'noteItem_id':id,
       'type': type,
       'content': content,
       'note_color': noteColor == null? 0: noteColor.value,

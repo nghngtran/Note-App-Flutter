@@ -41,7 +41,7 @@ class TagBUS {
   //Required tagId
   //case tag exist return tag
   //case tag not exist return null
-  getTagById(int tagId) async {
+  getTagById(String tagId) async {
     var res = await _tagRepository.getTag(tagId);
     return res;
   }
@@ -67,7 +67,7 @@ class TagBUS {
     return -1;
   }
 
-  deleteTagById(int id) async {
+  deleteTagById(String id) async {
     _tagRepository.deleteTagById(id);
     getTags();
   }

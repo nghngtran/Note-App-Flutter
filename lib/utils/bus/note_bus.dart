@@ -27,7 +27,7 @@ class NoteBUS {
     _noteController.sink.add(result);
     return result;
   }
-  getNoteById(int note_id) async {
+  getNoteById(String note_id) async {
     return await _noteRepository.getNote(note_id);
   }
   addNote(Notes note) async {
@@ -42,7 +42,7 @@ class NoteBUS {
     return code;
   }
 
-  deleteNoteById(int id) async {
+  deleteNoteById(String id) async {
     var code = _noteRepository.deleteNotesById(id);
     getNotes();
     return code;

@@ -12,17 +12,17 @@ class TagDAO {
   final relativeDao = RelativeDAO();
 
   //Insert new Tag
-  Future<int> createTag(Tag tag) async {
+  Future<String> createTag(Tag tag) async {
     final db = await dbProvider.database;
 
     var tagId = await db.insert(
       'tags',
       tag.toDatabaseJson(),
-      conflictAlgorithm: ConflictAlgorithm.ignore,
+      conflictAlgorithm: ConflictAlgorithm.abort,
     );
 
     LogHistory.trackLog("[TAG]", "INSERT tag:" + tagId.toString());
-    return tagId;
+    return tagId.toString();
   }
 
   //Update Tag with another Tag with same tag_id
@@ -40,7 +40,7 @@ class TagDAO {
   }
 
   //Delete exist Tag with Tag
-  Future<int> deleteTag(int tagId) async {
+  Future<int> deleteTag(String tagId) async {
     final db = await dbProvider.database;
 
     var result = await db.delete(
@@ -66,7 +66,7 @@ class TagDAO {
   }
 
   //Find Tag by tag_id
-  Future<Tag> getTagByID(int tagId) async {
+  Future<Tag> getTagByID(String tagId) async {
     final db = await dbProvider.database;
     final List<Map<String, dynamic>> maps =
         await db.query('tags', where: "tag_id = ?", whereArgs: [tagId]);
@@ -88,7 +88,7 @@ class TagDAO {
     return null;
   }
   //Get List Tag of Note
-  Future<List<Tag>> getTagsByNoteID(int noteId) async {
+  Future<List<Tag>> getTagsByNoteID(String noteId) async {
     final db = await dbProvider.database;
 
     final List<Map<String, dynamic>> result =
@@ -118,6 +118,25 @@ class TagDAO {
         ? result.map((item) => Tag.fromDatabaseJson(item)).toList()
         : [];
     return note;
+  }
+  Future<int> getOrder() async {
+    final db = await dbProvider.database;
+    List<Map<String, dynamic>> maps =
+    await db.query('tableCount', where: "id = ?", whereArgs: ["tags"]);
+    if(maps.isNotEmpty)
+      return maps[0]['count'];
+    else return 0;
+  }
+  Future<int> updateOrder(int order) async {
+    final db = await dbProvider.database;
+
+    var orderId = await db.insert(
+      'tableCount',
+      {'id':'tags',
+      'count':order},
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+   return orderId;
   }
   Future<int> getCounts() async {
     final db = await dbProvider.database;

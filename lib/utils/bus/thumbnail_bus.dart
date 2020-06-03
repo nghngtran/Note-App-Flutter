@@ -38,7 +38,7 @@ class ThumbnailBUS {
     getThumbnails();
   }
 
-  deleteThumbnailById(int id) async {
+  deleteThumbnailById(String id) async {
     _thumbnailRepository.deleteThumbnailById(id);
     getThumbnails();
   }

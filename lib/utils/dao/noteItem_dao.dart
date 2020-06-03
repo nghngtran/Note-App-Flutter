@@ -10,7 +10,7 @@ class NoteItemDAO {
   final dbProvider = DatabaseApp.dbProvider;
 
   //Insert NoteItem with note ID
-  Future<int> insertNoteItem(NoteItem noteItem, int noteId) async {
+  Future<String> insertNoteItem(NoteItem noteItem, String noteId) async {
     final db = await dbProvider.database;
     var noteItemId = await db.insert(
       'noteItems',
@@ -19,7 +19,7 @@ class NoteItemDAO {
     );
     LogHistory.trackLog(
         "[NoteItem]", "INSERT new note item:" + noteItemId.toString() + " of note: " + noteId.toString());
-    return noteItemId;
+    return noteItemId.toString();
   }
 
   //Update NoteItem with noteItem
@@ -40,7 +40,7 @@ class NoteItemDAO {
   }
 
   //Delete NoteItem
-  Future<int> deleteNoteItem(int noteItemId) async {
+  Future<int> deleteNoteItem(String noteItemId) async {
     final db = await dbProvider.database;
 
     // Remove the NoteItem from the database.
@@ -56,7 +56,7 @@ class NoteItemDAO {
   }
 
   //Delete NoteItem by NoteID
-  Future<void> deleteNoteItemsByNoteID(int noteId) async {
+  Future<void> deleteNoteItemsByNoteID(String noteId) async {
     final db = await dbProvider.database;
 
     // Remove the NoteItem from the database.
@@ -82,7 +82,7 @@ class NoteItemDAO {
   }
 
   //Get Single NoteItem
-  Future<NoteItem> getNoteItem(int noteId) async {
+  Future<NoteItem> getNoteItem(String noteId) async {
     final db = await dbProvider.database;
     final List<Map<String, dynamic>> maps =
         await db.query('notes', where: "noteItem_id = ?", whereArgs: [noteId]);
@@ -90,7 +90,7 @@ class NoteItemDAO {
     return maps.isEmpty ? null : NoteItem.fromDatabaseJson(maps[0]);
   }
 
-  Future<List<NoteItem>> getNoteItemsByNoteID(int noteId) async {
+  Future<List<NoteItem>> getNoteItemsByNoteID(String noteId) async {
     final db = await dbProvider.database;
 
     // Query the table for all The NoteItem of identify Note.
@@ -102,6 +102,25 @@ class NoteItemDAO {
         ? maps.map((item) => NoteItem.fromDatabaseJson(item)).toList()
         : [];
     return note;
+  }
+  Future<int> updateOrder(int order) async {
+    final db = await dbProvider.database;
+
+    var orderId = await db.insert(
+      'tableCount',
+      {'id':'noteItems',
+        'count':order},
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+    return orderId;
+  }
+  Future<int> getOrder() async {
+    final db = await dbProvider.database;
+    List<Map<String, dynamic>> maps =
+    await db.query('tableCount', where: "id = ?", whereArgs: ["noteItems"]);
+    if(maps.isNotEmpty)
+      return maps[0]['count'];
+    else return 0;
   }
   Future<int> getCounts() async {
     final db = await dbProvider.database;

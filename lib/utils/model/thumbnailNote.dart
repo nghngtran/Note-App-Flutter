@@ -5,7 +5,7 @@ import 'package:note_app/utils/model/tag.dart';
 
 
 class ThumbnailNote{
-  final int noteId;
+  final String noteId;
   final String title;
   List<Tag> tags;
   final String content;

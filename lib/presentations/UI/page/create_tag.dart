@@ -120,7 +120,6 @@ class CreateTag extends StatelessWidget {
 //                          print("Finish Testtttt");
                           TagBUS tagbus = new TagBUS();
                           var stt = await tagbus.addTag(tag);
-                          print("stt:"+stt.toString());
                           //print(tag);
                           print("|TAG|");
                           var _listTags = await tagbus.getTags();

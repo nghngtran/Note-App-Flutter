@@ -13,7 +13,7 @@ class ThumbnailNoteDAO {
   final tagDao = TagDAO();
 
   //Insert new Thumbnail
-  Future<int> createThumbnail(ThumbnailNote thumbnail) async {
+  Future<String> createThumbnail(ThumbnailNote thumbnail) async {
     final db = await dbProvider.database;
     var thumbId = await db.insert(
       'thumbnails',
@@ -22,10 +22,10 @@ class ThumbnailNoteDAO {
     );
     LogHistory.trackLog(
         "[Thumbnail]", "INSERT new thumbnail note:" + thumbnail.noteId.toString());
-    return thumbId;
+    return thumbId.toString();
   }
 
-  Future<ThumbnailNote> getThumbnailByID(int noteId) async {
+  Future<ThumbnailNote> getThumbnailByID(String noteId) async {
     final db = await dbProvider.database;
     // Get List Note
     List<Map<String, dynamic>> maps = await db
@@ -62,7 +62,7 @@ class ThumbnailNoteDAO {
     if (thumbs.isNotEmpty) {
       for (var thumb in thumbs) {
         var tags = await tagDao.getTagsByNoteID(thumb.noteId);
-        print(tags);
+        //print(tags);
         thumb.setTag(tags);
       }
     }
@@ -91,7 +91,7 @@ class ThumbnailNoteDAO {
     return result;
   }
 
-  Future<int> deleteThumbnail(int noteId) async {
+  Future<int> deleteThumbnail(String noteId) async {
     final db = await dbProvider.database;
     var result = await db
         .delete('thumbnails', where: "note_id = ?", whereArgs: [noteId]);

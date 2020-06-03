@@ -4,11 +4,12 @@ import 'package:note_app/utils/model/TimeUtils.dart';
 class Tag extends TimeUtils with ChangeNotifier {
 
   //@primaryKey
-  int id;
+  String id;
   String title;
   Color color;
 
   Tag() : super() {
+    this.id = "tag-"+UniqueKey().toString();
     this.title = "New Tag";
   }
 
@@ -44,6 +45,7 @@ class Tag extends TimeUtils with ChangeNotifier {
   Map<String, dynamic> toDatabaseJson() {
     var formatter = TimeUtils.formatter;
     return {
+      'tag_id':id,
       'title': title,
       'color': color == null ? 0 : color.value,
       'created_time': formatter.format(created_time),

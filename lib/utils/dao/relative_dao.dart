@@ -9,7 +9,7 @@ import 'package:sqflite/sqflite.dart';
 class RelativeDAO {
   final dbProvider = DatabaseApp.dbProvider;
 
-  Future<int> insertRelative(int noteId, int tagId) async {
+  Future<int> insertRelative(String noteId, String tagId) async {
     final db = await dbProvider.database;
 
     var res = await db.insert(
@@ -25,7 +25,7 @@ class RelativeDAO {
             tagId.toString());
     return res;
   }
-  Future<void> insertRelativesFromTagList(int noteId, List<Tag> tags) async{
+  Future<void> insertRelativesFromTagList(String noteId, List<Tag> tags) async{
     for(var tag in tags){
       await insertRelative(noteId, tag.id);
     }
@@ -43,7 +43,7 @@ class RelativeDAO {
     return res;
   }
 
-  Future<int> deleteRelativesByTagID(int tagId) async {
+  Future<int> deleteRelativesByTagID(String tagId) async {
     final db = await dbProvider.database;
 
     var res = await db.delete(
@@ -55,7 +55,7 @@ class RelativeDAO {
     return res;
   }
 
-  Future<int> deleteRelativesByNoteID(int noteId) async {
+  Future<int> deleteRelativesByNoteID(String noteId) async {
     final db = await dbProvider.database;
 
     var res = await db.delete(
@@ -75,7 +75,7 @@ class RelativeDAO {
     return res;
   }
 
-  Future<List<Relative>> getRelativesByNoteID(int noteId) async {
+  Future<List<Relative>> getRelativesByNoteID(String noteId) async {
     final db = await dbProvider.database;
 
     // Query the table for all The NoteItem of identify Note.
@@ -86,7 +86,7 @@ class RelativeDAO {
     });
   }
 
-  Map<String, dynamic> toMap(int noteId, int tagId) {
+  Map<String, dynamic> toMap(String noteId, String tagId) {
     return {'note_id': noteId, 'tag_id': tagId};
   }
   Future<int> getCounts() async {
@@ -97,8 +97,13 @@ class RelativeDAO {
 }
 
 class Relative {
-  int noteId;
-  int tagId;
+  String noteId;
+  String tagId;
 
   Relative(this.noteId, this.tagId);
+  String toString(){
+    return "<Relative Note_id=\""+noteId.toString()+
+        "\" Tag_id=\"" + tagId.toString() +
+        "\"/>";
+  }
 }

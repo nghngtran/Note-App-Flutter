@@ -20,7 +20,7 @@ class NoteDAO {
   final relativeDao = RelativeDAO();
 
   //Insert new Note
-  Future<int> createNote(Notes note) async {
+  Future<String> createNote(Notes note) async {
     final db = await dbProvider.database;
     var noteId = await db.insert(
       'notes',
@@ -28,19 +28,19 @@ class NoteDAO {
       //conflictAlgorithm: ConflictAlgorithm.replace,
     );
     for(var noteItem in note.contents){
-      noteItem.id = await noteItemDao.insertNoteItem(noteItem, noteId);
+      noteItem.id = await noteItemDao.insertNoteItem(noteItem, note.id);
     }
     for(var tag in note.tags){
       tag.id = await tagDao.createTag(tag);
-      await relativeDao.insertRelative(noteId, tag.id);
+      await relativeDao.insertRelative(note.id, tag.id);
     }
 
-    ThumbnailNote thumbnail = new ThumbnailNote(noteId, note.title, note.tags,
+    ThumbnailNote thumbnail = new ThumbnailNote(note.id, note.title, note.tags,
         note.contents[0].content, note.modified_time);
     thumbnailNoteDao.createThumbnail(thumbnail);
 
     LogHistory.trackLog("[Note]", "INSERT new note:" + noteId.toString());
-    return noteId;
+    return noteId.toString();
   }
 
 //Update a Note
@@ -65,7 +65,7 @@ class NoteDAO {
   }
 
   //Delete Note Record
-  Future<int> deleteNote(int noteId) async {
+  Future<int> deleteNote(String noteId) async {
     final db = await dbProvider.database;
     var count =
         await db.delete('notes', where: "note_id = ?", whereArgs: [noteId]);
@@ -107,17 +107,17 @@ class NoteDAO {
     }
 
     List<Notes> note = result.isNotEmpty
-        ? result.map((item) => Notes.fromDatabaseJson(item)).toList()
-        : [];
-    return note;
-  }
+      ? result.map((item) => Notes.fromDatabaseJson(item)).toList()
+      : [];
+  return note;
+}
 
   Future<List<Notes>> getNotesFullData() async {
     //TODO
     return null;
   }
 
-  Future<Notes> getNoteByID(int noteId) async {
+  Future<Notes> getNoteByID(String noteId) async {
     final db = await dbProvider.database;
     // Get List Note
     List<Map<String, dynamic>> maps =
@@ -134,7 +134,25 @@ class NoteDAO {
     }
     return null;
   }
+  Future<int> updateOrder(int order) async {
+    final db = await dbProvider.database;
 
+    var orderId = await db.insert(
+      'tableCount',
+      {'id':'notes',
+        'count':order},
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+    return orderId;
+  }
+  Future<int> getOrder() async {
+    final db = await dbProvider.database;
+    List<Map<String, dynamic>> maps =
+    await db.query('tableCount', where: "id = ?", whereArgs: ["notes"]);
+    if(maps.isNotEmpty)
+      return maps[0]['count'];
+    else return 0;
+  }
   Future<int> getCounts() async {
     final db = await dbProvider.database;
     int count = Sqflite.firstIntValue(await db.rawQuery(COUNT, ['notes']));

@@ -1,15 +1,15 @@
 import 'dart:collection';
 
 import 'package:flutter/cupertino.dart';
+import 'package:note_app/utils/dao/note_dao.dart';
 import 'package:note_app/utils/model/TimeUtils.dart';
 
 import 'noteItem.dart';
 import 'tag.dart';
 
 class Notes extends TimeUtils with ChangeNotifier {
-
   //@primaryKey
-  int id;
+  String id;
   String title;
   List<Tag> tags;
   List<NoteItem> contents;
@@ -17,6 +17,7 @@ class Notes extends TimeUtils with ChangeNotifier {
 
   //Constructor
   Notes() : super() {
+    this.id = "note-"+UniqueKey().toString();
     this.title = "New untitled note";
     this.tags = new List<Tag>();
     this.contents = new List<NoteItem>();
@@ -36,7 +37,8 @@ class Notes extends TimeUtils with ChangeNotifier {
     this.created_time = created_time;
     this.modified_time = modified_time;
   }
-  Notes.withTitle(String title) {
+  Notes.withTitle(String title):super() {
+    this.id = "note-"+UniqueKey().toString();
     this.tags = new List<Tag>();
     this.contents = new List<NoteItem>();
     this.history = new List<String>();
@@ -45,6 +47,7 @@ class Notes extends TimeUtils with ChangeNotifier {
   }
 
   Notes.withTag(Tag tag) : super() {
+    this.id = "note-"+UniqueKey().toString();
     this.title = "New Note";
     this.tags = new List<Tag>();
     this.contents = new List<NoteItem>();
@@ -129,6 +132,7 @@ class Notes extends TimeUtils with ChangeNotifier {
   Map<String, dynamic> toDatabaseJson() {
     var formatter = TimeUtils.formatter;
     return {
+      'note_id':id,
       'title': title,
       'created_time': formatter.format(created_time),
       'modified_time': formatter.format(modified_time)

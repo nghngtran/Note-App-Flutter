@@ -6,12 +6,12 @@ class NoteRepository {
 
   Future getAllNotes({String query}) => noteDao.getNotes(query: query);
 
-  Future getNote(int id) => noteDao.getNoteByID(id);
+  Future getNote(String id) => noteDao.getNoteByID(id);
 
   Future insertNotes(Notes note) => noteDao.createNote(note);
   Future updateNotes(Notes note) => noteDao.updateNote(note);
 
-  Future deleteNotesById(int id) => noteDao.deleteNote(id);
+  Future deleteNotesById(String id) => noteDao.deleteNote(id);
 
   //We are not going to use this in the demo
   Future deleteAllNotes() => noteDao.deleteAllNotes();

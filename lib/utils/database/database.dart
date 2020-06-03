@@ -25,12 +25,14 @@ class DatabaseApp {
   }
   createDatabase() async {
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
-    String path = join(documentsDirectory.path, "test21.db");
+    String path = join(documentsDirectory.path, "test48.db");
+    print(path);
     var database = await openDatabase(path,
         version: 1, onCreate: initDB, onUpgrade: onUpgrade);
     return database;
   }
   void initDB(Database database, int version) async {
+    print("INIT NEW DATABASE");
     await database.execute(DROP_TABLE_NOTE);
     await database.execute(DROP_TABLE_TAG);
     await database.execute(DROP_TABLE_NOTE_ITEM);
@@ -40,9 +42,9 @@ class DatabaseApp {
 
     await database.execute(CREATE_TABLE_RELATIVE);
     await database.execute(CREATE_TABLE_THUMBNAIL_NOTE);
+    await database.execute(CREATE_TABLE_TAG);
     await database.execute(CREATE_TABLE_NOTE_ITEM);
     await database.execute(CREATE_TABLE_NOTE);
-    await database.execute(CREATE_TABLE_TAG);
 
   }
   //This is optional, and only used for changing DB schema migrations
