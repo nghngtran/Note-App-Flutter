@@ -2,8 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:note_app/application/constants.dart';
 import 'package:note_app/presentations/UI/custom_widget/custom_type_tag.dart';
-import 'package:note_app/utils/database/dao/tag_dao.dart';
-import 'package:note_app/utils/database/model/tag.dart';
+import 'package:note_app/utils/bus/tag_bus.dart';
+import 'package:note_app/utils/dao/tag_dao.dart';
+import 'package:note_app/utils/model/tag.dart';
 import 'package:note_app/view_model/note_view_model.dart';
 import 'package:note_app/presentations/UI/custom_widget/custom_text_style.dart';
 
@@ -101,9 +102,9 @@ class CreateTagNote extends StatelessWidget {
                           tag.setTitle(textController.text);
 //                          Provider.of<Tag>(context, listen: false).setColor()
 //                              .setTitle(textController.text);
-                          TagDAO.insertTag(tag);
+                          (TagBUS()).addTag(tag);
                           print(tag);
-                          var _listTags = TagDAO.getTags();
+                          var _listTags = (TagBUS()).getTags();
                           List<Tag> listTags = List<Tag>();
                           _listTags.then((list) =>
                               list.forEach((tag) => listTags.add(tag)));

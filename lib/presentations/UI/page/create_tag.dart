@@ -1,14 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:note_app/application/constants.dart';
-import 'package:note_app/utils/database/dao/note_dao.dart';
-import 'package:note_app/utils/database/dao/tag_dao.dart';
-import 'package:note_app/utils/database/dao/thumbnail_dao.dart';
+import 'package:note_app/utils/bus/note_bus.dart';
+import 'package:note_app/utils/bus/tag_bus.dart';
+import 'package:note_app/utils/bus/thumbnail_bus.dart';
+import 'package:note_app/utils/dao/note_dao.dart';
+import 'package:note_app/utils/dao/tag_dao.dart';
+import 'package:note_app/utils/dao/thumbnail_dao.dart';
 import 'package:note_app/utils/database/database.dart';
-import 'package:note_app/utils/database/model/note.dart';
-import 'package:note_app/utils/database/model/noteItem.dart';
-import 'package:note_app/utils/database/model/tag.dart';
-import 'package:note_app/utils/database/model/thumbnailNote.dart';
+import 'package:note_app/utils/model/note.dart';
+import 'package:note_app/utils/model/noteItem.dart';
+import 'package:note_app/utils/model/tag.dart';
+import 'package:note_app/utils/model/thumbnailNote.dart';
 import 'package:note_app/view_model/list_tag_viewmodel.dart';
 import 'package:note_app/presentations/UI/custom_widget/custom_text_style.dart';
 
@@ -100,7 +103,7 @@ class CreateTag extends StatelessWidget {
                                 .textTheme
                                 .headline7
                                 .copyWith(color: Colors.blue)),
-                        onPressed: () {
+                        onPressed: () async {
 //                          Provider.of<Tag>(context, listen: false)
 //                              .setTitle(textController.text);
                           tag.setTitle(textController.text);
@@ -115,13 +118,22 @@ class CreateTag extends StatelessWidget {
 //                            })
 //                          });
 //                          print("Finish Testtttt");
-                          TagDAO.insertTag(tag);
+                          TagBUS tagbus = new TagBUS();
+                          var stt = await tagbus.addTag(tag);
                           //print(tag);
-                          var _listTags = TagDAO.getTags();
+                          print("|TAG|");
+                          var _listTags = await tagbus.getTags();
                           List<Tag> listTags = List<Tag>();
-                          _listTags.then((list) =>
-                              list.forEach((tag) => listTags.add(tag)));
-                          listTags.forEach((listT) => listT.toString());
+                          _listTags.forEach((tag) => listTags.add(tag));
+                          listTags.forEach((listT) => print(listT));
+                          print("|TAG|");
+////
+//                             ThumbnailBUS thumbnailbus = new ThumbnailBUS();
+////                          ThumbnailNote thumb = new ThumbnailNote("note1", "day la thumbnail", listTags, "day la noi dung", DateTime.now());
+////                          thumbnailbus.addThumbnail(thumb);
+//
+//                          var _listThumbnail = await thumbnailbus.getThumbnails();
+//                          _listThumbnail.forEach((thumbnail) => print(thumbnail));
 //                          Provider.of<TagCreated>(context, listen: true)
 //                              .addTag(tag);
                           tagCreatedModel.addToList(tag);

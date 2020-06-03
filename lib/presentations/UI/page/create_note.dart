@@ -16,9 +16,13 @@ import 'package:note_app/presentations/UI/page/create_tag.dart';
 import 'package:note_app/presentations/UI/page/customPaint.dart';
 import 'package:note_app/presentations/UI/page/home_screen.dart';
 import 'package:note_app/presentations/UI/page/image_pick.dart';
-import 'package:note_app/utils/database/dao/note_dao.dart';
-import 'package:note_app/utils/database/model/note.dart';
-import 'package:note_app/utils/database/model/noteItem.dart';
+import 'package:note_app/utils/bus/note_bus.dart';
+import 'package:note_app/utils/bus/tag_bus.dart';
+import 'package:note_app/utils/bus/thumbnail_bus.dart';
+import 'package:note_app/utils/dao/note_dao.dart';
+import 'package:note_app/utils/dao/thumbnail_dao.dart';
+import 'package:note_app/utils/model/note.dart';
+import 'package:note_app/utils/model/noteItem.dart';
 import 'package:note_app/view_model/list_tag_viewmodel.dart';
 import 'package:note_app/view_model/note_view_model.dart';
 import 'package:provider/provider.dart';
@@ -186,23 +190,38 @@ class CreateNoteState extends State<CreateNote> {
                                 ))),
                         Expanded(
                             child: GestureDetector(
-                          onTap: () {
+                          onTap: () async {
                             note.setListNoteItems(noteViewModel.contents);
                             note.setTitle(noteViewModel.title);
                             note.setTag(noteViewModel.tags);
 
-                            NoteDAO.insertNote(note);
-                            print(note.contents);
-                            print(note.contents.length);
+                            final NoteBUS noteBus = NoteBUS();
+                            note.id = await noteBus.addNote(note);
+                            //print(note.contents);
+                            //print(note.contents.length);
+
                             //Print List Note
-                            print("\n[List Note]\n");
-//                            var notes = NoteDAO.getNoteByID(note.id);
-//                            notes.then((value)=> print(value.toString()));
-                            var listNotes = NoteDAO.getNotes();
-                            listNotes.then((list) => list.forEach((note) => {
-                                  print(note.toString()),
-                                }));
-                            print("\n[/List Note]\n");
+//                            print("|Load Notes|");
+//                            var notes = await noteBus.getNotes();
+//                            for(var note1 in notes)
+//                              print(note1.toString());
+//                            print("|Load Notes|");
+
+                            final TagBUS tagBus = TagBUS();
+                            print("|Load Tag|");
+                            var tags1 = await tagBus.getTags();
+                            for(var tag1 in tags1){
+                              print(tag1.toString());
+                            }
+                            print("|Load Tag|");
+//                            final ThumbnailBUS thumbBus = ThumbnailBUS();
+//                            print("|Load Thumbnails|");
+//                            var thumbs = await thumbBus.getThumbnails();
+//                            for(var thumb in thumbs)
+//                              print(thumb.toString());
+//                            print("|Load Thumbnails|");
+
+
                             Navigator.of(context).pushNamedAndRemoveUntil(
                                 '/', (Route<dynamic> route) => false);
                           },
@@ -254,12 +273,12 @@ class EditText extends StatefulWidget {
 
 class EditTextState extends State<EditText> {
   TextEditingController txtController = TextEditingController();
-  var note_color;
+  var noteColor;
   var _editableNote;
 
   void initState() {
     _editableNote = widget.item;
-    note_color = _editableNote.note_color;
+    noteColor = _editableNote.noteColor;
   }
 
   @override
@@ -272,8 +291,8 @@ class EditTextState extends State<EditText> {
   void _changeColor(Color newColorSelected) {
     print("note color changed");
     setState(() {
-      note_color = newColorSelected;
-      _editableNote.note_color = newColorSelected;
+      noteColor = newColorSelected;
+      _editableNote.noteColor = newColorSelected;
     });
   }
 
@@ -282,7 +301,7 @@ class EditTextState extends State<EditText> {
         context: context,
         builder: (BuildContext ctx) {
           return MoreOptionsSheet(
-            color: note_color,
+            color: noteColor,
             callBackColorTapped: _changeColor,
           );
         });
@@ -305,7 +324,7 @@ class EditTextState extends State<EditText> {
                       autocorrect: false,
                       decoration: InputDecoration(
                           contentPadding: EdgeInsets.fromLTRB(w, h, w, h),
-                          fillColor: note_color,
+                          fillColor: noteColor,
                           filled: true,
                           border: OutlineInputBorder(
                               borderRadius:
@@ -319,7 +338,7 @@ class EditTextState extends State<EditText> {
                           color: Theme.of(context).iconTheme.color),
                       onSaved: (value) {
                         widget.item.setContent(txtController.text);
-                        widget.item.setBgColor(note_color);
+                        widget.item.setBgColor(noteColor);
 
                         print(widget.item.content);
                       })
