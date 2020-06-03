@@ -78,7 +78,7 @@ All data access must to use BUS class
 - Cú pháp:` List<Note> notes = await notebus.getNotes(String Query);`
 
 ## Lớp TagBUS:  
-###### Status: :hammer_and_wrench:
+###### Status: :heavy_check_mark:
 **Mô tả**: TagBUS cung cấp các phương thức để thực hiện các thao tác với table tag
 
 **1. Khởi tạo**
