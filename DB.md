@@ -1,5 +1,26 @@
-Lớp NoteBUS:
-- Khởi tạo: var notebus = new NoteBUS();
+# Document for Database NoteApp
+
+Built and maintained by our [Collaborators](#collaborators)
+
+```
+All data access must to use BUS class
+```
+:hammer_and_wrench:
+:heavy_check_mark:
+:warning:
+:exclamation:
+## Lớp NoteBUS: 
+###### Status: :hammer_and_wrench:
+**Mô tả**: NoteBUS cung cấp các phương thức để thực hiện các thao tác với table note
+
+**1. Khởi tạo**
+
+*Tham số:* Không
+
+*Trả về:* Object 
+
+Cú pháp:` var notebus = new NoteBUS();`
+
 - thêm record vào bảng "notes" : notebus.addNote(Notes note);
 - update record : notebus.updateNote(Notes note);
 - xóa 1 record : notebus.deleteNoteById(String note_id);
