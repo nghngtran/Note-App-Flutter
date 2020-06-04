@@ -5,7 +5,7 @@ Database SQLITE use library [SQFLITE by tekartik](https://github.com/tekartik/sq
 Built and maintained by our [Collaborators](#collaborators)
 
 ```
-All data access must to use BUS class
+All data access operations must be used via the BUS layer
 ```
 :hammer_and_wrench:
 :heavy_check_mark:
