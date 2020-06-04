@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:camera/camera.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -17,6 +17,7 @@ import 'package:note_app/presentations/UI/page/camera.dart';
 import 'package:note_app/presentations/UI/page/camera_access.dart';
 import 'package:note_app/presentations/UI/page/create_tag.dart';
 import 'package:note_app/presentations/UI/page/customPaint.dart';
+import 'package:note_app/presentations/UI/page/handle_audio.dart';
 import 'package:note_app/presentations/UI/page/home_screen.dart';
 import 'package:note_app/presentations/UI/page/image_pick.dart';
 import 'package:note_app/presentations/UI/page/open_file_audio.dart';
@@ -37,6 +38,10 @@ class CreateNote extends StatefulWidget {
 class CreateNoteState extends State<CreateNote> {
   ScrollController mainController = ScrollController();
   TagCreatedModel tagCreatedModel;
+  String _fileName = "";
+  String _path;
+
+  FileType _pickingType = FileType.audio;
 
   var note = new Notes();
   void initState() {
@@ -93,11 +98,16 @@ class CreateNoteState extends State<CreateNote> {
           ),
           CupertinoDialogAction(
               child: Text('Mp3'),
-              onPressed: () {
-//                Navigator.push(context,
-//                    MaterialPageRoute(builder: (BuildContext context) {
-//                  return ChooseFileAudio(model);
-//                }));
+              onPressed: () async {
+                _path = await FilePicker.getFilePath(type: _pickingType);
+
+                _fileName = _path != null ? _path.split('/').last : '';
+                print("check" + _fileName);
+                NoteItem tmp = NoteItem("Audio");
+                tmp.type = "Audio";
+                tmp.setContent(_fileName);
+                model.addNoteItem(tmp);
+                Navigator.of(context).pop();
               })
         ]);
   }
@@ -123,8 +133,6 @@ class CreateNoteState extends State<CreateNote> {
     children.add(_profileOption(
         iconData: Icons.audiotrack,
         onPressed: () {
-          final NoteItem noteItem = NoteItem("Audio");
-          model.addNoteItem(noteItem);
           showDialog(child: dialogSound(context, model), context: context);
         },
         hero: "sound"));
@@ -175,7 +183,7 @@ class CreateNoteState extends State<CreateNote> {
     double h = MediaQuery.of(context).size.height / 100;
 
     return BaseView<NoteViewModel>(
-        onModelReady: (noteViewModel) => noteViewModel.getListItems(),
+        onModelReady: (noteViewModel) => noteViewModel,
         builder: (context, noteViewModel, child) => Scaffold(
             backgroundColor: Theme.of(context).backgroundColor,
             resizeToAvoidBottomPadding: false,
@@ -289,8 +297,6 @@ class ListNoteItems extends StatelessWidget {
   ScrollController _controller = new ScrollController();
   @override
   Widget build(BuildContext context) {
-//    Timer(Duration(milliseconds: 1000),
-//        () => _controller.jumpTo(_controller.position.maxScrollExtent));
     return ListView(
       controller: _controller,
       children: getChildrenNotes(),
@@ -298,6 +304,9 @@ class ListNoteItems extends StatelessWidget {
   }
 
   List<Widget> getChildrenNotes() {
+    if (model.contents.length == 0) {
+      return List<Container>();
+    }
     return model.contents.map((todo) => NoteItemWidget(todo)).toList();
   }
 }
@@ -403,7 +412,6 @@ class NoteItemWidget extends StatelessWidget {
       return EditText(item);
     } else if (item.type == "Image") {
       enCodeImg();
-
       return Container(
           width: w * 100,
           height: w * 100,
@@ -415,27 +423,29 @@ class NoteItemWidget extends StatelessWidget {
               color: Colors.white),
           child: Image.memory(bytes));
     }
-    return Container(
-        height: h * 5,
-        margin: EdgeInsets.fromLTRB(w * 4, h * 2, w * 2, h),
-        padding: EdgeInsets.fromLTRB(w, h, w, h),
-        decoration: BoxDecoration(
-            border: Border.all(width: 1, color: Colors.black),
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-            color: Colors.white),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            Icon(Icons.audiotrack, size: 20, color: Colors.black),
-            SizedBox(width: w * 2),
-            Text(item.content,
-                style: TextStyle(
-                    fontSize: 17,
-                    fontFamily: Font.Name,
-                    fontWeight: Font.Regular,
-                    color: Colors.black))
-          ],
-        ));
+
+    return HandleAudio(url: item.content);
+//      Container(
+//        height: h * 5,
+//        margin: EdgeInsets.fromLTRB(w * 4, h * 2, w * 2, h),
+//        padding: EdgeInsets.fromLTRB(w, h, w, h),
+//        decoration: BoxDecoration(
+//            border: Border.all(width: 1, color: Colors.black),
+//            borderRadius: BorderRadius.all(Radius.circular(10)),
+//            color: Colors.white),
+//        child: Row(
+//          mainAxisAlignment: MainAxisAlignment.start,
+//          children: <Widget>[
+//            Icon(Icons.audiotrack, size: 20, color: Colors.black),
+//            SizedBox(width: w * 2),
+//            Text(item.content,
+//                style: TextStyle(
+//                    fontSize: 17,
+//                    fontFamily: Font.Name,
+//                    fontWeight: Font.Regular,
+//                    color: Colors.black))
+//          ],
+//        ));
   }
 
   Widget fileAudio(BuildContext context) {
