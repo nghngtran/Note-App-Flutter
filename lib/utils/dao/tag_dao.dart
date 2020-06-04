@@ -12,7 +12,8 @@ class TagDAO {
   final relativeDao = RelativeDAO();
 
   //Insert new Tag
-  Future<String> createTag(Tag tag) async {
+  //Return row id
+  Future<int> createTag(Tag tag) async {
     final db = await dbProvider.database;
 
     var tagId = await db.insert(
@@ -22,10 +23,11 @@ class TagDAO {
     );
 
     LogHistory.trackLog("[TAG]", "INSERT tag:" + tag.id.toString());
-    return tagId.toString();
+    return tagId;
   }
 
-  //Update Tag with another Tag with same tag_id
+  //Update a Tag
+  //Return number of record was applied
   Future<int> updateTag(Tag tag) async {
     final db = await dbProvider.database;
 
@@ -39,11 +41,12 @@ class TagDAO {
     return count;
   }
 
-  //Delete exist Tag with Tag
+  //Delete a Tag
+  //Return number of record was applied
   Future<int> deleteTag(String tagId) async {
     final db = await dbProvider.database;
 
-    var result = await db.delete(
+    var count = await db.delete(
       'tags',
       where: "tag_id = ?",
       whereArgs: [tagId],
@@ -51,43 +54,47 @@ class TagDAO {
     await relativeDao.deleteRelativesByTagID(tagId);
 
     LogHistory.trackLog("[TAG]", "DELETE tag:" + tagId.toString());
-    return result;
+    return count;
   }
 
-  //Delete All Note Record
+  //Delete All Tag Record
+  //Return number of record was applied
   Future deleteAllTags() async {
     final db = await dbProvider.database;
-    var result = await db.delete(
+    var count = await db.delete(
       'tags',
     );
     await relativeDao.deleteAllRelatives();
     LogHistory.trackLog("[TAG]", "DELETE all tag");
-    return result;
+    return count;
   }
 
-  //Find Tag by tag_id
+  //Get Tag by ID
+  //Return Tag object or null
   Future<Tag> getTagByID(String tagId) async {
     final db = await dbProvider.database;
     final List<Map<String, dynamic>> maps =
         await db.query('tags', where: "tag_id = ?", whereArgs: [tagId]);
 
     if (maps.isNotEmpty) {
-      return Tag.fromDatabaseJson(maps[0]);
+      return Tag.fromDatabaseJson(maps.first);
     }
-    return null;
+    else return null;
   }
-  //Find Tag by title
+  //Get Tag by Title
+  //Return Tag object or null
   Future<Tag> getTagByTitle(String title) async{
     final db = await dbProvider.database;
     final List<Map<String, dynamic>> maps =
     await db.query('tags', where: "title = ?", whereArgs: [title]);
 
     if (maps.isNotEmpty) {
-      return Tag.fromDatabaseJson(maps[0]);
+      return Tag.fromDatabaseJson(maps.first);
     }
-    return null;
+    else return null;
   }
   //Get List Tag of Note
+  //Return List Tag object or null
   Future<List<Tag>> getTagsByNoteID(String noteId) async {
     final db = await dbProvider.database;
 
@@ -100,6 +107,7 @@ class TagDAO {
     return tags;
   }
   //Get List Tag in Database
+  //Return List Tag object or null
   Future<List<Tag>> getTags({List<String> columns, String query}) async {
     final db = await dbProvider.database;
 
