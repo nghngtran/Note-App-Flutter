@@ -267,7 +267,7 @@ class HandleAudioState extends State<HandleAudio> {
                         children: <Widget>[
                           Icon(Icons.audiotrack, size: 20, color: Colors.black),
                           SizedBox(width: w * 2),
-                          Text(url.split('/').last,git
+                          Text(url.split('/').last,
                               style: TextStyle(
                                   fontSize: 17,
                                   fontFamily: Font.Name,
