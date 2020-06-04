@@ -20,7 +20,8 @@ class NoteDAO {
   final relativeDao = RelativeDAO();
 
   //Insert new Note
-  Future<String> createNote(Notes note) async {
+  //Return row id
+  Future<int> createNote(Notes note) async {
     final db = await dbProvider.database;
     var noteId = await db.insert(
       'notes',
@@ -29,23 +30,25 @@ class NoteDAO {
     );
     //Insert NoteItem
     for(var noteItem in note.contents){
-      await noteItemDao.insertNoteItem(noteItem, note.id);
+      await noteItemDao.createNoteItem(noteItem, note.id);
     }
     //Insert Tag Relative
-    for(var tag in note.tags){
-      //tag.id = await tagDao.createTag(tag);
-      await relativeDao.insertRelative(note.id, tag.id);
-    }
+    await relativeDao.insertRelativesFromTagList(note.id, note.tags);
+//    for(var tag in note.tags){
+//      //tag.id = await tagDao.createTag(tag);
+//      await relativeDao.insertRelative(note.id, tag.id);
+//    }
 
     ThumbnailNote thumbnail = new ThumbnailNote(note.id, note.title, note.tags,
         note.contents[0].content, note.modified_time);
     thumbnailNoteDao.createThumbnail(thumbnail);
 
     LogHistory.trackLog("[Note]", "INSERT new note:" + note.id.toString());
-    return noteId.toString();
+    return noteId;
   }
 
-//Update a Note
+  //Update a Note
+  //Return number of record was applied
   Future<int> updateNote(Notes note) async {
     final db = await dbProvider.database;
     var count = await db.update(
@@ -67,6 +70,7 @@ class NoteDAO {
   }
 
   //Delete Note Record
+  //Return number of record was applied
   Future<int> deleteNote(String noteId) async {
     final db = await dbProvider.database;
     var count =
@@ -80,13 +84,15 @@ class NoteDAO {
   }
 
   //Delete All Note Record
+  //Return number of record was applied
   Future<int> deleteAllNotes() async {
     final db = await dbProvider.database;
     var count = await db.delete(
       'notes',
     );
     await noteItemDao.deleteAllNoteItem();
-    await tagDao.deleteAllTags();
+    await relativeDao.deleteAllRelatives();
+    //await tagDao.deleteAllTags();
 
     LogHistory.trackLog("[Note]", "DELETE ALL note");
     return count;
@@ -94,6 +100,7 @@ class NoteDAO {
 
   //Get All Note
   //Searches if query string was passed
+  //TODO
   Future<List<Notes>> getNotes({List<String> columns, String query}) async {
     final db = await dbProvider.database;
 
@@ -111,14 +118,15 @@ class NoteDAO {
     List<Notes> note = result.isNotEmpty
       ? result.map((item) => Notes.fromDatabaseJson(item)).toList()
       : [];
-  return note;
+    return note;
 }
 
   Future<List<Notes>> getNotesFullData() async {
     //TODO
     return null;
   }
-
+  //Get Note by ID
+  //Return note object or null
   Future<Notes> getNoteByID(String noteId) async {
     final db = await dbProvider.database;
     // Get List Note
@@ -126,9 +134,9 @@ class NoteDAO {
         await db.query('notes', where: "note_id = ?", whereArgs: [noteId]);
     // Case Found
     if (maps.isNotEmpty) {
-      var tags = await tagDao.getTagsByNoteID(noteId);
-      var noteItems = await noteItemDao.getNoteItemsByNoteID(noteId);
-      var note = Notes.fromDatabaseJson(maps[0]);
+      var tags = await tagDao.getTagsByNoteID(noteId);//Get tags of Note
+      var noteItems = await noteItemDao.getNoteItemsByNoteID(noteId);//Get noteItems of Note
+      var note = Notes.fromDatabaseJson(maps.first);//Create base Note
       note.setTag(tags);
       note.setListNoteItems(noteItems);
 

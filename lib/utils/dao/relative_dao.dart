@@ -9,52 +9,67 @@ import 'package:sqflite/sqflite.dart';
 class RelativeDAO {
   final dbProvider = DatabaseApp.dbProvider;
 
+  //Insert new relative
+  //Return row id
   Future<int> insertRelative(String noteId, String tagId) async {
     final db = await dbProvider.database;
 
-    var res = await db.insert(
+    var rowId = await db.insert(
       'relatives',
-      toMap(noteId, tagId),
+      Relative.toDatabaseJson(noteId, tagId),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
-    LogHistory.trackLog(
-        "[Relative]",
-        "INSERT new relative note:" +
-            noteId.toString() +
-            " with tag:" +
-            tagId.toString());
-    return res;
+    LogHistory.trackLog("[Relative]", "INSERT new relative note:" +
+        noteId.toString() +
+        " with tag:" +
+        tagId.toString());
+    return rowId;
   }
-  Future<void> insertRelativesFromTagList(String noteId, List<Tag> tags) async{
-    for(var tag in tags){
+
+  //Insert list relative from tag list and noteId
+  //Return none
+  Future<void> insertRelativesFromTagList(String noteId, List<Tag> tags) async {
+    for (var tag in tags) {
       await insertRelative(noteId, tag.id);
     }
   }
-  Future<int> deleteRelative(int noteId, int tagId) async {
+
+  //Delete Relative Record
+  //Return number of record was applied
+  Future<int> deleteRelative(String noteId, String tagId) async {
     final db = await dbProvider.database;
 
-    var res = await db.delete(
+    var count = await db.delete(
       'relatives',
       where: "note_id = ? and tag_id = ?",
       whereArgs: [noteId, tagId],
     );
-    LogHistory.trackLog("[Relative]",
-        "DELETE relative note:" + noteId.toString() + " with tag:" + tagId.toString());
-    return res;
+    LogHistory.trackLog(
+        "[Relative]",
+        "DELETE relative note:" +
+            noteId.toString() +
+            " with tag:" +
+            tagId.toString());
+    return count;
   }
 
+  //Delete Relative Record by TagId
+  //Return number of record was applied
   Future<int> deleteRelativesByTagID(String tagId) async {
     final db = await dbProvider.database;
 
-    var res = await db.delete(
+    var count = await db.delete(
       'relatives',
       where: "tag_id = ?",
       whereArgs: [tagId],
     );
-    LogHistory.trackLog("[Relative]", "DELETE all relative of tag:" + tagId.toString());
-    return res;
+    LogHistory.trackLog(
+        "[Relative]", "DELETE all relative of tag:" + tagId.toString());
+    return count;
   }
 
+  //Delete Relative Record by NoteId
+  //Return number of record was applied
   Future<int> deleteRelativesByNoteID(String noteId) async {
     final db = await dbProvider.database;
 
@@ -63,10 +78,13 @@ class RelativeDAO {
       where: "note_id = ?",
       whereArgs: [noteId],
     );
-    LogHistory.trackLog("[Relative]", "DELETE all relative of note:" + noteId.toString());
+    LogHistory.trackLog(
+        "[Relative]", "DELETE all relative of note:" + noteId.toString());
     return res;
   }
 
+  //Delete All Relative Record
+  //Return number of record was applied
   Future<int> deleteAllRelatives() async {
     final db = await dbProvider.database;
 
@@ -75,23 +93,37 @@ class RelativeDAO {
     return res;
   }
 
+  //Get Relative by NoteID
+  //Return List Relative object or null
   Future<List<Relative>> getRelativesByNoteID(String noteId) async {
     final db = await dbProvider.database;
 
     // Query the table for all The NoteItem of identify Note.
     final List<Map<String, dynamic>> maps =
-        await db.query('relatives', where: "note_id = ?", whereArgs: [noteId]);
-    return List.generate(maps.length, (i) {
-      return Relative(maps[i]['note_id'], maps[i]['tag_id']);
-    });
+    await db.query('relatives', where: "note_id = ?", whereArgs: [noteId]);
+    List<Relative> note = maps.isNotEmpty
+        ? maps.map((item) => Relative.fromDatabaseJson(item)
+    ).toList()
+        : [];
+    return note;
   }
+  //Get Relative by TagID
+  //Return List Relative object or null
+  Future<List<Relative>> getRelativesByTagID(String tagId) async {
+    final db = await dbProvider.database;
 
-  Map<String, dynamic> toMap(String noteId, String tagId) {
-    return {'note_id': noteId, 'tag_id': tagId};
+    // Query the table for all The NoteItem of identify Note.
+    final List<Map<String, dynamic>> maps =
+    await db.query('relatives', where: "tag_id = ?", whereArgs: [tagId]);
+    List<Relative> note = maps.isNotEmpty
+        ? maps.map((item) => Relative.fromDatabaseJson(item)
+    ).toList()
+        : [];
+    return note;
   }
   Future<int> getCounts() async {
     final db = await dbProvider.database;
-    int count = Sqflite.firstIntValue(await db.rawQuery(COUNT,['relatives']));
+    int count = Sqflite.firstIntValue(await db.rawQuery(COUNT, ['relatives']));
     return count;
   }
 }
@@ -101,9 +133,18 @@ class Relative {
   String tagId;
 
   Relative(this.noteId, this.tagId);
-  String toString(){
-    return "<Relative Note_id=\""+noteId.toString()+
-        "\" Tag_id=\"" + tagId.toString() +
+
+  factory Relative.fromDatabaseJson(Map<String, dynamic> data) =>
+      Relative(data['note_id'], data['tag_id']);
+
+  static Map<String, dynamic> toDatabaseJson(String noteId,String tagId) {
+    return {'note_id': noteId, 'tag_id': tagId};
+    }
+  String toString() {
+    return "<Relative Note_id=\"" +
+        noteId.toString() +
+        "\" Tag_id=\"" +
+        tagId.toString() +
         "\"/>";
   }
 }

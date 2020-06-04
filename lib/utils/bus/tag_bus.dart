@@ -10,17 +10,17 @@ class TagBUS {
   //the state of our stream of data like adding
   //new data, change the state of the stream
   //and broadcast it to observers/subscribers
-  final _tagController = StreamController<List<Tag>>.broadcast();
+  //final _tagController = StreamController<List<Tag>>.broadcast();
 
-  get tags => _tagController.stream;
+  //get tags => _tagController.stream;
 
   TagBloc() {
     getTags();
   }
-  //Check tag Exist
-  //Required: Tag
-  //case tag exist return true;
-  //case tag not exist return false;
+  ///Check tag Exist
+  ///Required: Tag
+  ///case tag exist return true;
+  ///case tag not exist return false;
   isTagExist(Tag tag) async {
     var res = await _tagRepository.getTagByTitle(tag.title);
     if (res == null) return false;
@@ -34,7 +34,7 @@ class TagBUS {
     //sink is a way of adding data reactively to the stream
     //by registering a new event
     var res = await _tagRepository.getAllTags(query: query);
-    _tagController.sink.add(res);
+    //_tagController.sink.add(res);
     return res;
   }
   //Get Tag from database
@@ -50,29 +50,29 @@ class TagBUS {
   //case non-exist tag will add and return tagId
   addTag(Tag tag) async {
     if (!(await isTagExist(tag))) {
-      var tagId = await _tagRepository.insertTag(tag);
-      getTags();
+      await _tagRepository.insertTag(tag);
+      //getTags();
       return true;
     }
-    return false;
+    else return false;
   }
   //Update Tag
   //Required: Tag
   updateTag(Tag tag) async {
-    if (!isTagExist(tag)) {
-      var count = await _tagRepository.updateTags(tag);
-      getTags();
-      return count;
-    }
-    return -1;
+    //if (!isTagExist(tag)) {
+      return await _tagRepository.updateTags(tag) > 0;
+      //getTags();
+      //return true;
+    //}
+    //return false;
   }
 
   deleteTagById(String id) async {
-    _tagRepository.deleteTagById(id);
-    getTags();
+    return await _tagRepository.deleteTagById(id) > 0;
+    //getTags();
   }
 
-  dispose() {
-    _tagController.close();
-  }
+//  dispose() {
+//    _tagController.close();
+//  }
 }
