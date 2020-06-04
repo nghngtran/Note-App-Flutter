@@ -51,8 +51,11 @@ dev_dependencies:
   flutter_sound: ^4.0.0
   record_mp3: ^2.0.0
   audioplayers: ^0.15.1
-#  permission_handler: ^5.0.0+hotfix.8
+  permission_handler: ^5.0.0+hotfix.8
   assets_audio_player: ^1.6.4+4
+  wave: ^0.0.8
+  percent_indicator: ^2.1.4
+  file_picker: ^1.9.0+1
 
 
 # For information on the generic Dart part of this file, see the
