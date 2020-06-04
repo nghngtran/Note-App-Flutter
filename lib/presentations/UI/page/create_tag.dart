@@ -84,7 +84,9 @@ class CreateTag extends StatelessWidget {
                         color: Colors.transparent,
                         textColor: Theme.of(context).iconTheme.color,
                         child: Text("Cancel",
-                            style: Theme.of(context).textTheme.headline7),
+                            style: TextStyle( fontSize: 17,
+                              fontFamily: Font.Name,
+                              fontWeight: Font.Regular)),
                         onPressed: () {
                           Navigator.of(context).pop();
                         },
@@ -99,11 +101,13 @@ class CreateTag extends StatelessWidget {
                         color: Colors.transparent,
                         textColor: Theme.of(context).iconTheme.color,
                         child: Text("Save",
-                            style: Theme.of(context)
-                                .textTheme
-                                .headline7
-                                .copyWith(color: Colors.blue)),
+                            style:TextStyle(
+                                fontSize: 17,
+                                fontFamily: Font.Name,
+                                fontWeight: Font.Regular,color: Colors.blue)),
+                   
                         onPressed: () async {
+
 //                          Provider.of<Tag>(context, listen: false)
 //                              .setTitle(textController.text);
                           tag.setTitle(textController.text);

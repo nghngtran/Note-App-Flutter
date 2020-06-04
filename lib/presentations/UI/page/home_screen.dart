@@ -193,7 +193,7 @@ class HomeScreenState extends State<HomeScreen>
                 splashColor:
                     Theme.of(context).floatingActionButtonTheme.backgroundColor,
                 child: Icon(Icons.add,
-                    size: 18, color: Theme.of(context).iconTheme.color),
+                    size: 28, color: Theme.of(context).iconTheme.color),
                 onPressed: () {
                   Navigator.push(
                       context,

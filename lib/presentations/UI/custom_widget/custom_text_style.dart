@@ -1,23 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:note_app/application/constants.dart';
 
-extension CustomTextStyles on TextTheme {
-  TextStyle get headline8 => TextStyle(
-        fontSize: 17,
-        fontFamily: Font.Name,
-        fontWeight: Font.Light,
-      ); // H8
-  TextStyle get headline7 => TextStyle(
-        fontSize: 15,
-        fontFamily: Font.Name,
-        fontWeight: Font.Regular,
-      ); // H7
-  TextStyle get headline6 => TextStyle(
-        fontSize: 13,
-        fontFamily: Font.Name,
-        fontWeight: Font.Regular,
-      );
-}
+//extension CustomTextStyles TextTheme {
+//  TextStyle get headline8 => TextStyle(
+//    fontSize: 17,
+//    fontFamily: Font.Name,
+//    fontWeight: Font.Light,
+//  ); // H8
+//  TextStyle get headline7 => TextStyle(
+//    fontSize: 17,
+//    fontFamily: Font.Name,
+//    fontWeight: Font.Regular,
+//  ); // H7
+//TextStyle get headline6 => TextStyle(
+//        fontSize: 13,
+//        fontFamily: Font.Name,
+//        fontWeight: Font.Regular,
+//      );
+//}
+//
+
 
 TextTheme customizedTheme = TextTheme(
   subtitle: TextStyle(
