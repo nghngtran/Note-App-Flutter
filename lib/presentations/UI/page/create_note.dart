@@ -209,7 +209,7 @@ class CreateNoteState extends State<CreateNote> {
                             final TagBUS tagBus = TagBUS();
                             print("|Load Tag|");
                             var tags1 = await tagBus.getTags();
-                            for(var tag1 in tags1){
+                            for (var tag1 in tags1) {
                               print(tag1.toString());
                             }
                             print("|Load Tag|");
@@ -218,8 +218,7 @@ class CreateNoteState extends State<CreateNote> {
                             print("|Load Thumbnails|");
                             var thumbs = await thumbBus.getThumbnails();
 
-                            for(var thumb in thumbs)
-                              print(thumb.toString());
+                            for (var thumb in thumbs) print(thumb.toString());
                             print("|Load Thumbnails|");
 
                             Navigator.of(context).pushNamedAndRemoveUntil(
@@ -391,10 +390,11 @@ class NoteItemWidget extends StatelessWidget {
             Icon(Icons.audiotrack, size: 20, color: Colors.black),
             SizedBox(width: w * 2),
             Text("Em Gai Mua audio",
-                style: Theme.of(context)
-                    .textTheme
-                    .headline7
-                    .copyWith(color: Colors.black))
+                style: TextStyle(
+                    fontSize: 15,
+                    fontFamily: Font.Name,
+                    fontWeight: Font.Regular,
+                    color: Colors.black))
           ],
         ));
   }

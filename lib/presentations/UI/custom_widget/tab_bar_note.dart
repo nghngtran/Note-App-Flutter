@@ -77,7 +77,11 @@ class CreateTagNote extends StatelessWidget {
                         color: Colors.transparent,
                         textColor: Theme.of(context).iconTheme.color,
                         child: Text("Cancel",
-                            style: Theme.of(context).textTheme.headline7),
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontFamily: Font.Name,
+                              fontWeight: Font.Regular,
+                            )),
                         onPressed: () {
                           Navigator.of(context).pop();
                         },
@@ -92,10 +96,11 @@ class CreateTagNote extends StatelessWidget {
                         color: Colors.transparent,
                         textColor: Theme.of(context).iconTheme.color,
                         child: Text("Save",
-                            style: Theme.of(context)
-                                .textTheme
-                                .headline7
-                                .copyWith(color: Colors.blue)),
+                            style: TextStyle(
+                                fontSize: 15,
+                                fontFamily: Font.Name,
+                                fontWeight: Font.Regular,
+                                color: Colors.blue)),
                         onPressed: () {
 //                          Provider.of<Tag>(context, listen: false)
 //                              .setTitle(textController.text);
@@ -250,10 +255,11 @@ class CustomTagNote extends StatelessWidget {
               child: Center(
                   child: Text(
                 "#" + tag.title,
-                style: Theme.of(context)
-                    .textTheme
-                    .headline7
-                    .copyWith(color: Colors.white),
+                style: TextStyle(
+                    fontSize: 15,
+                    fontFamily: Font.Name,
+                    fontWeight: Font.Regular,
+                    color: Colors.white),
               )))
         ]));
   }

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:note_app/application/constants.dart';
 import 'package:note_app/presentations/UI/custom_widget/custom_text_style.dart';
 
 class NoteCardModel {
@@ -164,10 +165,11 @@ class NoteCardState extends State<NoteCard> {
                   SizedBox(
                       height: 2 * MediaQuery.of(context).size.height / 100),
                   Text(noteCard.content,
-                      style: Theme.of(context)
-                          .textTheme
-                          .headline7
-                          .copyWith(color: Colors.black))
+                      style: TextStyle(
+                          fontSize: 15,
+                          fontFamily: Font.Name,
+                          fontWeight: Font.Regular,
+                          color: Colors.black))
                 ],
               )));
     }
