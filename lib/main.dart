@@ -54,15 +54,15 @@ void main() async {
     originalCheck<T>(value);
   };
   setupDependencyAssembler();
-//  runApp(ChangeNotifierProvider<AppStateNotifier>(
-//      create: (context) => AppStateNotifier(), child: MyApp()));
+  runApp(ChangeNotifierProvider<AppStateNotifier>(
+      create: (context) => AppStateNotifier(), child: MyApp()));
 
-  runApp(
-    DevicePreview(
-      builder: (context) => ChangeNotifierProvider<AppStateNotifier>(
-          create: (context) => AppStateNotifier(), child: MyApp()),
-    ),
-  );
+//  runApp(
+//    DevicePreview(
+//      builder: (context) => ChangeNotifierProvider<AppStateNotifier>(
+//          create: (context) => AppStateNotifier(), child: MyApp()),
+//    ),
+//  );
 }
 
 class MyApp extends StatelessWidget {

@@ -7,8 +7,10 @@ import 'package:note_app/presentations/UI/custom_widget/custom_type_tag.dart';
 import 'package:note_app/presentations/UI/page/base_view.dart';
 import 'package:note_app/presentations/UI/page/create_note.dart';
 import 'package:note_app/presentations/UI/page/image_pick.dart';
+import 'package:note_app/utils/bus/tag_bus.dart';
 import 'package:note_app/utils/model/note.dart';
 import 'package:note_app/utils/model/noteItem.dart';
+import 'package:note_app/utils/model/tag.dart';
 import 'package:note_app/view_model/list_tag_viewmodel.dart';
 import 'package:note_app/view_model/tag_view_model.dart';
 import 'package:page_transition/page_transition.dart';
@@ -86,6 +88,10 @@ class HomeScreenState extends State<HomeScreen>
       onChanged: updateSearchQuery,
     );
   }
+  TagBUS tagBUS = TagBUS();
+  List<Tag> listCreatedTag;
+  void loadTagData() async {
+    listCreatedTag = await tagBUS.getTags();}
 
   void updateSearchQuery(String newQuery) {
     setState(() {
@@ -121,6 +127,8 @@ class HomeScreenState extends State<HomeScreen>
   }
 
   Widget build(BuildContext context) {
+    loadTagData();
+
     List<NoteCardModel> notecard = List<NoteCardModel>();
     notecard.add(NoteCardModel(
         tag: "Homework",
@@ -225,7 +233,7 @@ class HomeScreenState extends State<HomeScreen>
             ),
             body: ListView(controller: mainController, // parent ListView
                 children: <Widget>[
-                  TagBar(mainController, model),
+                  TagBar(mainController, listCreatedTag),
                   SingleChildScrollView(
                       child: Container(
                     width: MediaQuery.of(context).size.width,
