@@ -1,38 +1,49 @@
-import 'dart:io' show Directory, FileSystemEntity, Platform;
-import 'package:file_picker/file_picker.dart';
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
-
+import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
-
+import 'package:note_app/utils/database/model/note.dart';
+import 'package:note_app/utils/database/model/noteItem.dart';
 import 'package:note_app/view_model/note_view_model.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:provider/provider.dart';
+import 'package:path_provider/path_provider.dart';
+//import 'package:simple_permissions/simple_permissions.dart';
 
 class ChooseFileAudio extends StatelessWidget {
   final NoteViewModel model;
 //  Future<List<Directory>> _externalDocumentsDirectory;
   ChooseFileAudio(NoteViewModel _model) : model = _model;
-  String _fileName;
-  String _path;
-  String _extension;
-  FileType _pickingType = FileType.audio;
-  void checkPermission() async {
-    _path = await FilePicker.getFilePath(
-        type: _pickingType,
-        allowedExtensions: (_extension?.isNotEmpty ?? false)
-            ? _extension?.replaceAll(' ', '')?.split(',')
-            : null);
-    _fileName = _path != null ? _path.split('/').last : '...';
-    print(_fileName);
+  FileSystemEntity choose;
+  ScrollController controller = ScrollController();
+  static Future<String> get localPath async {
+    final directory = await getApplicationDocumentsDirectory();
+    return directory.path;
   }
 
-  void _clearCachedFiles() {
-    FilePicker.clearTemporaryFiles().then((result) {});
-  }
-
+  List<FileSystemEntity> _files;
+  List<FileSystemEntity> _songs = [];
   @override
   Widget build(BuildContext context) {
     double w = MediaQuery.of(context).size.width / 100;
     double h = MediaQuery.of(context).size.height / 100;
-    checkPermission();
+//    SimplePermissions.requestPermission(Permission.ReadExternalStorage)
+//        .then((value) {
+//      if (value == PermissionStatus.authorized) {
+//        localPath.then((String value) {
+//          print("True");
+    Directory dir = Directory('/storage/emulated/0/Download');
+
+    _files = dir.listSync(recursive: true, followLinks: false);
+    for (FileSystemEntity entity in _files) {
+      String path = entity.path;
+      if (path.endsWith('.mp3')) _songs.add(entity);
+    }
+//        });
+//      }
+//    });
+    print(_songs.length.toString());
     return Scaffold(
         backgroundColor: Theme.of(context).backgroundColor,
         resizeToAvoidBottomPadding: false,
@@ -40,26 +51,39 @@ class ChooseFileAudio extends StatelessWidget {
           title: Text('Pick audio',
               style: TextStyle(color: Theme.of(context).iconTheme.color)),
         ),
-        body: GestureDetector(
-            onTap: () {
-              model.setContentChildItem(_path);
-              Navigator.of(context).pop();
-            },
-            child: Container(
-                height: h * 5,
-                width: w * 100,
-                padding: EdgeInsets.fromLTRB(w * 2, h, w, h),
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: <Widget>[
-                      Icon(Icons.music_note,
-                          color: Theme.of(context).iconTheme.color, size: 16),
-//                      Text(
-//                        _fileName,
-//                        style: TextStyle(
-//                            color: Theme.of(context).iconTheme.color,
-//                            fontSize: 15),
-//                      )
-                    ]))));
+        body: ListView.builder(
+          controller: controller,
+          itemCount: _songs.length,
+          itemBuilder: (BuildContext context, int index) {
+            final item = _songs[index];
+            return GestureDetector(
+                onTap: () {
+                  choose = item;
+                  NoteItem tmp = NoteItem("Audio");
+                  tmp.type = "Audio";
+                  tmp.content = item.path;
+//                  Provider.of<Notes>(context, listen: true).addNoteItem(tmp);
+                  model.addNoteItem(tmp);
+                  Navigator.of(context).pop();
+                },
+                child: Container(
+                    height: h * 5,
+                    width: w * 100,
+                    padding: EdgeInsets.fromLTRB(w * 2, h, w, h),
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: <Widget>[
+                          Icon(Icons.music_note,
+                              color: Theme.of(context).iconTheme.color,
+                              size: 16),
+                          Text(
+                            item.path,
+                            style: TextStyle(
+                                color: Theme.of(context).iconTheme.color,
+                                fontSize: 15),
+                          )
+                        ])));
+          },
+        ));
   }
 }
