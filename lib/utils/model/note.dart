@@ -98,15 +98,15 @@ class Notes extends TimeUtils with ChangeNotifier {
   }
 
   String toString() {
+    String noteItem = "";
+    if (contents != null) {
+      contents.forEach((f) => {noteItem = noteItem + "\t\t" + f.toString() + "\n"});
+    }
     String tag = "";
     if (tags != null) {
       tags.forEach((f) => {tag = tag + "\t\t" + f.toString() + "\n"});
     }
-    String noteItem = "";
-    if (contents != null) {
-      contents
-          .forEach((f) => {noteItem = noteItem + "\t\t" + f.toString() + "\n"});
-    }
+
     return "<Note ID=\"" +
         id.toString() +
         "\" Title=\"" +

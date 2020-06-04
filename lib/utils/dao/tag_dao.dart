@@ -13,59 +13,101 @@ class TagDAO {
 
   //Insert new Tag
   //Return row id
-  Future<int> createTag(Tag tag) async {
+  Future<int> createTag(Tag tag, {Transaction txn}) async {
     final db = await dbProvider.database;
+    var tagId = -1;
 
-    var tagId = await db.insert(
-      'tags',
-      tag.toDatabaseJson()
-      //conflictAlgorithm: ConflictAlgorithm.abort,
-    );
-
-    LogHistory.trackLog("[TAG]", "INSERT tag:" + tag.id.toString());
+    if (txn != null) {
+      tagId = await txn.insert('tags', tag.toDatabaseJson()
+          //conflictAlgorithm: ConflictAlgorithm.abort,
+          );
+      LogHistory.trackLog("[TAG]", "INSERT tag:" + tag.id.toString());
+    } else
+      await db.transaction((txn) async {
+        tagId = await txn.insert('tags', tag.toDatabaseJson()
+            //conflictAlgorithm: ConflictAlgorithm.abort,
+            );
+        LogHistory.trackLog("[TAG]", "INSERT tag:" + tag.id.toString());
+      });
     return tagId;
   }
 
   //Update a Tag
   //Return number of record was applied
-  Future<int> updateTag(Tag tag) async {
-    final db = await dbProvider.database;
-
-    var count = await db.update(
-      'tags',
-      tag.toDatabaseJson(),
-      where: "tag_id = ?",
-      whereArgs: [tag.id],
-    );
-    LogHistory.trackLog("[TAG]", "UPDATE tag:" + tag.id.toString());
+  Future<int> updateTag(Tag tag, {Transaction txn}) async {
+    var count = 0;
+    if (txn != null) {
+      count = await txn.update(
+        'tags',
+        tag.toDatabaseJson(),
+        where: "tag_id = ?",
+        whereArgs: [tag.id],
+      );
+      LogHistory.trackLog("[TAG]", "UPDATE tag:" + tag.id.toString());
+    }
+    else {
+      final db = await dbProvider.database;
+      count = await db.update(
+        'tags',
+        tag.toDatabaseJson(),
+        where: "tag_id = ?",
+        whereArgs: [tag.id],
+      );
+      LogHistory.trackLog("[TAG]", "UPDATE tag:" + tag.id.toString());
+    }
     return count;
   }
 
   //Delete a Tag
   //Return number of record was applied
-  Future<int> deleteTag(String tagId) async {
-    final db = await dbProvider.database;
-
-    var count = await db.delete(
-      'tags',
-      where: "tag_id = ?",
-      whereArgs: [tagId],
-    );
-    await relativeDao.deleteRelativesByTagID(tagId);
-
-    LogHistory.trackLog("[TAG]", "DELETE tag:" + tagId.toString());
+  Future<int> deleteTag(String tagId,{Transaction txn}) async {
+    var count = 0;
+    if(txn!= null){
+        await relativeDao.deleteRelativesByTagID(tagId,txn:txn);
+        count = await txn.delete(
+          'tags',
+          where: "tag_id = ?",
+          whereArgs: [tagId],
+        );
+        LogHistory.trackLog("[TAG]", "DELETE tag:" + tagId.toString());
+    }
+    else {
+      final db = await dbProvider.database;
+      await db.transaction((txn1) async {
+        await relativeDao.deleteRelativesByTagID(tagId,txn:txn1);
+        count = await txn1.delete(
+          'tags',
+          where: "tag_id = ?",
+          whereArgs: [tagId],
+        );
+        LogHistory.trackLog("[TAG]", "DELETE tag:" + tagId.toString());
+      });
+    }
     return count;
   }
 
   //Delete All Tag Record
   //Return number of record was applied
-  Future deleteAllTags() async {
-    final db = await dbProvider.database;
-    var count = await db.delete(
-      'tags',
-    );
-    await relativeDao.deleteAllRelatives();
-    LogHistory.trackLog("[TAG]", "DELETE all tag");
+  Future deleteAllTags({Transaction txn}) async {
+    var count = 0;
+
+    if(txn!= null){
+      await relativeDao.deleteAllRelatives(txn:txn);
+      count = await txn.delete(
+        'tags',
+      );
+      LogHistory.trackLog("[TAG]", "DELETE all tag");
+    }
+    else {
+      final db = await dbProvider.database;
+      await db.transaction((txn1) async {
+        count = await txn1.delete(
+          'tags',
+        );
+        await relativeDao.deleteAllRelatives(txn:txn1);
+        LogHistory.trackLog("[TAG]", "DELETE all tag");
+      });
+    }
     return count;
   }
 
@@ -78,21 +120,23 @@ class TagDAO {
 
     if (maps.isNotEmpty) {
       return Tag.fromDatabaseJson(maps.first);
-    }
-    else return null;
+    } else
+      return null;
   }
+
   //Get Tag by Title
   //Return Tag object or null
-  Future<Tag> getTagByTitle(String title) async{
+  Future<Tag> getTagByTitle(String title) async {
     final db = await dbProvider.database;
     final List<Map<String, dynamic>> maps =
-    await db.query('tags', where: "title = ?", whereArgs: [title]);
+        await db.query('tags', where: "title = ?", whereArgs: [title]);
 
     if (maps.isNotEmpty) {
       return Tag.fromDatabaseJson(maps.first);
-    }
-    else return null;
+    } else
+      return null;
   }
+
   //Get List Tag of Note
   //Return List Tag object or null
   Future<List<Tag>> getTagsByNoteID(String noteId) async {
@@ -106,6 +150,7 @@ class TagDAO {
         : [];
     return tags;
   }
+
   //Get List Tag in Database
   //Return List Tag object or null
   Future<List<Tag>> getTags({List<String> columns, String query}) async {
@@ -127,28 +172,31 @@ class TagDAO {
         : [];
     return note;
   }
+
   Future<int> getOrder() async {
     final db = await dbProvider.database;
     List<Map<String, dynamic>> maps =
-    await db.query('tableCount', where: "id = ?", whereArgs: ["tags"]);
-    if(maps.isNotEmpty)
+        await db.query('tableCount', where: "id = ?", whereArgs: ["tags"]);
+    if (maps.isNotEmpty)
       return maps[0]['count'];
-    else return 0;
+    else
+      return 0;
   }
+
   Future<int> updateOrder(int order) async {
     final db = await dbProvider.database;
 
     var orderId = await db.insert(
       'tableCount',
-      {'id':'tags',
-      'count':order},
+      {'id': 'tags', 'count': order},
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
-   return orderId;
+    return orderId;
   }
+
   Future<int> getCounts() async {
     final db = await dbProvider.database;
-    int count = Sqflite.firstIntValue(await db.rawQuery(COUNT,['tags']));
+    int count = Sqflite.firstIntValue(await db.rawQuery(COUNT, ['tags']));
     return count;
   }
 }

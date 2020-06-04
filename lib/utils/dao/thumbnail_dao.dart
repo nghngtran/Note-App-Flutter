@@ -1,7 +1,9 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:note_app/utils/dao/tag_dao.dart';
 import 'package:note_app/utils/db_commands.dart';
+import 'package:note_app/utils/model/note.dart';
 import 'package:note_app/utils/model/thumbnailNote.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -14,15 +16,60 @@ class ThumbnailNoteDAO {
 
   //Insert new Thumbnail
   //Return row id
-  Future<int> createThumbnail(ThumbnailNote thumbnail) async {
-    final db = await dbProvider.database;
-    var thumbId = await db.insert(
-      'thumbnails',
-      thumbnail.toDatabaseJson(),
-      conflictAlgorithm: ConflictAlgorithm.replace,
-    );
-    LogHistory.trackLog("[Thumbnail]",
-        "INSERT new thumbnail note:" + thumbnail.noteId.toString());
+  Future<int> createThumbnail(ThumbnailNote thumbnail,{Transaction txn}) async {
+    var thumbId = -1;
+    if(txn!=null){
+      thumbId = await txn.insert(
+        'thumbnails',
+        thumbnail.toDatabaseJson(),
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
+      LogHistory.trackLog("[Thumbnail]",
+          "INSERT new thumbnail note:" + thumbnail.noteId.toString());
+    }
+    else {
+      final db = await dbProvider.database;
+      thumbId = await db.insert(
+        'thumbnails',
+        thumbnail.toDatabaseJson(),
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
+      LogHistory.trackLog("[Thumbnail]",
+          "INSERT new thumbnail note:" + thumbnail.noteId.toString());
+    }
+    return thumbId;
+  }
+
+  //Insert new Thumbnail
+  //Return row id
+  Future<int> createThumbnailByNote(Notes note,{Transaction txn}) async {
+    var thumbId = -1;
+    if(txn!= null){
+      ThumbnailNote thumbnail = new ThumbnailNote(note.id, note.title,
+          note.tags, note.contents[0].content, note.modified_time);
+
+      thumbId = await txn.insert(
+        'thumbnails',
+        thumbnail.toDatabaseJson(),
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
+      LogHistory.trackLog("[Thumbnail]",
+          "INSERT new thumbnail note:" + thumbnail.noteId.toString());
+    }
+    else {
+      final db = await dbProvider.database;
+
+      ThumbnailNote thumbnail = new ThumbnailNote(note.id, note.title,
+          note.tags, note.contents[0].content, note.modified_time);
+
+      thumbId = await db.insert(
+        'thumbnails',
+        thumbnail.toDatabaseJson(),
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
+      LogHistory.trackLog("[Thumbnail]",
+          "INSERT new thumbnail note:" + thumbnail.noteId.toString());
+    }
     return thumbId;
   }
 
