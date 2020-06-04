@@ -7,6 +7,8 @@ class RoutePaths {
   static const String Create_note = 'create_note';
   static const String Paint = 'paint';
   static const String Camera = 'camera';
+  static const String Record = 'record';
+  static const String ChooseFileSound= 'choose_file_sound';
 }
 
 class Font {

@@ -34,7 +34,7 @@ class CustomTag extends StatelessWidget {
                   child: Text(
                 "#" + tag.title,
                 style: TextStyle(
-                    fontSize: 15,
+                    fontSize: 17,
                     fontFamily: Font.Name,
                     fontWeight: Font.Regular,
                     color: Colors.white),

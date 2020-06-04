@@ -4,12 +4,20 @@ import 'package:note_app/application/constants.dart';
 import 'dart:io';
 import 'package:note_app/presentations/UI/custom_widget/custom_text_style.dart';
 import 'package:note_app/presentations/UI/page/customPaint.dart';
-import 'package:note_app/utils/model/note.dart';
-import 'package:note_app/utils/model/noteItem.dart';
+// <<<<<<< audio
+// import 'package:note_app/utils/database/model/note.dart';
+// import 'package:note_app/utils/database/model/noteItem.dart';
+import 'package:note_app/view_model/note_view_model.dart';
+// =======
+// import 'package:note_app/utils/model/note.dart';
+// import 'package:note_app/utils/model/noteItem.dart';
+// >>>>>>> master
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
 class PickImage extends StatefulWidget {
+  final NoteViewModel model;
+  PickImage(NoteViewModel _model) : model = _model;
   @override
   _PickImageState createState() => _PickImageState();
 }
@@ -36,7 +44,8 @@ class _PickImageState extends State<PickImage> {
                 Image tmp = new Image.file(snapshot.data);
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => CustomPaintPage(tmp)),
+                  MaterialPageRoute(
+                      builder: (context) => CustomPaintPage(tmp, widget.model)),
                 );
               },
               child: Container(
@@ -83,7 +92,6 @@ class _PickImageState extends State<PickImage> {
                     Provider.of<Notes>(context, listen: true).contents.last;
                 Provider.of<Notes>(context, listen: true)
                     .removeNoteItem(noteItem);
-
                 Navigator.of(context).pop();
               },
             )),
