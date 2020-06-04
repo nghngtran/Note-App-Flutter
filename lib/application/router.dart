@@ -1,10 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:note_app/application/constants.dart';
-import 'package:note_app/presentations/UI/page/camera_access.dart';
 import 'package:note_app/presentations/UI/page/create_note.dart';
-import 'package:note_app/presentations/UI/page/create_tag.dart';
-import 'package:note_app/presentations/UI/page/customPaint.dart';
 import 'package:note_app/presentations/UI/page/home_screen.dart';
 import 'package:note_app/presentations/UI/page/image_pick.dart';
 import 'package:note_app/presentations/UI/page/open_file_audio.dart';

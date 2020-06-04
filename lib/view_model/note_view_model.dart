@@ -1,8 +1,8 @@
 import 'dart:collection';
 
-import 'package:note_app/utils/database/model/TimeUtils.dart';
-import 'package:note_app/utils/database/model/noteItem.dart';
-import 'package:note_app/utils/database/model/tag.dart';
+import 'package:note_app/utils/model/TimeUtils.dart';
+import 'package:note_app/utils/model/noteItem.dart';
+import 'package:note_app/utils/model/tag.dart';
 import 'package:note_app/view_model/list_tag_viewmodel.dart';
 
 class Audio extends NoteItem {

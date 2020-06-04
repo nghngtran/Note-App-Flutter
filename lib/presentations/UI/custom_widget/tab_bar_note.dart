@@ -2,8 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:note_app/application/constants.dart';
 import 'package:note_app/presentations/UI/custom_widget/custom_type_tag.dart';
-import 'package:note_app/utils/database/dao/tag_dao.dart';
-import 'package:note_app/utils/database/model/tag.dart';
+import 'package:note_app/utils/bus/tag_bus.dart';
+import 'package:note_app/utils/dao/tag_dao.dart';
+import 'package:note_app/utils/model/tag.dart';
 import 'package:note_app/view_model/note_view_model.dart';
 import 'package:note_app/presentations/UI/custom_widget/custom_text_style.dart';
 
@@ -106,9 +107,9 @@ class CreateTagNote extends StatelessWidget {
                           tag.setTitle(textController.text);
 //                          Provider.of<Tag>(context, listen: false).setColor()
 //                              .setTitle(textController.text);
-                          TagDAO.insertTag(tag);
+                          (TagBUS()).addTag(tag);
                           print(tag);
-                          var _listTags = TagDAO.getTags();
+                          var _listTags = (TagBUS()).getTags();
                           List<Tag> listTags = List<Tag>();
                           _listTags.then((list) =>
                               list.forEach((tag) => listTags.add(tag)));
@@ -213,17 +214,18 @@ class TagBarOfNote extends StatelessWidget {
                     size: 20, color: Theme.of(context).iconTheme.color),
               )),
 
-          Container(
-              width: MediaQuery.of(context).size.width / 100 * 85,
-              height: MediaQuery.of(context).size.height / 100 * 6,
-              child: ListView.builder(
-                  controller: horizontal,
-                  scrollDirection: Axis.horizontal,
-                  itemCount: model.tags.length,
-                  itemBuilder: (context, index) {
-                    final item = model.tags[index];
-                    return CustomTagNote(item);
-                  }))
+          Expanded(
+              child: Container(
+                  width: MediaQuery.of(context).size.width / 100 * 85,
+                  height: MediaQuery.of(context).size.height / 100 * 6,
+                  child: ListView.builder(
+                      controller: horizontal,
+                      scrollDirection: Axis.horizontal,
+                      itemCount: model.tags.length,
+                      itemBuilder: (context, index) {
+                        final item = model.tags[index];
+                        return CustomTagNote(item);
+                      })))
 //              : Container()
         ]);
   }

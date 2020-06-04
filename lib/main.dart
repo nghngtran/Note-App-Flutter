@@ -35,10 +35,9 @@ import 'package:note_app/application/router.dart';
 import 'package:note_app/presentations/UI/page/base_view.dart';
 
 import 'package:note_app/presentations/UI/page/home_screen.dart';
-import 'package:note_app/presentations/UI/page/test.dart';
 
 import 'package:note_app/utils/database/database.dart';
-import 'package:note_app/utils/database/model/note.dart';
+import 'package:note_app/utils/model/note.dart';
 import 'package:provider/provider.dart';
 
 
@@ -59,14 +58,15 @@ void main() async {
     originalCheck<T>(value);
   };
   setupDependencyAssembler();
-  runApp(ChangeNotifierProvider<AppStateNotifier>(
-      create: (context) => AppStateNotifier(), child: MyApp()));
+//  runApp(ChangeNotifierProvider<AppStateNotifier>(
+//      create: (context) => AppStateNotifier(), child: MyApp()));
 
-//  runApp(
-//    DevicePreview(
-//      builder: (context) => MyApp(),
-//    ),
-//  );
+  runApp(
+    DevicePreview(
+      builder: (context) => ChangeNotifierProvider<AppStateNotifier>(
+          create: (context) => AppStateNotifier(), child: MyApp()),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {

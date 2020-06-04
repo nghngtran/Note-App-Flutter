@@ -4,9 +4,14 @@ import 'package:note_app/application/constants.dart';
 import 'dart:io';
 import 'package:note_app/presentations/UI/custom_widget/custom_text_style.dart';
 import 'package:note_app/presentations/UI/page/customPaint.dart';
-import 'package:note_app/utils/database/model/note.dart';
-import 'package:note_app/utils/database/model/noteItem.dart';
+// <<<<<<< audio
+// import 'package:note_app/utils/database/model/note.dart';
+// import 'package:note_app/utils/database/model/noteItem.dart';
 import 'package:note_app/view_model/note_view_model.dart';
+// =======
+// import 'package:note_app/utils/model/note.dart';
+// import 'package:note_app/utils/model/noteItem.dart';
+// >>>>>>> master
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 

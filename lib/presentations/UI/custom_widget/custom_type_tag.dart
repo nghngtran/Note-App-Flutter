@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:note_app/application/constants.dart';
 
 import 'package:note_app/presentations/UI/page/create_tag.dart';
-import 'package:note_app/utils/database/dao/tag_dao.dart';
-import 'package:note_app/utils/database/model/tag.dart';
+import 'package:note_app/utils/dao/tag_dao.dart';
+import 'package:note_app/utils/model/tag.dart';
 import 'package:note_app/view_model/list_tag_viewmodel.dart';
 import 'package:provider/provider.dart';
 import 'package:note_app/presentations/UI/custom_widget/custom_text_style.dart';
@@ -81,17 +81,18 @@ class TagBar extends StatelessWidget {
               )),
 //      SizedBox (width: MediaQuery.of(context).size.width / 100 * 2),
           model.listTagCreated.length > 0
-              ? Container(
-                  width: MediaQuery.of(context).size.width / 100 * 85,
-                  height: MediaQuery.of(context).size.height / 100 * 6,
-                  child: ListView.builder(
-                      controller: horizontal,
-                      scrollDirection: Axis.horizontal,
-                      itemCount: model.listTagCreated.length,
-                      itemBuilder: (context, index) {
-                        final item = model.listTagCreated[index];
-                        return CustomTag(item);
-                      }))
+              ? Expanded(
+                  child: Container(
+                      width: MediaQuery.of(context).size.width / 100 * 85,
+                      height: MediaQuery.of(context).size.height / 100 * 6,
+                      child: ListView.builder(
+                          controller: horizontal,
+                          scrollDirection: Axis.horizontal,
+                          itemCount: model.listTagCreated.length,
+                          itemBuilder: (context, index) {
+                            final item = model.listTagCreated[index];
+                            return CustomTag(item);
+                          })))
               : Container()
         ]);
   }
