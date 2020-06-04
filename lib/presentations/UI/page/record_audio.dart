@@ -1,7 +1,8 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:note_app/presentations/UI/custom_widget/custom_list_notes.dart';
-import 'package:note_app/utils/database/model/noteItem.dart';
+import 'package:note_app/utils/model/noteItem.dart';
+
 import 'package:note_app/view_model/note_view_model.dart';
 import 'dart:async';
 import 'package:path_provider/path_provider.dart';

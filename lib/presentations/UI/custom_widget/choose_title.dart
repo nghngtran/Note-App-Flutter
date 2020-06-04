@@ -91,9 +91,9 @@ class ChooseTitle extends StatelessWidget {
                       textColor: Colors.blue,
                       child: Text("Save",
                           style: TextStyle(
-                              fontSize: 17,
+                              fontSize: 19,
                               fontFamily: Font.Name,
-                              fontWeight: Font.Regular)),
+                              fontWeight: Font.SemiBold)),
                       onPressed: () {
                         print(textController.text);
                         noteViewModel.setTitle(textController.text);

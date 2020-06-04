@@ -189,7 +189,7 @@ class HandleAudioState extends State<HandleAudio> {
                     child: WaveWidget(
                       config: config,
                       backgroundColor: backgroundColor,
-                      size: Size(w * 100, h * 10),
+                      size: Size(w * 100, h * 15),
                       waveAmplitude: 0,
                     ))),
             SizedBox(height: h),
@@ -265,14 +265,16 @@ class HandleAudioState extends State<HandleAudio> {
                     child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
-                          Icon(Icons.audiotrack, size: 20, color: Colors.black),
+                          Icon(Icons.audiotrack,
+                              size: 24,
+                              color: Theme.of(context).iconTheme.color),
                           SizedBox(width: w * 2),
                           Text(url.split('/').last,
                               style: TextStyle(
                                   fontSize: 17,
                                   fontFamily: Font.Name,
                                   fontWeight: Font.Regular,
-                                  color: Colors.black))
+                                  color: Theme.of(context).iconTheme.color))
                         ]))));
   }
 }

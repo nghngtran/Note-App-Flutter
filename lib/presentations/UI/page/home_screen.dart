@@ -170,7 +170,8 @@ class HomeScreenState extends State<HomeScreen>
                               Provider.of<AppStateNotifier>(context).isDarkMode,
                           onChanged: (bool value) {
                             setState(() {
-                              Provider.of<AppStateNotifier>(context)
+                              Provider.of<AppStateNotifier>(context,
+                                      listen: false)
                                   .updateTheme(value);
                             });
                           },
