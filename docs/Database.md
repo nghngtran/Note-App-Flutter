@@ -146,15 +146,55 @@ All data access operations must be used via the BUS layer
 - *Trả về:* **`List<Tag>`** :**`list<object>`** nếu thành công, **`[]`** nếu thất bại
 
 - Cú pháp:` List<Tag> tags = await tagbus.getTags(String Query);`
-***
-To be continute
 
-Lớp ThumbnailBUS:
-- Khởi tạo: var thumbnail_bus = new ThumbnailBUS();
-- thêm record vào bảng "thumbnails" : thumbnail_bus.addThumbnail(ThumbnailNote note);
-- update record : thumbnail_bus.updateThumbnail(ThumbnailNote note);
-- xóa 1 record : thumbnail_bus.deleteThumbnailById(String note_id);
-- xóa tất cả record : thumbnail_bus.deleteAll();
-- trả về 1 record với note_id có sẵn : thumbnail_bus.getThumbnailById(String note_id);
-- trả về tất cả record với filter : thumbnail_bus.getThumbnails(String Query);
-- trả về tất cả record : thumbnail_bus.getThumbnails();
+## Lớp ThumbnailBUS:  
+###### Status: :heavy_check_mark:
+**Mô tả**: ThumbnailBUS cung cấp các phương thức để thực hiện các thao tác với thumbnail của 1 note đã tồn tại
+
+**1. Khởi tạo**
+
+- *Tham số:* **`Không`**
+
+- *Trả về:* **`Object`** 
+
+- Cú pháp:` var thumbnailbus = new ThumbnailBUS();`
+
+**2. Xóa 1 record với ID của note xác định khỏi bảng**
+
+- *Tham số:* **`String`** NoteId
+
+- *Trả về:* **`Boolean`** :**`True`** nếu thành công, **`False`** nếu thất bại
+
+- Cú pháp:` boolean status = await thumbnailbus.deleteThumbnailById(String note_id);`
+
+**3. Xóa tất cả record khỏi bảng**
+
+- *Tham số:* **`Không`**
+
+- *Trả về:* **`Boolean`** :**`True`** nếu thành công, **`False`** nếu thất bại
+
+- Cú pháp:` boolean status = await thumbnailbus.deleteAll();`
+
+**4. Lấy 1 Thumbnail object từ bảng**
+
+- *Tham số:* **`String`** ID
+
+- *Trả về:* **`ThumbnailNote`** :**object** nếu thành công, **`null`** nếu thất bại
+
+- Cú pháp:` ThumbnailNote thumbnail = await thumbnailbus.getTagById(String tagId);`
+
+**5. Lấy tất cả Thumbnail object từ bảng**
+
+- *Tham số:* **`Không`**
+
+- *Trả về:* **`List<ThumbnailNote>`** :**`list<object>`** nếu thành công, **`[]`** nếu thất bại
+
+- Cú pháp:` List<ThumbnailNote> thumbnails = await thumbnailbus.getThumbnails();;`
+
+**6. Lấy tất cả Thumbnail object với Query String từ bảng**
+
+- *Tham số:* **`String`** Query
+
+- *Trả về:* **`List<ThumbnailNote>`** :**`list<object>`** nếu thành công, **`[]`** nếu thất bại
+
+- Cú pháp:` List<ThumbnailNote> thumbnails = await thumbnailbus.getTags(String Query);`
