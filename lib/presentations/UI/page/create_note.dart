@@ -201,11 +201,10 @@ class CreateNoteState extends State<CreateNote> {
                             //print(note.contents.length);
 
                             //Print List Note
-//                            print("|Load Notes|");
-//                            var notes = await noteBus.getNotes();
-//                            for(var note1 in notes)
-//                              print(note1.toString());
-//                            print("|Load Notes|");
+                            print("|Load Notes|");
+                            var note1 = await noteBus.getNoteById(note.id);
+                            print(note1.toString());
+                            print("|Load Notes|");
 
                             final TagBUS tagBus = TagBUS();
                             print("|Load Tag|");

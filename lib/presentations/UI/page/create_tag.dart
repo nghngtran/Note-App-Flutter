@@ -109,18 +109,10 @@ class CreateTag extends StatelessWidget {
                           tag.setTitle(textController.text);
 //                          Provider.of<Tag>(context, listen: false).setColor()
 //                              .setTitle(textController.text);
-//                          Future<List<ThumbnailNote>> lists = ThumbnailNoteDAO.getThumbnails();
-//                          print("Testtttttttttttttttttt");
-//                          //Print Thumbnail test
-//                          lists.then((value) => {
-//                            value.forEach((f)=>{
-//                              print(f.toString())
-//                            })
-//                          });
-//                          print("Finish Testtttt");
+
                           TagBUS tagbus = new TagBUS();
                           var stt = await tagbus.addTag(tag);
-                          //print(tag);
+                          print(stt);
                           print("|TAG|");
                           var _listTags = await tagbus.getTags();
                           List<Tag> listTags = List<Tag>();
