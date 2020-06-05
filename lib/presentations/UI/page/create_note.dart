@@ -148,6 +148,7 @@ class CreateNoteState extends State<CreateNote> {
   Widget _profileOption({IconData iconData, Function onPressed, String hero}) {
     return UnicornButton(
         currentButton: FloatingActionButton(
+      elevation: 0.0,
       heroTag: hero,
       backgroundColor: Theme.of(context).backgroundColor,
       mini: true,
@@ -291,8 +292,10 @@ class CreateNoteState extends State<CreateNote> {
                             for (var thumb in thumbs) print(thumb.toString());
                             print("|Load Thumbnails|");
 
-                            Navigator.of(context).pushNamedAndRemoveUntil(
-                                '/', (Route<dynamic> route) => false);
+                            Navigator.of(context)
+                                .push(MaterialPageRoute(builder: (context) {
+                              return HomeScreen();
+                            }));
                           },
                           child: Text(
                             "Save",

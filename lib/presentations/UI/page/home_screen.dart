@@ -7,8 +7,10 @@ import 'package:note_app/presentations/UI/custom_widget/custom_type_tag.dart';
 import 'package:note_app/presentations/UI/page/base_view.dart';
 import 'package:note_app/presentations/UI/page/create_note.dart';
 import 'package:note_app/presentations/UI/page/image_pick.dart';
+import 'package:note_app/utils/bus/thumbnail_bus.dart';
 import 'package:note_app/utils/model/note.dart';
 import 'package:note_app/utils/model/noteItem.dart';
+import 'package:note_app/utils/model/thumbnailNote.dart';
 import 'package:note_app/view_model/list_tag_viewmodel.dart';
 import 'package:note_app/view_model/tag_view_model.dart';
 import 'package:page_transition/page_transition.dart';
@@ -18,6 +20,8 @@ import 'package:provider/provider.dart';
 import '../../../main.dart';
 
 class HomeScreen extends StatefulWidget {
+//  HomeScreen({Key key}):super(key:key);
+
   @override
   State<StatefulWidget> createState() {
     return HomeScreenState();
@@ -30,15 +34,24 @@ class HomeScreenState extends State<HomeScreen>
   bool _isSearching = false;
   String searchQuery = "Search for a word ...";
   TextEditingController _searchQuery;
-  List<Note> listNotes = List<Note>();
+
   bool visible = true;
   bool isCollapsed = true;
-
   bool _light = true;
+
   ScrollController mainController = ScrollController();
+  ThumbnailBUS thumbnailBUS = ThumbnailBUS();
+  List<ThumbnailNote> listTBNote = List<ThumbnailNote>();
+
+  void loadNotes() async {
+    listTBNote = await thumbnailBUS.getThumbnails();
+    print(listTBNote.length);
+    listTBNote.forEach((e) => print(e.toString()));
+  }
 
   void initState() {
     super.initState();
+
     _searchQuery = new TextEditingController();
   }
 
@@ -121,26 +134,28 @@ class HomeScreenState extends State<HomeScreen>
   }
 
   Widget build(BuildContext context) {
-    List<NoteCardModel> notecard = List<NoteCardModel>();
-    notecard.add(NoteCardModel(
-        tag: "Homework",
-        name: "Intro SE",
-        imageUrl: "assets/img.png",
-        contentCard:
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."));
-    notecard.add(NoteCardModel(
-        tag: "Homework",
-        name: "Intro SE",
-        imageUrl: "assets/asset_bg.png",
-        contentCard:
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. "));
-    listNotes.add(Note(date: DateNote(dateNote: "Today"), list: notecard));
-    notecard.add(NoteCardModel(
-        tag: "Homework",
-        name: "Intro SE",
-        contentCard:
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."));
-    listNotes.add(Note(date: DateNote(dateNote: "12/04/2020"), list: notecard));
+//    List<NoteCardModel> notecard = List<NoteCardModel>();
+//    notecard.add(NoteCardModel(
+//        tag: "Homework",
+//        name: "Intro SE",
+//        imageUrl: "assets/img.png",
+//        contentCard:
+//            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."));
+//    notecard.add(NoteCardModel(
+//        tag: "Homework",
+//        name: "Intro SE",
+//        imageUrl: "assets/asset_bg.png",
+//        contentCard:
+//            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. "));
+//    listNotes.add(Note(date: DateNote(dateNote: "Today"), list: notecard));
+//    notecard.add(NoteCardModel(
+//        tag: "Homework",
+//        name: "Intro SE",
+//        contentCard:
+//            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."));
+//    listNotes.add(Note(date: DateNote(dateNote: "12/04/2020"), list: notecard));
+    loadNotes();
+    print(listTBNote.length);
     return BaseView<TagCreatedModel>(
         onModelReady: (tagCreated) => tagCreated.getTagCreated(),
         builder: (context, tagCreated, child) => Scaffold(
@@ -185,7 +200,6 @@ class HomeScreenState extends State<HomeScreen>
                     )
                   ]),
             ),
-//            backgroundColor: Colors.white,
             resizeToAvoidBottomPadding: false,
             floatingActionButton: FloatingActionButton(
                 heroTag: "btnAdd",
@@ -203,7 +217,6 @@ class HomeScreenState extends State<HomeScreen>
                           child: CreateNote()));
                 }),
             appBar: AppBar(
-//                backgroundColor: Color.fromRGBO(255, 209, 16, 1.0),
               elevation: 0.0,
               title: _isSearching ? _buildSearchField() : null,
               actions: _buildActions(),
@@ -231,76 +244,11 @@ class HomeScreenState extends State<HomeScreen>
                       child: Container(
                     width: MediaQuery.of(context).size.width,
                     height: MediaQuery.of(context).size.height,
-                    child: NoteGrid(listNotes),
+                    child: listTBNote.length > 0
+                        ? NoteGrid(listTBNote)
+                        : Center(
+                            child: Text("Empty data.Let's create new note !")),
                   ))
-                ])
-//              Stack(
-//                children: <Widget>[
-//                  menu(context),
-//                  home(context, tagCreated),
-//                ],
-//              ),
-            ));
+                ])));
   }
 }
-
-//  Widget home(context, TagCreatedModel model) {
-//    return AnimatedPositioned(
-//        duration: duration,
-//        top: 0,
-//        bottom: 0,
-//        left: isCollapsed ? 0 : MediaQuery.of(context).size.width * 0.4,
-//        right: isCollapsed ? 0 : -0.2 * MediaQuery.of(context).size.width,
-//        child: Material(
-//            animationDuration: duration,
-//            child: ScaleTransition(
-//                scale: _scaleAnimation,
-//                child: ListView(controller: mainController, // parent ListView
-//                    children: <Widget>[
-//                      TagBar(mainController, model),
-//                      SingleChildScrollView(
-//                          child: Container(
-//                        width: MediaQuery.of(context).size.width,
-//                        height: MediaQuery.of(context).size.height,
-//                        child: NoteGrid(listNotes),
-//                      ))
-//                    ]))));
-//  }
-//
-//  Widget menu(context) {
-//    return SlideTransition(
-//      position: _slideAnimation,
-////      child: ScaleTransition(
-////        scale: _menuScaleAnimation,
-//      child: Container(
-//        width: MediaQuery.of(context).size.width,
-//        height: MediaQuery.of(context).size.height,
-//        alignment: Alignment.topLeft,
-//        child: Column(
-//            mainAxisSize: MainAxisSize.min,
-//            mainAxisAlignment: MainAxisAlignment.spaceAround,
-//            crossAxisAlignment: CrossAxisAlignment.start,
-//            children: <Widget>[
-//              MergeSemantics(
-//                child: ListTile(
-//                  title: Text('Lights'),
-//                  trailing: CupertinoSwitch(
-//                    value: _light,
-//                    onChanged: (bool value) {
-//                      setState(() {
-//                        _light = value;
-//                      });
-//                    },
-//                  ),
-//                  onTap: () {
-//                    setState(() {
-//                      _light = !_light;
-//                    });
-//                  },
-//                ),
-//              )
-//            ]),
-//      ),
-//    );
-//  }
-//}

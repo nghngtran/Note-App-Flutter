@@ -199,6 +199,7 @@ class TagBarOfNote extends StatelessWidget {
               child: FloatingActionButton(
                 elevation: 0.0,
                 heroTag: "createTag",
+//                backgroundColor: Theme.of(context).backgroundColor,
                 onPressed: () {
                   showDialog(
                       context: context,

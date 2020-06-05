@@ -98,7 +98,7 @@ class ChooseTitle extends StatelessWidget {
                         print(textController.text);
                         noteViewModel.setTitle(textController.text);
 //
-                        Provider.of<Notes>(context, listen: true)
+                        Provider.of<Notes>(context, listen: false)
                             .setTitle(textController.text);
                         Navigator.of(context).pop();
                       },
