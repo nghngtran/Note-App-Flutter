@@ -7,9 +7,11 @@ import 'package:note_app/presentations/UI/custom_widget/custom_type_tag.dart';
 import 'package:note_app/presentations/UI/page/base_view.dart';
 import 'package:note_app/presentations/UI/page/create_note.dart';
 import 'package:note_app/presentations/UI/page/image_pick.dart';
+import 'package:note_app/utils/bus/tag_bus.dart';
 import 'package:note_app/utils/bus/thumbnail_bus.dart';
 import 'package:note_app/utils/model/note.dart';
 import 'package:note_app/utils/model/noteItem.dart';
+import 'package:note_app/utils/model/tag.dart';
 import 'package:note_app/utils/model/thumbnailNote.dart';
 import 'package:note_app/view_model/list_tag_viewmodel.dart';
 import 'package:note_app/view_model/tag_view_model.dart';
@@ -42,6 +44,11 @@ class HomeScreenState extends State<HomeScreen>
   ScrollController mainController = ScrollController();
   ThumbnailBUS thumbnailBUS = ThumbnailBUS();
   List<ThumbnailNote> listTBNote = List<ThumbnailNote>();
+  TagBUS tagBUS = TagBUS();
+  List<Tag> listCreatedTag;
+  void loadTagData() async {
+    listCreatedTag = await tagBUS.getTags();
+  }
 
   void loadNotes() async {
     listTBNote = await thumbnailBUS.getThumbnails();
@@ -134,27 +141,8 @@ class HomeScreenState extends State<HomeScreen>
   }
 
   Widget build(BuildContext context) {
-//    List<NoteCardModel> notecard = List<NoteCardModel>();
-//    notecard.add(NoteCardModel(
-//        tag: "Homework",
-//        name: "Intro SE",
-//        imageUrl: "assets/img.png",
-//        contentCard:
-//            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."));
-//    notecard.add(NoteCardModel(
-//        tag: "Homework",
-//        name: "Intro SE",
-//        imageUrl: "assets/asset_bg.png",
-//        contentCard:
-//            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. "));
-//    listNotes.add(Note(date: DateNote(dateNote: "Today"), list: notecard));
-//    notecard.add(NoteCardModel(
-//        tag: "Homework",
-//        name: "Intro SE",
-//        contentCard:
-//            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."));
-//    listNotes.add(Note(date: DateNote(dateNote: "12/04/2020"), list: notecard));
     loadNotes();
+    loadTagData();
     print(listTBNote.length);
     return BaseView<TagCreatedModel>(
         onModelReady: (tagCreated) => tagCreated.getTagCreated(),
@@ -220,26 +208,10 @@ class HomeScreenState extends State<HomeScreen>
               elevation: 0.0,
               title: _isSearching ? _buildSearchField() : null,
               actions: _buildActions(),
-//                leading: _isSearching
-//                    ? BackButton(color: Theme.of(context).primaryColor)
-//                    : Container()
-//                IconButton(
-//                        color: Theme.of(context).primaryColor,
-//                        icon: Icon(Icons.menu, size: 24),
-//                        onPressed: () {
-//                          setState(() {
-//                            if (isCollapsed)
-//                              _controller.forward();
-//                            else
-//                              _controller.reverse();
-//
-//                            isCollapsed = !isCollapsed;
-//                          });
-//                        }),
             ),
             body: ListView(controller: mainController, // parent ListView
                 children: <Widget>[
-                  TagBar(mainController, model),
+                  TagBar(mainController, listCreatedTag, model),
                   SingleChildScrollView(
                       child: Container(
                     width: MediaQuery.of(context).size.width,

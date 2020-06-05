@@ -45,8 +45,10 @@ class CustomTag extends StatelessWidget {
 
 class TagBar extends StatelessWidget {
   ScrollController horizontal;
-
-  TagBar(ScrollController _scroll, this.model) : horizontal = _scroll;
+  final List<Tag> listCreatedTag;
+  TagBar(ScrollController _scroll, List<Tag> _listCreatedTag, this.model)
+      : horizontal = _scroll,
+        listCreatedTag = _listCreatedTag;
 //  List<Tag> listTags = List<Tag>();
   final TagCreatedModel model;
 
@@ -80,7 +82,7 @@ class TagBar extends StatelessWidget {
                     size: 20, color: Theme.of(context).iconTheme.color),
               )),
 //      SizedBox (width: MediaQuery.of(context).size.width / 100 * 2),
-          model.listTagCreated.length > 0
+          listCreatedTag.length > 0
               ? Expanded(
                   child: Container(
                       width: MediaQuery.of(context).size.width / 100 * 85,
@@ -88,9 +90,9 @@ class TagBar extends StatelessWidget {
                       child: ListView.builder(
                           controller: horizontal,
                           scrollDirection: Axis.horizontal,
-                          itemCount: model.listTagCreated.length,
+                          itemCount: listCreatedTag.length,
                           itemBuilder: (context, index) {
-                            final item = model.listTagCreated[index];
+                            final item = listCreatedTag[index];
                             return CustomTag(item);
                           })))
               : Container()
