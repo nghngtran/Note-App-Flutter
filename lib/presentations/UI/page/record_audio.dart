@@ -2,12 +2,12 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:note_app/presentations/UI/custom_widget/custom_list_notes.dart';
 import 'package:note_app/utils/model/noteItem.dart';
-
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:note_app/view_model/note_view_model.dart';
 import 'dart:async';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_sound/flutter_sound.dart';
+
 import 'package:record_mp3/record_mp3.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:audioplayers/audioplayers.dart';
@@ -16,8 +16,6 @@ enum RecordStatus {
   IDEL,
   RECORDING,
   PAUSE,
-// COMPLETE,
-// ERROR,
 }
 
 class Record extends StatefulWidget {
@@ -27,75 +25,46 @@ class Record extends StatefulWidget {
 }
 
 class RecordState extends State<Record> {
-  bool isComplete = false;
+  bool isComplete;
+  bool isRecording;
   String fileName = "";
+  void initState() {
+    super.initState();
+    isRecording = false;
+  }
+
   Widget build(BuildContext context) {
     double w = MediaQuery.of(context).size.width / 100;
     double h = MediaQuery.of(context).size.height / 100;
-    return Container(
-      width: w * 100,
-      height: h * 20,
-      decoration: BoxDecoration(
-          shape: BoxShape.rectangle,
-          border: Border(
-              left: BorderSide(color: Colors.transparent),
-              right: BorderSide(color: Colors.transparent)),
-          borderRadius: BorderRadius.circular(20),
-          color: Theme.of(context).backgroundColor),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: <Widget>[
-          SizedBox(height: h * 2),
-          GestureDetector(
-              onTap: () {
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: Container(
+        width: w * 100,
+        height: h * 30,
+        color: Colors.yellow,
+        child: GestureDetector(
+            onTap: () async {
+              setState(() {
+                isRecording = !isRecording;
+              });
+              if (isRecording) {
                 getFilePath();
                 NoteItem tmp = NoteItem("Audio");
-                tmp.content = fileName;
+                print("FIle" + fileName);
+                tmp.setContent(fileName);
                 widget.model.addNoteItem(tmp);
-                Navigator.of(context).pushNamed('create_note');
-              },
-              child: Icon(Icons.check,
-                  color: Theme.of(context).iconTheme.color, size: 20)),
-          Center(
-            child: Icon(Icons.mic_none,
-                color: Theme.of(context).iconTheme.color, size: 20),
-          ),
-          Expanded(
-              child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: <Widget>[
-              InkWell(
-                child: Icon(
-                  Icons.play_circle_filled,
-                  color: Theme.of(context).iconTheme.color,
-                  size: 20,
-                ),
-                onTap: () async {
-                  startRecord();
-                },
-              ),
-              InkWell(
-                  child: Icon(
-                    Icons.play_circle_outline,
-                    color: Theme.of(context).iconTheme.color,
-                    size: 20,
-                  ),
-                  onTap: () async {
-                    play();
-                  }),
-              InkWell(
-                child: Icon(
-                  Icons.stop,
-                  color: Theme.of(context).iconTheme.color,
-                  size: 20,
-                ),
-                onTap: () async {
-                  stopRecord();
-                },
-              )
-            ],
-          ))
-        ],
+                startRecord();
+              } else {
+                stopRecord();
+                Navigator.of(context).pop();
+              }
+            },
+            child: isRecording
+                ? SpinKitThreeBounce(
+                    color: Theme.of(context).iconTheme.color, size: 42)
+                : Icon(Icons.mic_none,
+                    color: Theme.of(context).iconTheme.color)),
+//
       ),
     );
   }
@@ -112,6 +81,7 @@ class RecordState extends State<Record> {
 
   void startRecord() async {
     bool hasPermission = await checkPermission();
+
     if (hasPermission) {
       recordFilePath = await getFilePath();
       isComplete = false;
@@ -137,6 +107,7 @@ class RecordState extends State<Record> {
   }
 
   void stopRecord() {
+    print("stop");
     bool s = RecordMp3.instance.stop();
     if (s) {
       isComplete = true;

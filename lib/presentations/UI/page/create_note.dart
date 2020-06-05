@@ -93,12 +93,15 @@ class CreateNoteState extends State<CreateNote> {
           CupertinoDialogAction(
             child: Text('Record'),
             onPressed: () {
-//              Navigator.
-////              popAndPushNamed(context, 'record');
-//                  push(context,
-//                      MaterialPageRoute(builder: (BuildContext context) {
-//                return Record(model);
-//              }));
+              Navigator.of(context).pop();
+              showDialog(
+                  context: context,
+                  builder: (BuildContext context) => Dialog(
+                      elevation: 0.0,
+                      backgroundColor: Theme.of(context).backgroundColor,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20)),
+                      child: Record(model)));
             },
           ),
           CupertinoDialogAction(
