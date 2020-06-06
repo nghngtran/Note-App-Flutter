@@ -5,14 +5,25 @@ import 'package:note_app/utils/model/noteItem.dart';
 import 'package:note_app/utils/model/tag.dart';
 import 'package:note_app/view_model/list_tag_viewmodel.dart';
 
+class Audio extends NoteItem {
+  String path;
+  Audio() : super("Audio");
+  void setPath(String _path) {
+    this.path = _path;
+  }
+}
+
 class NoteViewModel extends BaseModel {
-//  static int order = 0;
-//  String id;
   String title = "New untitled note";
   List<Tag> tags = [];
   List<NoteItem> contents = [];
   int get size {
     return contents != null ? contents.length : 0;
+  }
+
+  void setContentChildItem(String content) {
+    this.contents.last.setContent(content);
+    notifyListeners();
   }
 
   List<NoteItem> getListItems() {
@@ -23,14 +34,12 @@ class NoteViewModel extends BaseModel {
     contents = [];
     notifyListeners();
   }
-//  NoteViewModel() : super() {
-//    this.id = "note" + ((++order).toString());
-//    this.title = "New untitled note";
-//    this.tags = new List<Tag>();
-//    this.contents = new List<NoteItem>();
-//    this.history = new List<String>();
-//    this.history.add(TimeUtils.formatter.format(DateTime.now()));
-//  }
+
+  NoteViewModel() : super() {
+    this.title = "New untitled note";
+    this.tags = new List<Tag>();
+    this.contents = new List<NoteItem>();
+  }
 //  NoteViewModel.withFullInfo(
 //      this.id, this.title, DateTime created_time, DateTime modified_time) {
 //    this.tags = new List<Tag>();
@@ -63,11 +72,10 @@ class NoteViewModel extends BaseModel {
     notifyListeners();
   }
 
-//  List<NoteItem> getNoteItem() => this.contents;
-//  void removeTitle() {
-//    this.title = "New Note";
-//  }
-//
+  void removeTitle() {
+    this.title = "New Note";
+  }
+
   void setTag(List<Tag> tags) {
     this.tags.addAll(tags);
     //this.tags = this.tags.toSet().toList();
@@ -83,9 +91,10 @@ class NoteViewModel extends BaseModel {
     notifyListeners();
   }
 
-//  void setNoteItem(List<NoteItem> noteItems) {
-//    this.contents.addAll(noteItems);
-//  }
+  void setNoteItem(List<NoteItem> noteItems) {
+    this.contents.addAll(noteItems);
+    notifyListeners();
+  }
 
   void addNoteItem(NoteItem noteItem) {
     this.contents.add(noteItem);
@@ -97,10 +106,10 @@ class NoteViewModel extends BaseModel {
     notifyListeners();
   }
 
-//  NoteItem getNoteItemAt(index) {
-//    return this.contents[index];
-//  }
-//
+  NoteItem getNoteItemAt(index) {
+    return this.contents[index];
+  }
+
 //  String toString() {
 //    return id + "  |  " + title + "  |  ";
 //        created_time.toString() +

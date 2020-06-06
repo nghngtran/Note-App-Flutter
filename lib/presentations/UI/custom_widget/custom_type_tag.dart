@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:note_app/application/constants.dart';
 
 import 'package:note_app/presentations/UI/page/create_tag.dart';
 import 'package:note_app/utils/bus/tag_bus.dart';
@@ -33,10 +34,11 @@ class CustomTag extends StatelessWidget {
               child: Center(
                   child: Text(
                 "#" + tag.title,
-                style: Theme.of(context)
-                    .textTheme
-                    .headline7
-                    .copyWith(color: Colors.white),
+                style: TextStyle(
+                    fontSize: 17,
+                    fontFamily: Font.Name,
+                    fontWeight: Font.Regular,
+                    color: Colors.white),
               )))
         ]));
   }
@@ -44,14 +46,12 @@ class CustomTag extends StatelessWidget {
 
 class TagBar extends StatelessWidget {
   ScrollController horizontal;
-
-  TagBar(ScrollController _scroll, List<Tag> _listCreatedTag) : horizontal = _scroll,listCreatedTag =_listCreatedTag ;
-
-//  final TagCreatedModel model;
-//  TagBUS tagBUS = TagBUS();
-  List<Tag> listCreatedTag;
-//  void loadData() async {
-//  listCreatedTag = await tagBUS.getTags();}
+  final List<Tag> listCreatedTag;
+  TagBar(ScrollController _scroll, List<Tag> _listCreatedTag, this.model)
+      : horizontal = _scroll,
+        listCreatedTag = _listCreatedTag;
+//  List<Tag> listTags = List<Tag>();
+  final TagCreatedModel model;
 
   Widget build(BuildContext context) {
     return Row(
@@ -84,8 +84,7 @@ class TagBar extends StatelessWidget {
                     size: 20, color: Theme.of(context).iconTheme.color),
               )),
 //      SizedBox (width: MediaQuery.of(context).size.width / 100 * 2),
-//          model.listTagCreated.length > 0
-          listCreatedTag.length >0
+          listCreatedTag.length > 0
               ? Expanded(
                   child: Container(
                       width: MediaQuery.of(context).size.width / 100 * 85,
@@ -93,11 +92,9 @@ class TagBar extends StatelessWidget {
                       child: ListView.builder(
                           controller: horizontal,
                           scrollDirection: Axis.horizontal,
-                          itemCount:listCreatedTag.length,
-//                          model.listTagCreated.length,
+                          itemCount: listCreatedTag.length,
                           itemBuilder: (context, index) {
                             final item = listCreatedTag[index];
-//                            model.listTagCreated[index];
                             return CustomTag(item);
                           })))
               : Container()

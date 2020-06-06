@@ -1,8 +1,11 @@
 import 'dart:async';
-
-import 'package:camera/camera.dart';
+import 'dart:io';
+import 'dart:typed_data';
+import 'package:audioplayers/audioplayers.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:note_app/application/constants.dart';
 import 'package:note_app/presentations/UI/custom_widget/FAB.dart';
 import 'package:note_app/presentations/UI/custom_widget/choose_title.dart';
@@ -14,8 +17,12 @@ import 'package:note_app/presentations/UI/page/camera.dart';
 import 'package:note_app/presentations/UI/page/camera_access.dart';
 import 'package:note_app/presentations/UI/page/create_tag.dart';
 import 'package:note_app/presentations/UI/page/customPaint.dart';
+import 'package:note_app/presentations/UI/page/handle_audio.dart';
 import 'package:note_app/presentations/UI/page/home_screen.dart';
 import 'package:note_app/presentations/UI/page/image_pick.dart';
+
+import 'package:note_app/presentations/UI/page/record_audio.dart';
+
 import 'package:note_app/utils/bus/note_bus.dart';
 import 'package:note_app/utils/bus/tag_bus.dart';
 import 'package:note_app/utils/bus/thumbnail_bus.dart';
@@ -25,6 +32,7 @@ import 'package:note_app/utils/model/note.dart';
 import 'package:note_app/utils/model/noteItem.dart';
 import 'package:note_app/view_model/list_tag_viewmodel.dart';
 import 'package:note_app/view_model/note_view_model.dart';
+import 'package:painter2/painter2.dart';
 import 'package:provider/provider.dart';
 import 'package:unicorndial/unicorndial.dart';
 
@@ -35,6 +43,10 @@ class CreateNote extends StatefulWidget {
 class CreateNoteState extends State<CreateNote> {
   ScrollController mainController = ScrollController();
   TagCreatedModel tagCreatedModel;
+  String _fileName = "";
+  String _path;
+
+  FileType _pickingType = FileType.audio;
 
   var note = new Notes();
   void initState() {
@@ -47,29 +59,86 @@ class CreateNoteState extends State<CreateNote> {
     super.dispose();
   }
 
+  Widget dialogImg(BuildContext context, NoteViewModel model) {
+    return CupertinoAlertDialog(
+      title: Text('Get image from ?'),
+      actions: <Widget>[
+        CupertinoDialogAction(
+          child: Text('Camera'),
+          onPressed: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (BuildContext context) {
+              return CameraScreen();
+            }));
+          },
+        ),
+        CupertinoDialogAction(
+            child: Text('Gallery'),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (BuildContext context) {
+                  return PickImage(model);
+                }),
+              );
+            })
+      ],
+    );
+  }
+
+  Widget dialogSound(BuildContext context, NoteViewModel model) {
+    return CupertinoAlertDialog(
+        title: Text('Get sound from ?'),
+        actions: <Widget>[
+          CupertinoDialogAction(
+            child: Text('Record'),
+            onPressed: () {
+//              Navigator.
+////              popAndPushNamed(context, 'record');
+//                  push(context,
+//                      MaterialPageRoute(builder: (BuildContext context) {
+//                return Record(model);
+//              }));
+            },
+          ),
+          CupertinoDialogAction(
+              child: Text('Mp3'),
+              onPressed: () async {
+                _path = await FilePicker.getFilePath(type: _pickingType);
+
+                _fileName = _path != null ? _path.split('/').last : '';
+                print("check" + _fileName);
+                NoteItem tmp = NoteItem("Audio");
+                tmp.type = "Audio";
+                tmp.setContent(_path);
+                model.addNoteItem(tmp);
+                Navigator.of(context).pop();
+              })
+        ]);
+  }
+
   List<UnicornButton> _getProfileMenu(NoteViewModel model) {
     List<UnicornButton> children = [];
     children.add(_profileOption(
         iconData: Icons.create,
         onPressed: () {
           final NoteItem noteItem = NoteItem("Text");
-          Provider.of<Notes>(context, listen: true).addNoteItem(noteItem);
-
+//          Provider.of<Notes>(context, listen: true).addNoteItem(noteItem);
           model.addNoteItem(noteItem);
         },
         hero: "txt"));
     children.add(_profileOption(
         iconData: Icons.camera_alt,
         onPressed: () {
-          final NoteItem noteItem = NoteItem("Image");
-          model.addNoteItem(noteItem);
+//          final NoteItem noteItem = NoteItem("Image");
+//          model.addNoteItem(noteItem);
+          showDialog(context: context, child: dialogImg(context, model));
         },
         hero: "img"));
     children.add(_profileOption(
         iconData: Icons.audiotrack,
         onPressed: () {
-          final NoteItem noteItem = NoteItem("Audio");
-          model.addNoteItem(noteItem);
+          showDialog(child: dialogSound(context, model), context: context);
         },
         hero: "sound"));
 
@@ -79,6 +148,7 @@ class CreateNoteState extends State<CreateNote> {
   Widget _profileOption({IconData iconData, Function onPressed, String hero}) {
     return UnicornButton(
         currentButton: FloatingActionButton(
+      elevation: 0.0,
       heroTag: hero,
       backgroundColor: Theme.of(context).backgroundColor,
       mini: true,
@@ -119,21 +189,22 @@ class CreateNoteState extends State<CreateNote> {
     double h = MediaQuery.of(context).size.height / 100;
 
     return BaseView<NoteViewModel>(
-        onModelReady: (noteViewModel) => noteViewModel.getListItems(),
+        onModelReady: (noteViewModel) => noteViewModel,
         builder: (context, noteViewModel, child) => Scaffold(
             backgroundColor: Theme.of(context).backgroundColor,
             resizeToAvoidBottomPadding: false,
             floatingActionButton: UnicornDialer(
               parentButtonBackground: Colors.blue,
               orientation: UnicornOrientation.VERTICAL,
-              parentButton: Icon(Icons.add),
+              parentButton:
+                  Icon(Icons.add, color: Theme.of(context).primaryColor),
               childButtons: _getProfileMenu(noteViewModel),
             ),
             appBar: AppBar(
                 title: Text('Create new note',
-                    style: TextStyle(color: Theme.of(context).primaryColor)),
+                    style: TextStyle(color: Theme.of(context).iconTheme.color)),
                 leading: BackButton(
-                  color: Theme.of(context).primaryColor,
+                  color: Theme.of(context).iconTheme.color,
                   onPressed: () {
                     _handleClickMe();
                   },
@@ -209,7 +280,7 @@ class CreateNoteState extends State<CreateNote> {
                             final TagBUS tagBus = TagBUS();
                             print("|Load Tag|");
                             var tags1 = await tagBus.getTags();
-                            for(var tag1 in tags1){
+                            for (var tag1 in tags1) {
                               print(tag1.toString());
                             }
                             print("|Load Tag|");
@@ -218,12 +289,13 @@ class CreateNoteState extends State<CreateNote> {
                             print("|Load Thumbnails|");
                             var thumbs = await thumbBus.getThumbnails();
 
-                            for(var thumb in thumbs)
-                              print(thumb.toString());
+                            for (var thumb in thumbs) print(thumb.toString());
                             print("|Load Thumbnails|");
 
-                            Navigator.of(context).pushNamedAndRemoveUntil(
-                                '/', (Route<dynamic> route) => false);
+                            Navigator.of(context)
+                                .push(MaterialPageRoute(builder: (context) {
+                              return HomeScreen();
+                            }));
                           },
                           child: Text(
                             "Save",
@@ -242,16 +314,11 @@ class CreateNoteState extends State<CreateNote> {
 }
 
 class ListNoteItems extends StatelessWidget {
-//  Notes note;
-//
-//  ListNoteItems(Notes _note) : note = _note;
   final NoteViewModel model;
   ListNoteItems(this.model);
   ScrollController _controller = new ScrollController();
   @override
   Widget build(BuildContext context) {
-//    Timer(Duration(milliseconds: 1000),
-//        () => _controller.jumpTo(_controller.position.maxScrollExtent));
     return ListView(
       controller: _controller,
       children: getChildrenNotes(),
@@ -259,6 +326,9 @@ class ListNoteItems extends StatelessWidget {
   }
 
   List<Widget> getChildrenNotes() {
+    if (model.contents.length == 0) {
+      return List<Container>();
+    }
     return model.contents.map((todo) => NoteItemWidget(todo)).toList();
   }
 }
@@ -339,7 +409,6 @@ class EditTextState extends State<EditText> {
                       onSaved: (value) {
                         widget.item.setContent(txtController.text);
                         widget.item.setBgColor(noteColor);
-
                         print(widget.item.content);
                       })
                 ]))));
@@ -348,8 +417,16 @@ class EditTextState extends State<EditText> {
 
 class NoteItemWidget extends StatelessWidget {
   final NoteItem item;
-
+  AudioPlayer advancedPlayer = AudioPlayer();
   NoteItemWidget(NoteItem _item) : item = _item;
+  Uint8List bytes;
+  void enCodeImg() {
+    final picker = ImagePicker();
+    File imgFile = File(item.content);
+    print(item.content);
+    ImagePicker.pickImage(source: ImageSource.gallery);
+    bytes = imgFile.readAsBytesSync();
+  }
 
   Widget build(BuildContext context) {
     double w = MediaQuery.of(context).size.width / 100;
@@ -357,45 +434,45 @@ class NoteItemWidget extends StatelessWidget {
     if (item.type == "Text") {
       return EditText(item);
     } else if (item.type == "Image") {
-      return CupertinoAlertDialog(
-        title: Text('Get image from ?'),
-        actions: <Widget>[
-          CupertinoDialogAction(
-            child: Text('Camera'),
-            onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (BuildContext context) {
-                return CameraScreen();
-              }));
-            },
-          ),
-          CupertinoDialogAction(
-              child: Text('Gallery'),
-              onPressed: () {
-                Navigator.of(context).pushNamed('pick_image');
-              }),
-        ],
-      );
+      enCodeImg();
+      return Container(
+          width: w * 100,
+          height: w * 100,
+          margin: EdgeInsets.fromLTRB(w * 2, h, w * 2, h),
+          padding: EdgeInsets.fromLTRB(w, h, w, h),
+          decoration: BoxDecoration(
+              border: Border.all(width: 1, color: Colors.black),
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+              color: Colors.white),
+          child: Image.memory(bytes));
     }
-    return Container(
-        height: h * 5,
-        margin: EdgeInsets.fromLTRB(w * 4, h * 2, w * 2, h),
-        padding: EdgeInsets.fromLTRB(w, h, w, h),
-        decoration: BoxDecoration(
-            border: Border.all(width: 1, color: Colors.black),
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-            color: Colors.white),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            Icon(Icons.audiotrack, size: 20, color: Colors.black),
-            SizedBox(width: w * 2),
-            Text("Em Gai Mua audio",
-                style: Theme.of(context)
-                    .textTheme
-                    .headline7
-                    .copyWith(color: Colors.black))
-          ],
-        ));
+    advancedPlayer.startHeadlessService();
+    return HandleAudio(url: item.content);
+//      Container(
+//        height: h * 5,
+//        margin: EdgeInsets.fromLTRB(w * 4, h * 2, w * 2, h),
+//        padding: EdgeInsets.fromLTRB(w, h, w, h),
+//        decoration: BoxDecoration(
+//            border: Border.all(width: 1, color: Colors.black),
+//            borderRadius: BorderRadius.all(Radius.circular(10)),
+//            color: Colors.white),
+//        child: Row(
+//          mainAxisAlignment: MainAxisAlignment.start,
+//          children: <Widget>[
+//            Icon(Icons.audiotrack, size: 20, color: Colors.black),
+//            SizedBox(width: w * 2),
+//            Text(item.content,
+//                style: TextStyle(
+//                    fontSize: 17,
+//                    fontFamily: Font.Name,
+//                    fontWeight: Font.Regular,
+//                    color: Colors.black))
+//          ],
+//        ));
   }
+
+//  Widget fileAudio(BuildContext context) {
+//    double w = MediaQuery.of(context).size.width / 100;
+//    double h = MediaQuery.of(context).size.height / 100;
+//    return HandleAudio()
 }

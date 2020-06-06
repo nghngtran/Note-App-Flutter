@@ -1,11 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:note_app/presentations/UI/custom_widget/custom_note_card.dart';
+import 'package:note_app/utils/model/thumbnailNote.dart';
 
 class Note extends StatelessWidget {
   DateNote dateNote = DateNote();
-  List<NoteCardModel> listNote = List<NoteCardModel>();
-  Note({@required DateNote date, @required List<NoteCardModel> list})
+  List<ThumbnailNote> listNote = List<ThumbnailNote>();
+  Note({@required DateNote date, @required List<ThumbnailNote> list})
       : dateNote = date,
         listNote = list;
   Widget build(BuildContext context) {
@@ -26,7 +27,7 @@ class Note extends StatelessWidget {
   }
 }
 
-Widget noteGridBuilder(BuildContext context, List<NoteCardModel> indexes) {
+Widget noteGridBuilder(BuildContext context, List<ThumbnailNote> indexes) {
   List<Widget> columnOne = List<Widget>();
   List<Widget> columnTwo = List<Widget>();
 
@@ -72,16 +73,12 @@ Widget noteGridBuilder(BuildContext context, List<NoteCardModel> indexes) {
 }
 
 class NoteGrid extends StatelessWidget {
-  List<Note> _note = List<Note>();
-  NoteGrid(List<Note> note) : _note = note;
+  List<ThumbnailNote> _note = List<ThumbnailNote>();
+  NoteGrid(List<ThumbnailNote> note) : _note = note;
   Widget build(BuildContext context) {
-    return Container(
-        width: MediaQuery.of(context).size.width,
-        child: ListView.builder(
-            itemCount: _note.length,
-            itemBuilder: (context, index) {
-              final item = _note[index];
-              return item;
-            }));
+    return ListView(
+      children: <Widget>[noteGridBuilder(context, _note)],
+    );
   }
+//  }
 }

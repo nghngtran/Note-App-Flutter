@@ -1,31 +1,3 @@
-//import 'package:flutter/material.dart';
-//import 'package:note_app/presentations/UI/page/home_screen.dart';
-//
-//void main() => runApp(MyApp());
-//
-//class MyApp extends StatelessWidget {
-//  // This widget is the root of your application.
-//  @override
-//  Widget build(BuildContext context) {
-//    return MaterialApp(
-//      title: 'Flutter Demo',
-//      theme: ThemeData(
-//        // This is the theme of your application.
-//        //
-//        // Try running your application with "flutter run". You'll see the
-//        // application has a blue toolbar. Then, without quitting the app, try
-//        // changing the primarySwatch below to Colors.green and then invoke
-//        // "hot reload" (press "r" in the console where you ran "flutter run",
-//        // or simply save your changes to "hot reload" in a Flutter IDE).
-//        // Notice that the counter didn't reset back to zero; the application
-//        // is not restarted.
-//        primarySwatch: Colors.blue,
-//      ),
-//      home: HomeScreen(),
-//    );
-//  }
-//}
-
 import 'package:camera/camera.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/cupertino.dart';
@@ -35,19 +7,16 @@ import 'package:note_app/application/router.dart';
 import 'package:note_app/presentations/UI/page/base_view.dart';
 
 import 'package:note_app/presentations/UI/page/home_screen.dart';
+import 'package:note_app/utils/bus/thumbnail_bus.dart';
 
 import 'package:note_app/utils/database/database.dart';
 import 'package:note_app/utils/model/note.dart';
+import 'package:note_app/utils/model/thumbnailNote.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-// Obtain a list of the available cameras on the device.
   final cameras = await availableCameras();
-
-// Get a specific camera from the list of available cameras.
-  final firstCamera = cameras.first;
   final originalCheck = Provider.debugCheckInvalidValueType;
   Provider.debugCheckInvalidValueType = <T>(T value) {
     if (value is Object) return;
@@ -66,10 +35,10 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
+  DatabaseApp db = new DatabaseApp();
+
   @override
   Widget build(BuildContext context) {
-    DatabaseApp db = new DatabaseApp();
     return ChangeNotifierProvider(
         create: (context) => Notes(),
         child: Consumer<AppStateNotifier>(builder: (context, appState, child) {
@@ -81,7 +50,7 @@ class MyApp extends StatelessWidget {
             darkTheme:
                 AppTheme.darkTheme, // ThemeData(primarySwatch: Colors.blue),
 //            ThemeData(),
-//      initialRoute: RoutePaths.Pick_image,
+            initialRoute: RoutePaths.Home,
             onGenerateRoute: Router.generateRoute,
             home: TestWidget(),
             themeMode: appState.isDarkMode ? ThemeMode.dark : ThemeMode.light,
@@ -91,8 +60,17 @@ class MyApp extends StatelessWidget {
 }
 
 class TestWidget extends StatelessWidget {
+//  GlobalKey<HomeScreenState> loadNotesKey = GlobalKey();
+//  ThumbnailBUS thumbnailBUS = ThumbnailBUS();
+//  List<ThumbnailNote> listTBNote;
+//  void loadNotes() async {
+//    listTBNote = await thumbnailBUS.getThumbnails();
+//    listTBNote.forEach((e) => print(e.toString()));
+//  }
+
   @override
   Widget build(BuildContext context) {
+//    loadNotes();
     return HomeScreen();
   }
 }
@@ -103,7 +81,8 @@ class AppTheme {
     dialogBackgroundColor: Colors.white70,
     backgroundColor: Colors.white,
     scaffoldBackgroundColor: Colors.white,
-    primaryColor: Colors.white,
+//    primaryColor: Colors.white,
+//    primaryColor: Color.fromRGBO(184, 13, 87, 1.0),
     appBarTheme: AppBarTheme(
       color: Color.fromRGBO(255, 209, 16, 1.0),
       iconTheme: IconThemeData(
@@ -116,6 +95,7 @@ class AppTheme {
 //      primaryVariant: Colors.white38,
 //      secondary: Colors.black,
 //    ),
+
     floatingActionButtonTheme:
         FloatingActionButtonThemeData(backgroundColor: Colors.blue),
     iconTheme: IconThemeData(
@@ -147,7 +127,7 @@ class AppTheme {
         color: Colors.white,
       ),
     ),
-    primaryColor: Colors.white,
+//    primaryColor: Color.fromRGBO(184, 13, 87, 1.0),
     floatingActionButtonTheme:
         FloatingActionButtonThemeData(backgroundColor: Colors.black),
 //    colorScheme: ColorScheme.dark(
@@ -179,9 +159,7 @@ class AppTheme {
 }
 
 class AppStateNotifier extends ChangeNotifier {
-  //
   bool isDarkMode = false;
-
   void updateTheme(bool isDarkMode) {
     this.isDarkMode = isDarkMode;
     notifyListeners();
