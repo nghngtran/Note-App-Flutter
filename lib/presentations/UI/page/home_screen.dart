@@ -106,6 +106,10 @@ class HomeScreenState extends State<HomeScreen>
       onChanged: updateSearchQuery,
     );
   }
+  TagBUS tagBUS = TagBUS();
+  List<Tag> listCreatedTag;
+  void loadTagData() async {
+    listCreatedTag = await tagBUS.getTags();}
 
   void updateSearchQuery(String newQuery) {
     setState(() {

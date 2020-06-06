@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:note_app/application/constants.dart';
 
 import 'package:note_app/presentations/UI/page/create_tag.dart';
+import 'package:note_app/utils/bus/tag_bus.dart';
 import 'package:note_app/utils/dao/tag_dao.dart';
 import 'package:note_app/utils/model/tag.dart';
 import 'package:note_app/view_model/list_tag_viewmodel.dart';
@@ -76,7 +77,8 @@ class TagBar extends StatelessWidget {
                           backgroundColor: Theme.of(context).backgroundColor,
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(5)),
-                          child: CreateTag(model)));
+//                          child: CreateTag(model)
+                      ));
                 },
                 child: Icon(Icons.add,
                     size: 20, color: Theme.of(context).iconTheme.color),

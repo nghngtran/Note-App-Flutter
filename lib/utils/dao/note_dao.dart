@@ -38,6 +38,7 @@ class NoteDAO {
       //Insert Thumbnail
       await thumbnailNoteDao.createThumbnailByNote(note, txn: txn);
 
+      print(note.toString());
       LogHistory.trackLog("[Note]", "INSERT new note:" + note.id.toString());
     });
     return noteId;
