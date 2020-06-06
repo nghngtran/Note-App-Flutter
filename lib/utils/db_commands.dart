@@ -8,6 +8,7 @@ const String CREATE_TABLE_THUMBNAIL_NOTE = "CREATE TABLE IF NOT EXISTS thumbnail
     "note_id TEXT PRIMARY KEY, "
     "title TEXT, "
     "type TEXT, "
+    "color INTEGER, "
     "content TEXT, "
     "created_time DATETIME, "
     "modified_time DATETIME"

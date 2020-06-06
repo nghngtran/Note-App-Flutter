@@ -36,7 +36,7 @@ class Tag extends TimeUtils with ChangeNotifier {
 
   String toString() {
     return "<Tag ID=\""+id.toString()+"\" Title=\"" +title.toString()  +
-        "\" Color=\"" + color.value.toString() +
+        "\" Color=\"" + color.toString() +
         "\" Created_Time=\"" + created_time.toString() +
         "\" Modified_Time=\"" + modified_time.toString()+
         "\"/>";
