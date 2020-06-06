@@ -1,5 +1,5 @@
 import 'package:note_app/utils/model/tag.dart';
-import 'package:note_app/view_model/list_tag_viewmodel.dart';
+import 'package:note_app/view_model/list_tag_view_model.dart';
 
 class NoteTagsViewModel extends BaseModel {
   List<Tag> listTagOfNote = [];

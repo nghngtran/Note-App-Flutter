@@ -69,7 +69,7 @@ Widget noteGridBuilder(BuildContext context, List<ThumbnailNote> indexes) {
       ],
     );
   } else
-    return null;
+    return Container();
 }
 
 class NoteGrid extends StatelessWidget {

@@ -36,36 +36,32 @@ class RecordState extends State<Record> {
   Widget build(BuildContext context) {
     double w = MediaQuery.of(context).size.width / 100;
     double h = MediaQuery.of(context).size.height / 100;
-    return Align(
-      alignment: Alignment.bottomCenter,
-      child: Container(
-        width: w * 100,
-        height: h * 30,
-        color: Colors.yellow,
-        child: GestureDetector(
-            onTap: () async {
-              setState(() {
-                isRecording = !isRecording;
-              });
-              if (isRecording) {
-                getFilePath();
-                NoteItem tmp = NoteItem("Audio");
-                print("FIle" + fileName);
-                tmp.setContent(fileName);
-                widget.model.addNoteItem(tmp);
-                startRecord();
-              } else {
-                stopRecord();
-                Navigator.of(context).pop();
-              }
-            },
-            child: isRecording
-                ? SpinKitThreeBounce(
-                    color: Theme.of(context).iconTheme.color, size: 42)
-                : Icon(Icons.mic_none,
-                    color: Theme.of(context).iconTheme.color)),
+    getFilePath();
+    return Container(
+      width: w * 100,
+      height: h * 30,
+
+      child: GestureDetector(
+          onTap: () async {
+            setState(() {
+              isRecording = !isRecording;
+            });
+            if (isRecording) {
+              NoteItem tmp = NoteItem("Audio");
+              print("FIle" + fileName);
+              tmp.setContent(fileName);
+              widget.model.addNoteItem(tmp);
+              startRecord();
+            } else {
+              stopRecord();
+              Navigator.of(context).pop();
+            }
+          },
+          child: isRecording
+              ? SpinKitThreeBounce(
+                  color: Theme.of(context).iconTheme.color, size: 42)
+              : Icon(Icons.mic_none, color: Theme.of(context).iconTheme.color)),
 //
-      ),
     );
   }
 
@@ -140,7 +136,7 @@ class RecordState extends State<Record> {
     if (!d.existsSync()) {
       d.createSync(recursive: true);
     }
-    fileName = sdPath + "/test_${i++}.mp3";
+    fileName = sdPath + "/record_${i++}.mp3";
     return fileName;
   }
 }

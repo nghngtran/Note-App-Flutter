@@ -9,11 +9,11 @@ import 'package:note_app/presentations/UI/page/create_note.dart';
 import 'package:note_app/presentations/UI/page/image_pick.dart';
 import 'package:note_app/utils/bus/tag_bus.dart';
 import 'package:note_app/utils/bus/thumbnail_bus.dart';
-import 'package:note_app/utils/model/note.dart';
-import 'package:note_app/utils/model/noteItem.dart';
+import 'package:scoped_model/scoped_model.dart';
 import 'package:note_app/utils/model/tag.dart';
 import 'package:note_app/utils/model/thumbnailNote.dart';
-import 'package:note_app/view_model/list_tag_viewmodel.dart';
+import 'package:note_app/view_model/list_tb_note_view_model.dart';
+import 'package:note_app/view_model/list_tag_view_model.dart';
 import 'package:note_app/view_model/tag_view_model.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:note_app/presentations/UI/custom_widget/custom_text_style.dart';
@@ -22,8 +22,6 @@ import 'package:provider/provider.dart';
 import '../../../main.dart';
 
 class HomeScreen extends StatefulWidget {
-//  HomeScreen({Key key}):super(key:key);
-
   @override
   State<StatefulWidget> createState() {
     return HomeScreenState();
@@ -60,6 +58,8 @@ class HomeScreenState extends State<HomeScreen>
     super.initState();
 
     _searchQuery = new TextEditingController();
+    loadNotes();
+    loadTagData();
   }
 
   @override
@@ -141,11 +141,8 @@ class HomeScreenState extends State<HomeScreen>
   }
 
   Widget build(BuildContext context) {
-    loadNotes();
-    loadTagData();
     print(listTBNote.length);
     return BaseView<TagCreatedModel>(
-        onModelReady: (tagCreated) => tagCreated.getTagCreated(),
         builder: (context, tagCreated, child) => Scaffold(
             backgroundColor: Theme.of(context).backgroundColor,
             drawer: Drawer(
@@ -211,7 +208,7 @@ class HomeScreenState extends State<HomeScreen>
             ),
             body: ListView(controller: mainController, // parent ListView
                 children: <Widget>[
-                  TagBar(mainController, listCreatedTag, model),
+                  TagBar(mainController, model),
                   SingleChildScrollView(
                       child: Container(
                     width: MediaQuery.of(context).size.width,
@@ -221,6 +218,24 @@ class HomeScreenState extends State<HomeScreen>
                         : Center(
                             child: Text("Empty data.Let's create new note !")),
                   ))
+//                  LoadNoteHomeScreen()
                 ])));
+  }
+}
+
+class LoadNoteHomeScreen extends StatelessWidget {
+//  load thumbnail from ThumbBUS
+  NoteCreatedModel noteCreatedModel = NoteCreatedModel();
+  Widget build(BuildContext context) {
+    noteCreatedModel.loadData();
+    return BaseView<NoteCreatedModel>(
+        builder: (context, noteCreateModel, child) => SingleChildScrollView(
+                child: Container(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
+              child: noteCreatedModel.listSize > 0
+                  ? NoteGrid(noteCreatedModel.getNoteCreated())
+                  : Center(child: Text("Empty data.Let's create new note !")),
+            )));
   }
 }

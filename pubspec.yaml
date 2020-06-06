@@ -61,6 +61,7 @@ dev_dependencies:
   file_picker:
   flutter_audio_recorder: ^0.5.5
   flutter_spinkit: ^4.1.2+1
+  scoped_model: ^1.0.1
 
 
 # For information on the generic Dart part of this file, see the

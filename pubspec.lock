@@ -223,6 +223,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_audio_recorder:
+    dependency: "direct dev"
+    description:
+      name: flutter_audio_recorder
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.5.5"
   flutter_colorpicker:
     dependency: "direct main"
     description:
@@ -244,13 +251,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.8"
-  flutter_sound:
+  flutter_spinkit:
     dependency: "direct dev"
     description:
-      name: flutter_sound
+      name: flutter_spinkit
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.0.6"
+    version: "4.1.2+1"
   flutter_svg:
     dependency: "direct main"
     description:
@@ -597,6 +604,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.24.1"
+  scoped_model:
+    dependency: "direct dev"
+    description:
+      name: scoped_model
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.1"
   shared_preferences:
     dependency: "direct main"
     description:

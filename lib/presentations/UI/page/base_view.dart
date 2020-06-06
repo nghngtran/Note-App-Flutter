@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:note_app/view_model/list_tag_viewmodel.dart';
+import 'package:note_app/view_model/list_tag_view_model.dart';
+import 'package:note_app/view_model/list_tb_note_view_model.dart';
 import 'package:note_app/view_model/note_view_model.dart';
 import 'package:provider/provider.dart';
 
@@ -40,4 +41,5 @@ void setupDependencyAssembler() {
 //  dependencyAssembler.registerLazySingleton(() => API());
   dependencyAssembler.registerFactory(() => NoteViewModel());
   dependencyAssembler.registerFactory(() => TagCreatedModel());
+  dependencyAssembler.registerFactory(() => NoteCreatedModel());
 }
