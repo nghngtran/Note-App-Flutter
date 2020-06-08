@@ -22,7 +22,6 @@ import 'package:note_app/utils/bus/tag_bus.dart';
 import 'package:note_app/utils/bus/thumbnail_bus.dart';
 import 'package:note_app/utils/model/note.dart';
 import 'package:note_app/utils/model/noteItem.dart';
-import 'package:note_app/utils/model/thumbnailNote.dart';
 import 'package:note_app/view_model/list_tb_note_view_model.dart';
 import 'package:note_app/view_model/list_tag_view_model.dart';
 import 'package:note_app/view_model/note_view_model.dart';
@@ -118,7 +117,6 @@ class CreateNoteState extends State<CreateNote> {
         iconData: Icons.create,
         onPressed: () {
           final NoteItem noteItem = NoteItem("Text");
-//          Provider.of<Notes>(context, listen: true).addNoteItem(noteItem);
           model.addNoteItem(noteItem);
         },
         hero: "txt"));
@@ -448,36 +446,5 @@ class NoteItemWidget extends StatelessWidget {
     advancedPlayer.startHeadlessService();
     print(item.content);
     return HandleAudio(url: item.content);
-//      Container(
-//        height: h * 5,
-//        margin: EdgeInsets.fromLTRB(w * 4, h * 2, w * 2, h),
-//        padding: EdgeInsets.fromLTRB(w, h, w, h),
-//        decoration: BoxDecoration(
-//            border: Border.all(width: 1, color: Colors.black),
-//            borderRadius: BorderRadius.all(Radius.circular(10)),
-//            color: Colors.white),
-//        child: Row(
-//          mainAxisAlignment: MainAxisAlignment.start,
-//          children: <Widget>[
-//            Icon(Icons.audiotrack, size: 20, color: Colors.black),
-//            SizedBox(width: w * 2),
-//            Text(item.content,
-//                style: TextStyle(
-//                    fontSize: 17,
-//                    fontFamily: Font.Name,
-//                    fontWeight: Font.Regular,
-//                    color: Colors.black))
-//          ],
-//        ));
   }
-
-//  Widget fileAudio(BuildContext context) {
-//    double w = MediaQuery.of(context).size.width / 100;
-//    double h = MediaQuery.of(context).size.height / 100;
-//    return HandleAudio()
-}
-
-class AlwaysDisabledFocusNode extends FocusNode {
-  @override
-  bool get hasFocus => false;
 }
