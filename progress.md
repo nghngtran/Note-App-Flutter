@@ -1,42 +1,42 @@
 # Tiến độ
-- #### []Tạo Note:
-	- [ok] Thông tin cơ bản của Note(Title)
-	- [] Thành phần Nội dung của Note:
-		- [] Img: content:={path of file}
+- #### [1/10]Tạo Note:
+	- [:heavy_check_mark:] Thông tin cơ bản của Note(Title)
+	- [0/6] Thành phần Nội dung của Note:
+		- [0/4] Img: content:={path of file}
 			- []Loadfrom Gallery:
 			- []From Camera:
 			- []Trường hợp edit: Save file sau khi kết thúc edit
 			- []Trường hợp không edit: 
-		-[] Audio: content:={path of file}
+		- [0/2] Audio: content:={path of file}
 			- []Loadfrom device:
 			- []Record: Trường hợp máy k có record trả về và báo lỗi
-		-[ok] Text: content:={content}
-	- [] AddTag:
+		-[:heavy_check_mark:] Text: content:={content}
+	- [0/3] AddTag:
 		- [] Hiển thị tất cả tag đã có dưới DB, trừ những tag đã được thêm vào
 		- [] Tạo tag mới: báo lỗi nếu tạo fail
 		- [] Không hiển thị 1 tag nhiều hơn 1 lần
-- #### [] Xóa Note:
+- #### [0/2] Xóa Note:
 	- [] Xóa đơn bên trong View Note
 	- [] Xóa nhiều mục ngoài Home
-- #### [] View Note & Edit Note:
+- #### [0/4] View Note & Edit Note:
 	- [] Xóa tag ra khỏi Note: 
 	- [] Load đầy đủ 1 note lên
 	- [] Edit các field
 	- [] Save gọi update
-- #### [] Load Home:
+- #### [2/5] Load Home:
 	- [] Add Tag: gọi add tag(có kiểm tra true false, không hiển thị 1 tag nhiều hơn 1 lần)
 	- [] View Tag Info: ấn giữ vào tag
 	- [] Xóa Tag trong View Tag Info
-	- [ok] Load list Thumbnail từ DB
-	- [ok] Load list tag từ db
-- #### [] Search:
-	- [] Search by Tag:
+	- [:heavy_check_mark:] Load list Thumbnail từ DB
+	- [:heavy_check_mark:] Load list tag từ db
+- #### [2/6] Search:
+	- [1/4] Search by Tag:
 		- [] Ấn vào tag ngoài Home
 		- [] gõ #{têntag} trên search bar
 		- [] Khi hiển thị kết quả search bar hiện tên và màu tag
-		- [ok] Load list thumbnail by tag
-	- [] Search by keyword:Áp dụng cho cả content và title của Note, ưu tiên title 
+		- [:heavy_check_mark:] Load list thumbnail by tag
+	- [1/2] Search by keyword:Áp dụng cho cả content và title của Note, ưu tiên title 
 		- [] gõ keyword trên search bar
-		- [ok] Load list thumbnail by findkeyword
+		- [:heavy_check_mark:] Load list thumbnail by findkeyword
 
 			
