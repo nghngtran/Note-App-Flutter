@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:collection';
 
-
 import 'package:note_app/utils/dao/tag_dao.dart';
 import 'package:note_app/utils/db_commands.dart';
 import 'package:note_app/utils/model/note.dart';
