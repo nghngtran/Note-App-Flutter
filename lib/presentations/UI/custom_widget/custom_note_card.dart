@@ -8,6 +8,7 @@ import 'package:note_app/utils/model/thumbnailNote.dart';
 class NoteCard extends StatefulWidget {
   ThumbnailNote noteCard;
   NoteCard(ThumbnailNote note) : this.noteCard = note;
+
   NoteCardState createState() {
     return NoteCardState(noteCard);
   }
@@ -20,9 +21,11 @@ class DateNote {
 
 class NoteCardState extends State<NoteCard> {
   ThumbnailNote noteCard;
+
   NoteCardState(ThumbnailNote note) {
     this.noteCard = note;
   }
+
   Widget build(BuildContext context) {
 //    if (noteCard.imgUrl != null) {
 //      return InkWell(
@@ -106,16 +109,21 @@ class NoteCardState extends State<NoteCard> {
                         .copyWith(color: Colors.black)),
                 SizedBox(height: MediaQuery.of(context).size.height / 100),
                 Row(
+                      mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
-                        Icon(Icons.local_offer,
-                            color: noteCard.tags[0].color, size: 16),
+                        noteCard.tags.length > 0
+                            ? Icon(Icons.local_offer,
+                                color: noteCard.tags.first.color, size: 16)
+                            : Container(),
                         SizedBox(
                             width: MediaQuery.of(context).size.width / 100),
-                        Text(noteCard.tags[0].title,
-                            style: Theme.of(context)
-                                .textTheme
-                                .subtitle
-                                .copyWith(color: noteCard.tags[0].color))
+                        noteCard.tags.length > 0
+                            ? Text(noteCard.tags.first.title,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .subtitle
+                                    .copyWith(color: noteCard.tags.first.color))
+                            : Container()
                       ],
                     ) ??
                     Text(""),

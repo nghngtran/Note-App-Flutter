@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:note_app/presentations/UI/custom_widget/custom_note_card.dart';
+import 'package:note_app/utils/bus/thumbnail_bus.dart';
 import 'package:note_app/utils/model/thumbnailNote.dart';
 
 class Note extends StatelessWidget {
@@ -69,15 +70,28 @@ Widget noteGridBuilder(BuildContext context, List<ThumbnailNote> indexes) {
       ],
     );
   } else
-    return null;
+    return Container();
 }
 
-class NoteGrid extends StatelessWidget {
+class NoteGrid extends StatefulWidget {
   List<ThumbnailNote> _note = List<ThumbnailNote>();
-  NoteGrid(List<ThumbnailNote> note) : _note = note;
+  NoteGrid(List<ThumbnailNote> note, {Key key})
+      : _note = note,
+        super(key: key);
+  NoteGridState createState() => NoteGridState();
+}
+
+class NoteGridState extends State<NoteGrid> {
+
+
+  void initState() {
+    super.initState();
+  }
+
   Widget build(BuildContext context) {
+
     return ListView(
-      children: <Widget>[noteGridBuilder(context, _note)],
+      children: <Widget>[noteGridBuilder(context, widget._note)],
     );
   }
 //  }

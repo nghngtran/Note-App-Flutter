@@ -49,7 +49,7 @@ class MyApp extends StatelessWidget {
                 AppTheme.lightTheme, // ThemeData(primarySwatch: Colors.blue),
             darkTheme:
                 AppTheme.darkTheme, // ThemeData(primarySwatch: Colors.blue),
-//            ThemeData(),
+
             initialRoute: RoutePaths.Home,
             onGenerateRoute: Router.generateRoute,
             home: TestWidget(),
@@ -60,17 +60,8 @@ class MyApp extends StatelessWidget {
 }
 
 class TestWidget extends StatelessWidget {
-//  GlobalKey<HomeScreenState> loadNotesKey = GlobalKey();
-//  ThumbnailBUS thumbnailBUS = ThumbnailBUS();
-//  List<ThumbnailNote> listTBNote;
-//  void loadNotes() async {
-//    listTBNote = await thumbnailBUS.getThumbnails();
-//    listTBNote.forEach((e) => print(e.toString()));
-//  }
-
   @override
   Widget build(BuildContext context) {
-//    loadNotes();
     return HomeScreen();
   }
 }
@@ -81,21 +72,12 @@ class AppTheme {
     dialogBackgroundColor: Colors.white70,
     backgroundColor: Colors.white,
     scaffoldBackgroundColor: Colors.white,
-//    primaryColor: Colors.white,
-//    primaryColor: Color.fromRGBO(184, 13, 87, 1.0),
     appBarTheme: AppBarTheme(
       color: Color.fromRGBO(255, 209, 16, 1.0),
       iconTheme: IconThemeData(
         color: Colors.black,
       ),
     ),
-//    colorScheme: ColorScheme.light(
-//      primary: Colors.black,
-//      onPrimary: Colors.white,
-//      primaryVariant: Colors.white38,
-//      secondary: Colors.black,
-//    ),
-
     floatingActionButtonTheme:
         FloatingActionButtonThemeData(backgroundColor: Colors.blue),
     iconTheme: IconThemeData(
@@ -127,15 +109,9 @@ class AppTheme {
         color: Colors.white,
       ),
     ),
-//    primaryColor: Color.fromRGBO(184, 13, 87, 1.0),
+
     floatingActionButtonTheme:
         FloatingActionButtonThemeData(backgroundColor: Colors.black),
-//    colorScheme: ColorScheme.dark(
-//      primary: Colors.white,
-//      onPrimary: Colors.black,
-//      primaryVariant: Colors.black,
-//      secondary: Colors.red,
-//    ),
 
     cardTheme: CardTheme(
       color: Colors.black,
