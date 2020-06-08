@@ -49,11 +49,16 @@ class HandleAudioState extends State<HandleAudio> {
   HandleAudioState(this.url, this.mode);
   bool visibilityProgress = false;
   bool isPlaying = false;
-
+  bool isCompleted = false;
   @override
   void initState() {
     super.initState();
     _initAudioPlayer();
+  }
+
+  bool playDone() {
+    if (_position.inMilliseconds == _duration.inMilliseconds) return true;
+    return false;
   }
 
   @override
@@ -81,17 +86,6 @@ class HandleAudioState extends State<HandleAudio> {
       if (Theme.of(context).platform == TargetPlatform.iOS) {
 //        // (Optional) listen for notification updates in the background
         _audioPlayer.startHeadlessService();
-
-        // set at least title to see the notification bar on ios.
-//        _audioPlayer.setNotification(
-//            title: 'App Name',
-//            artist: 'Artist or blank',
-//            albumTitle: 'Name or blank',
-//            imageUrl: 'url or blank',
-//            forwardSkipInterval: const Duration(seconds: 30), // default is 30s
-//            backwardSkipInterval: const Duration(seconds: 30), // default is 30s
-//            duration: duration,
-//            elapsedTime: Duration(seconds: 0));
       }
     });
 
@@ -137,9 +131,9 @@ class HandleAudioState extends State<HandleAudio> {
             _position.inMilliseconds < _duration.inMilliseconds)
         ? _position
         : null;
-    print(playPosition);
+
     final result = await _audioPlayer.play(this.url, position: playPosition);
-    print(result);
+
     if (result == 1) {
       setState(() => _playerState = PlayerState.playing);
     }
@@ -245,7 +239,7 @@ class HandleAudioState extends State<HandleAudio> {
             width: MediaQuery.of(context).size.width,
             margin: EdgeInsets.fromLTRB(w * 4, h * 2, w * 2, h),
             padding: EdgeInsets.fromLTRB(w, h, w, h),
-            child: visibilityProgress
+            child: (visibilityProgress)
                 ? _buildCard(context,
                     config: CustomConfig(
                       gradients: [

@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
+import 'package:note_app/utils/bus/tag_bus.dart';
 import 'package:note_app/utils/model/tag.dart';
+import 'package:scoped_model/scoped_model.dart';
 
 enum ViewState { Idle, Busy }
 
@@ -13,9 +15,11 @@ class BaseModel extends ChangeNotifier {
 }
 
 class TagCreatedModel extends BaseModel {
+  TagBUS tagBus = TagBUS();
   List<Tag> listTagCreated = [];
-  List<Tag> get listTag {
-    return listTagCreated;
+  void loadData() async {
+    listTagCreated = await tagBus.getTags();
+    notifyListeners();
   }
 
   int get listSize {

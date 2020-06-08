@@ -12,7 +12,7 @@ import 'package:note_app/utils/model/note.dart';
 import 'package:note_app/utils/model/noteItem.dart';
 import 'package:note_app/utils/model/tag.dart';
 import 'package:note_app/utils/model/thumbnailNote.dart';
-import 'package:note_app/view_model/list_tag_viewmodel.dart';
+import 'package:note_app/view_model/list_tag_view_model.dart';
 import 'package:note_app/presentations/UI/custom_widget/custom_text_style.dart';
 
 class CreateTag extends StatelessWidget {
@@ -109,7 +109,6 @@ class CreateTag extends StatelessWidget {
                                 fontWeight: Font.Regular,
                                 color: Colors.blue)),
                         onPressed: () async {
-
 //                          Provider.of<Tag>(context, listen: false)
 //                              .setTitle(textController.text);
                           tag.setTitle(textController.text);

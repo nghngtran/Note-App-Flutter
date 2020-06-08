@@ -7,33 +7,24 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:note_app/application/constants.dart';
-import 'package:note_app/presentations/UI/custom_widget/FAB.dart';
 import 'package:note_app/presentations/UI/custom_widget/choose_title.dart';
-import 'package:note_app/presentations/UI/custom_widget/custom_text_style.dart';
 import 'package:note_app/presentations/UI/custom_widget/tab_bar_note.dart';
 import 'package:note_app/presentations/UI/page/MoreOptionsSheet.dart';
 import 'package:note_app/presentations/UI/page/base_view.dart';
+
 import 'package:note_app/presentations/UI/page/camera.dart';
-import 'package:note_app/presentations/UI/page/camera_access.dart';
-import 'package:note_app/presentations/UI/page/create_tag.dart';
-import 'package:note_app/presentations/UI/page/customPaint.dart';
 import 'package:note_app/presentations/UI/page/handle_audio.dart';
 import 'package:note_app/presentations/UI/page/home_screen.dart';
 import 'package:note_app/presentations/UI/page/image_pick.dart';
-
 import 'package:note_app/presentations/UI/page/record_audio.dart';
-
 import 'package:note_app/utils/bus/note_bus.dart';
 import 'package:note_app/utils/bus/tag_bus.dart';
 import 'package:note_app/utils/bus/thumbnail_bus.dart';
-import 'package:note_app/utils/dao/note_dao.dart';
-import 'package:note_app/utils/dao/thumbnail_dao.dart';
 import 'package:note_app/utils/model/note.dart';
 import 'package:note_app/utils/model/noteItem.dart';
-import 'package:note_app/view_model/list_tag_viewmodel.dart';
+import 'package:note_app/view_model/list_tb_note_view_model.dart';
+import 'package:note_app/view_model/list_tag_view_model.dart';
 import 'package:note_app/view_model/note_view_model.dart';
-import 'package:painter2/painter2.dart';
-import 'package:provider/provider.dart';
 import 'package:unicorndial/unicorndial.dart';
 
 class CreateNote extends StatefulWidget {
@@ -45,7 +36,7 @@ class CreateNoteState extends State<CreateNote> {
   TagCreatedModel tagCreatedModel;
   String _fileName = "";
   String _path;
-
+  NoteCreatedModel noteCreatedModel;
   FileType _pickingType = FileType.audio;
 
   var note = new Notes();
@@ -93,12 +84,15 @@ class CreateNoteState extends State<CreateNote> {
           CupertinoDialogAction(
             child: Text('Record'),
             onPressed: () {
-//              Navigator.
-////              popAndPushNamed(context, 'record');
-//                  push(context,
-//                      MaterialPageRoute(builder: (BuildContext context) {
-//                return Record(model);
-//              }));
+              Navigator.of(context).pop();
+              showDialog(
+                  context: context,
+                  builder: (BuildContext context) => Dialog(
+                      elevation: 0.0,
+                      backgroundColor: Theme.of(context).backgroundColor,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20)),
+                      child: Record(model)));
             },
           ),
           CupertinoDialogAction(
@@ -123,7 +117,6 @@ class CreateNoteState extends State<CreateNote> {
         iconData: Icons.create,
         onPressed: () {
           final NoteItem noteItem = NoteItem("Text");
-//          Provider.of<Notes>(context, listen: true).addNoteItem(noteItem);
           model.addNoteItem(noteItem);
         },
         hero: "txt"));
@@ -230,7 +223,6 @@ class CreateNoteState extends State<CreateNote> {
                                               borderRadius:
                                                   BorderRadius.circular(5)),
                                           child: ChooseTitle(noteViewModel)));
-//                      print(note.title);
                                 },
                                 child: Container(
                                   child: Row(
@@ -238,9 +230,6 @@ class CreateNoteState extends State<CreateNote> {
                                     children: <Widget>[
                                       SizedBox(width: w * 4),
                                       Text(
-//                                        Provider.of<Notes>(context,
-//                                                listen: true)
-//                                            .title,
                                         noteViewModel.title,
                                         style: Theme.of(context)
                                             .textTheme
@@ -268,29 +257,30 @@ class CreateNoteState extends State<CreateNote> {
 
                             final NoteBUS noteBus = NoteBUS();
                             await noteBus.addNote(note);
-                            //print(note.contents);
-                            //print(note.contents.length);
 
-                            //Print List Note
-                            print("|Load Notes|");
+//                            print("|Load Notes|");
                             var note1 = await noteBus.getNoteById(note.id);
-                            print(note1.toString());
-                            print("|Load Notes|");
+//                            print(note1.toString());
+//                            print("|Load Notes|");
 
                             final TagBUS tagBus = TagBUS();
-                            print("|Load Tag|");
+//                            print("|Load Tag|");
                             var tags1 = await tagBus.getTags();
                             for (var tag1 in tags1) {
-                              print(tag1.toString());
+//                              print(tag1.toString());
                             }
-                            print("|Load Tag|");
+//                            print("|Load Tag|");
 
                             final ThumbnailBUS thumbBus = ThumbnailBUS();
-                            print("|Load Thumbnails|");
+//                            print("|Load Thumbnails|");
                             var thumbs = await thumbBus.getThumbnails();
+//Lam sao lay thumnail cua note hien tai??
+                            for (var thumb in thumbs) {
+//                              print(thumb.toString());
+//                              noteCreatedModel.addToList(thumb);
+                            }
 
-                            for (var thumb in thumbs) print(thumb.toString());
-                            print("|Load Thumbnails|");
+//                            print("|Load Thumbnails|");
 
                             Navigator.of(context)
                                 .push(MaterialPageRoute(builder: (context) {
@@ -316,6 +306,7 @@ class CreateNoteState extends State<CreateNote> {
 class ListNoteItems extends StatelessWidget {
   final NoteViewModel model;
   ListNoteItems(this.model);
+
   ScrollController _controller = new ScrollController();
   @override
   Widget build(BuildContext context) {
@@ -393,12 +384,18 @@ class EditTextState extends State<EditText> {
                   TextFormField(
                       autocorrect: false,
                       decoration: InputDecoration(
-                          contentPadding: EdgeInsets.fromLTRB(w, h, w, h),
-                          fillColor: noteColor,
-                          filled: true,
-                          border: OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(10)))),
+                        contentPadding: EdgeInsets.fromLTRB(w, h, w, h),
+                        fillColor: noteColor,
+                        filled: true,
+                        enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(
+                                color: Theme.of(context).backgroundColor,
+                                width: 1)),
+                        border: OutlineInputBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(10))),
+                      ),
                       maxLength: null,
                       maxLines: null,
                       controller: txtController,
@@ -447,32 +444,7 @@ class NoteItemWidget extends StatelessWidget {
           child: Image.memory(bytes));
     }
     advancedPlayer.startHeadlessService();
+    print(item.content);
     return HandleAudio(url: item.content);
-//      Container(
-//        height: h * 5,
-//        margin: EdgeInsets.fromLTRB(w * 4, h * 2, w * 2, h),
-//        padding: EdgeInsets.fromLTRB(w, h, w, h),
-//        decoration: BoxDecoration(
-//            border: Border.all(width: 1, color: Colors.black),
-//            borderRadius: BorderRadius.all(Radius.circular(10)),
-//            color: Colors.white),
-//        child: Row(
-//          mainAxisAlignment: MainAxisAlignment.start,
-//          children: <Widget>[
-//            Icon(Icons.audiotrack, size: 20, color: Colors.black),
-//            SizedBox(width: w * 2),
-//            Text(item.content,
-//                style: TextStyle(
-//                    fontSize: 17,
-//                    fontFamily: Font.Name,
-//                    fontWeight: Font.Regular,
-//                    color: Colors.black))
-//          ],
-//        ));
   }
-
-//  Widget fileAudio(BuildContext context) {
-//    double w = MediaQuery.of(context).size.width / 100;
-//    double h = MediaQuery.of(context).size.height / 100;
-//    return HandleAudio()
 }
