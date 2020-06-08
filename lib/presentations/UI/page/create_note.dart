@@ -386,12 +386,18 @@ class EditTextState extends State<EditText> {
                   TextFormField(
                       autocorrect: false,
                       decoration: InputDecoration(
-                          contentPadding: EdgeInsets.fromLTRB(w, h, w, h),
-                          fillColor: noteColor,
-                          filled: true,
-                          border: OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(10)))),
+                        contentPadding: EdgeInsets.fromLTRB(w, h, w, h),
+                        fillColor: noteColor,
+                        filled: true,
+                        enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(
+                                color: Theme.of(context).backgroundColor,
+                                width: 1)),
+                        border: OutlineInputBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(10))),
+                      ),
                       maxLength: null,
                       maxLines: null,
                       controller: txtController,
@@ -469,4 +475,9 @@ class NoteItemWidget extends StatelessWidget {
 //    double w = MediaQuery.of(context).size.width / 100;
 //    double h = MediaQuery.of(context).size.height / 100;
 //    return HandleAudio()
+}
+
+class AlwaysDisabledFocusNode extends FocusNode {
+  @override
+  bool get hasFocus => false;
 }

@@ -41,25 +41,25 @@ class HomeScreenState extends State<HomeScreen>
 
   ScrollController mainController = ScrollController();
   ThumbnailBUS thumbnailBUS = ThumbnailBUS();
-  List<ThumbnailNote> listTBNote = List<ThumbnailNote>();
-  TagBUS tagBUS = TagBUS();
-  List<Tag> listCreatedTag;
-  void loadTagData() async {
-    listCreatedTag = await tagBUS.getTags();
-  }
+//  List<ThumbnailNote> listTBNote = List<ThumbnailNote>();
+//  TagBUS tagBUS = TagBUS();
+//  List<Tag> listCreatedTag;
+//  void loadTagData() async {
+//    listCreatedTag = await tagBUS.getTags();
+//  }
 
-  void loadNotes() async {
-    listTBNote = await thumbnailBUS.getThumbnails();
-    print(listTBNote.length);
-    listTBNote.forEach((e) => print(e.toString()));
-  }
-
+//  void loadNotes() async {
+////    listTBNote = await thumbnailBUS.getThumbnails();
+////    print(listTBNote.length);
+////    listTBNote.forEach((e) => print(e.toString()));
+////  }
+  final _key = GlobalKey();
   void initState() {
     super.initState();
 
     _searchQuery = new TextEditingController();
-    loadNotes();
-    loadTagData();
+//    loadNotes();
+//    loadTagData();
   }
 
   @override
@@ -141,101 +141,125 @@ class HomeScreenState extends State<HomeScreen>
   }
 
   Widget build(BuildContext context) {
-    print(listTBNote.length);
-    return BaseView<TagCreatedModel>(
-        builder: (context, tagCreated, child) => Scaffold(
-            backgroundColor: Theme.of(context).backgroundColor,
-            drawer: Drawer(
-              child: ListView(
-                  // Important: Remove any padding from the ListView.
-                  padding: EdgeInsets.zero,
-                  children: <Widget>[
-                    DrawerHeader(
-                        padding: EdgeInsets.fromLTRB(15, 30, 15, 0),
-                        decoration: BoxDecoration(
-                            shape: BoxShape.rectangle,
-                            color: Colors.transparent),
-                        child: Text("Settings your app",
-                            style: TextStyle(
-                                color: Theme.of(context).iconTheme.color,
-                                fontSize: 20))),
-                    MergeSemantics(
-                      child: ListTile(
-                        title: Text('Dark Theme',
-                            style: TextStyle(
-                                color: Theme.of(context).iconTheme.color,
-                                fontSize: 16)),
-                        trailing: CupertinoSwitch(
-                          value:
-                              Provider.of<AppStateNotifier>(context).isDarkMode,
-                          onChanged: (bool value) {
-                            setState(() {
-                              Provider.of<AppStateNotifier>(context,
-                                      listen: false)
-                                  .updateTheme(value);
-                            });
-                          },
-                        ),
-                        onTap: () {
-                          setState(() {
-                            _light = !_light;
-                          });
-                        },
-                      ),
-                    )
-                  ]),
-            ),
-            resizeToAvoidBottomPadding: false,
-            floatingActionButton: FloatingActionButton(
-                heroTag: "btnAdd",
-                backgroundColor:
-                    Theme.of(context).floatingActionButtonTheme.backgroundColor,
-                splashColor:
-                    Theme.of(context).floatingActionButtonTheme.backgroundColor,
-                child: Icon(Icons.add,
-                    size: 28, color: Theme.of(context).iconTheme.color),
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      PageTransition(
-                          type: PageTransitionType.downToUp,
-                          child: CreateNote()));
-                }),
-            appBar: AppBar(
-              elevation: 0.0,
-              title: _isSearching ? _buildSearchField() : null,
-              actions: _buildActions(),
-            ),
-            body: ListView(controller: mainController, // parent ListView
-                children: <Widget>[
-                  TagBar(mainController, model),
-                  SingleChildScrollView(
-                      child: Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height,
-                    child: listTBNote.length > 0
-                        ? NoteGrid(listTBNote)
-                        : Center(
-                            child: Text("Empty data.Let's create new note !")),
-                  ))
+//    print(listTBNote.length);
+    return MultiProvider(
+        providers: [
+          ChangeNotifierProvider<TagCreatedModel>(
+              create: (BuildContext context) {
+            return TagCreatedModel();
+          }),
+          ChangeNotifierProvider<NoteCreatedModel>(
+              create: (BuildContext context) {
+            return NoteCreatedModel();
+          })
+        ],
+        child:
+//      BaseView<TagCreatedModel>(
+//        builder: (context, tagCreated, child) =>
+            Scaffold(
+                backgroundColor: Theme.of(context).backgroundColor,
+                drawer: Drawer(
+                  child: ListView(
+                      // Important: Remove any padding from the ListView.
+                      padding: EdgeInsets.zero,
+                      children: <Widget>[
+                        DrawerHeader(
+                            padding: EdgeInsets.fromLTRB(15, 30, 15, 0),
+                            decoration: BoxDecoration(
+                                shape: BoxShape.rectangle,
+                                color: Colors.transparent),
+                            child: Text("Settings your app",
+                                style: TextStyle(
+                                    color: Theme.of(context).iconTheme.color,
+                                    fontSize: 20))),
+                        MergeSemantics(
+                          child: ListTile(
+                            title: Text('Dark Theme',
+                                style: TextStyle(
+                                    color: Theme.of(context).iconTheme.color,
+                                    fontSize: 16)),
+                            trailing: CupertinoSwitch(
+                              value: Provider.of<AppStateNotifier>(context)
+                                  .isDarkMode,
+                              onChanged: (bool value) {
+                                setState(() {
+                                  Provider.of<AppStateNotifier>(context,
+                                          listen: false)
+                                      .updateTheme(value);
+                                });
+                              },
+                            ),
+                            onTap: () {
+                              setState(() {
+                                _light = !_light;
+                              });
+                            },
+                          ),
+                        )
+                      ]),
+                ),
+                resizeToAvoidBottomPadding: false,
+                floatingActionButton: FloatingActionButton(
+                    heroTag: "btnAdd",
+                    backgroundColor: Theme.of(context)
+                        .floatingActionButtonTheme
+                        .backgroundColor,
+                    splashColor: Theme.of(context)
+                        .floatingActionButtonTheme
+                        .backgroundColor,
+                    child: Icon(Icons.add,
+                        size: 28, color: Theme.of(context).iconTheme.color),
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          PageTransition(
+                              type: PageTransitionType.downToUp,
+                              child: CreateNote()));
+                    }),
+                appBar: AppBar(
+                  elevation: 0.0,
+                  title: _isSearching ? _buildSearchField() : null,
+                  actions: _buildActions(),
+                ),
+                body: ListView(controller: mainController, // parent ListView
+                    children: <Widget>[
+                      Consumer<TagCreatedModel>(
+                          builder: (context, tagCreatedModel, _) {
+                        tagCreatedModel.loadData();
+                        return TagBar(mainController, tagCreatedModel);
+                      }),
+                      SingleChildScrollView(
+                          child: Container(
+                              width: MediaQuery.of(context).size.width,
+                              height: MediaQuery.of(context).size.height,
+                              child:
+//                    listTBNote.length > 0 ?
+                                  Consumer<NoteCreatedModel>(
+                                      builder: (context, listTBNote, _) {
+                                listTBNote.loadData();
+                                return NoteGrid(listTBNote.getNoteCreated());
+                              })
+//                        : Center(
+//                            child: Text("Empty data.Let's create new note !")),
+                              ))
 //                  LoadNoteHomeScreen()
-                ])));
+                    ])));
   }
 }
 
-class LoadNoteHomeScreen extends StatelessWidget {
-//  load thumbnail from ThumbBUS
-  NoteCreatedModel noteCreatedModel = NoteCreatedModel();
-  Widget build(BuildContext context) {
-    noteCreatedModel.loadData();
-    return BaseView<NoteCreatedModel>(
-        builder: (context, noteCreateModel, child) => SingleChildScrollView(
-                child: Container(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height,
-              child: noteCreatedModel.listSize > 0
-                  ? NoteGrid(noteCreatedModel.getNoteCreated())
-                  : Center(child: Text("Empty data.Let's create new note !")),
-            )));
-  }
-}
+//class LoadNoteHomeScreen extends StatelessWidget {
+////  load thumbnail from ThumbBUS
+//  NoteCreatedModel noteCreatedModel = NoteCreatedModel();
+//  Widget build(BuildContext context) {
+//    noteCreatedModel.loadData();
+//    return BaseView<NoteCreatedModel>(
+//        builder: (context, noteCreateModel, child) => SingleChildScrollView(
+//                child: Container(
+//              width: MediaQuery.of(context).size.width,
+//              height: MediaQuery.of(context).size.height,
+//              child: noteCreatedModel.listSize > 0
+//                  ? NoteGrid(noteCreatedModel.getNoteCreated())
+//                  : Center(child: Text("Empty data.Let's create new note !")),
+//            )));
+//  }
+//}
