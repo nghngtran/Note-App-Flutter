@@ -219,4 +219,4 @@ All data access operations must be used via the BUS layer
 
 - Cú pháp:` List<ThumbnailNote> thumbnails = await thumbnailbus.getThumbnailsByKeyWordAll(String Keyword);`
 
-:heavy_check_mark:
+
