@@ -10,7 +10,7 @@
 		- [0/2] Audio: content:={path of file}
 			- []Loadfrom device:
 			- []Record: Trường hợp máy k có record trả về và báo lỗi
-		-[:heavy_check_mark:] Text: content:={content}
+		- [:heavy_check_mark:] Text: content:={content}
 	- [0/3] AddTag:
 		- [] Hiển thị tất cả tag đã có dưới DB, trừ những tag đã được thêm vào
 		- [] Tạo tag mới: báo lỗi nếu tạo fail
