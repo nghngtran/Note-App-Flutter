@@ -170,7 +170,7 @@ class ThumbnailNoteDAO {
       for (var noteItem in noteItems) {
         noteIdList.add(noteItem['note_id']);
       }
-      List<String> res = LinkedHashSet<String>.from(notes).toList();
+      List<String> res = LinkedHashSet<String>.from(noteIdList).toList();
 
       List<ThumbnailNote> thumbs = new List<ThumbnailNote>();
       for(var noteId in res){

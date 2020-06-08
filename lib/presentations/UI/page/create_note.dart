@@ -257,29 +257,14 @@ class CreateNoteState extends State<CreateNote> {
                             final NoteBUS noteBus = NoteBUS();
                             await noteBus.addNote(note);
 
-//                            print("|Load Notes|");
-                            var note1 = await noteBus.getNoteById(note.id);
-//                            print(note1.toString());
-//                            print("|Load Notes|");
-
-                            final TagBUS tagBus = TagBUS();
-//                            print("|Load Tag|");
-                            var tags1 = await tagBus.getTags();
-                            for (var tag1 in tags1) {
-//                              print(tag1.toString());
-                            }
-//                            print("|Load Tag|");
-
                             final ThumbnailBUS thumbBus = ThumbnailBUS();
-//                            print("|Load Thumbnails|");
-                            var thumbs = await thumbBus.getThumbnails();
-//Lam sao lay thumnail cua note hien tai??
+                            print("|Load FTS|");
+                            var thumbs = await thumbBus.getThumbnailsByKeyWordAll("abcd");
                             for (var thumb in thumbs) {
-//                              print(thumb.toString());
-//                              noteCreatedModel.addToList(thumb);
+                              print(thumb.toString());
+//                              //noteCreatedModel.addToList(thumb);
                             }
-
-//                            print("|Load Thumbnails|");
+                            print("|Load FTS|");
 
                             Navigator.of(context)
                                 .push(MaterialPageRoute(builder: (context) {
