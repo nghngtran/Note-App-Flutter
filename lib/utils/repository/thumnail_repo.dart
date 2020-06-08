@@ -1,8 +1,13 @@
+import 'dart:wasm';
+
 import 'package:note_app/utils/dao/thumbnail_dao.dart';
 import 'package:note_app/utils/model/thumbnailNote.dart';
 
 class ThumbnailRepository {
   final thumbnailDao = ThumbnailNoteDAO();
+
+  Future findThumbnailByKeyWord(String keyword) => thumbnailDao.findThumbnailByKeyWord(keyword);
+  Future findThumbnailByKeyWordAll(String keyword) => thumbnailDao.findThumbnailByKeyWordAll(keyword);
 
   Future getAllThumbnails({String query}) => thumbnailDao.getThumbnails(query: query);
 

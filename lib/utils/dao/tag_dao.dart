@@ -6,6 +6,7 @@ import 'package:note_app/utils/db_commands.dart';
 import 'package:note_app/utils/log_history.dart';
 import 'package:note_app/utils/model/tag.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:sqflite/utils/utils.dart';
 
 class TagDAO {
   final dbProvider = DatabaseApp.dbProvider;
@@ -126,15 +127,11 @@ class TagDAO {
 
   //Get Tag by Title
   //Return Tag object or null
-  Future<Tag> getTagByTitle(String title) async {
+  Future<bool> exist(String title) async {
     final db = await dbProvider.database;
-    final List<Map<String, dynamic>> maps =
-        await db.query('tags', where: "title = ?", whereArgs: [title]);
-
-    if (maps.isNotEmpty) {
-      return Tag.fromDatabaseJson(maps.first);
-    } else
-      return null;
+    return firstIntValue(await db.query('tags',
+        columns:['COUNT(*)'],
+        where: "title = ?", whereArgs: [title])) == 1;
   }
 
   //Get List Tag of Note
