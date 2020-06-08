@@ -198,3 +198,25 @@ All data access operations must be used via the BUS layer
 - *Trả về:* **`List<ThumbnailNote>`** :**`list<object>`** nếu thành công, **`[]`** nếu thất bại
 
 - Cú pháp:` List<ThumbnailNote> thumbnails = await thumbnailbus.getTags(String Query);`
+
+**7. Lấy tất cả Thumbnail onject với Keyword bằng kĩ thuật FullTextSearch
+
+*chú thích*: *Chỉ áp dụng cho Title của Note*
+
+- *Tham sốL* **`String`** Keyword
+
+- *Trả về:* **`List<ThumbnailNote>`** :**`list<object>`** nếu thành công, **`[]`** nếu thất bại
+
+- Cú pháp:` List<ThumbnailNote> thumbnails = await thumbnailbus.getThumbnailsByKeyWord(String Keyword);`
+
+**8. Lấy tất cả Thumbnail onject với Keyword bằng kĩ thuật FullTextSearch
+
+*chú thích*: *áp dụng cho cả Title và Content Text Item của Note*
+
+- *Tham sốL* **`String`** Keyword
+
+- *Trả về:* **`List<ThumbnailNote>`** :**`list<object>`** nếu thành công, **`[]`** nếu thất bại
+
+- Cú pháp:` List<ThumbnailNote> thumbnails = await thumbnailbus.getThumbnailsByKeyWordAll(String Keyword);`
+
+:heavy_check_mark:
