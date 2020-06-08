@@ -82,18 +82,14 @@ class NoteGrid extends StatefulWidget {
 }
 
 class NoteGridState extends State<NoteGrid> {
-//  ThumbnailBUS thumbnailBUS = ThumbnailBUS();
-//  List<ThumbnailNote> listTBNote = List<ThumbnailNote>();
-//  void loadNotes() async {
-//    listTBNote = await thumbnailBUS.getThumbnails();
-//  }
+
 
   void initState() {
     super.initState();
   }
 
   Widget build(BuildContext context) {
-//    loadNotes();
+
     return ListView(
       children: <Widget>[noteGridBuilder(context, widget._note)],
     );
