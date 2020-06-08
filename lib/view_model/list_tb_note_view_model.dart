@@ -10,8 +10,6 @@ class NoteCreatedModel extends BaseModel {
 
   void loadData() async {
     listNoteCreated = await noteBus.getThumbnails();
-    print(listNoteCreated.length);
-    listNoteCreated.forEach((e) => print(e.toString()));
     notifyListeners();
   }
 

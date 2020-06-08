@@ -49,7 +49,7 @@ class MyApp extends StatelessWidget {
                 AppTheme.lightTheme, // ThemeData(primarySwatch: Colors.blue),
             darkTheme:
                 AppTheme.darkTheme, // ThemeData(primarySwatch: Colors.blue),
-//            ThemeData(),
+
             initialRoute: RoutePaths.Home,
             onGenerateRoute: Router.generateRoute,
             home: TestWidget(),

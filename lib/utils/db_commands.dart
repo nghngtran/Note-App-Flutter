@@ -51,7 +51,7 @@ final String SELECT_NOTE_ITEMS=
     "SELECT *FROM noteItems WHERE note_id=?";
 final String SELECT_NOTES_BY_TAGID =
     "SELECT *FROM relatives re INNER JOIN notes no ON re.note_id=no.note_id WHERE re.tag_id=?";
-final String FTS_NOTE_ITEM = "SELECT * FROM noteItems WHERE content MATCH ?";
-final String FTS_NOTE="SELECT * FROM notes WHERE title MATCH ?";
+final String FTS_NOTE_ITEM = "SELECT * FROM noteItems WHERE type = \"Text\" and content MATCH '";
+final String FTS_NOTE="SELECT * FROM notes WHERE title MATCH '";
 final String FTS_TAG="SELECT * FROM tags WHERE title MATCH ?";
 final String COUNT = "SELECT COUNT(*) FROM ?";

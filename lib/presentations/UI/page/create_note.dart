@@ -254,33 +254,17 @@ class CreateNoteState extends State<CreateNote> {
                             note.setListNoteItems(noteViewModel.contents);
                             note.setTitle(noteViewModel.title);
                             note.setTag(noteViewModel.tags);
-
                             final NoteBUS noteBus = NoteBUS();
                             await noteBus.addNote(note);
 
-//                            print("|Load Notes|");
-                            var note1 = await noteBus.getNoteById(note.id);
-//                            print(note1.toString());
-//                            print("|Load Notes|");
-
-                            final TagBUS tagBus = TagBUS();
-//                            print("|Load Tag|");
-                            var tags1 = await tagBus.getTags();
-                            for (var tag1 in tags1) {
-//                              print(tag1.toString());
-                            }
-//                            print("|Load Tag|");
-
                             final ThumbnailBUS thumbBus = ThumbnailBUS();
-//                            print("|Load Thumbnails|");
-                            var thumbs = await thumbBus.getThumbnails();
-//Lam sao lay thumnail cua note hien tai??
+                            print("|Load FTS|");
+                            var thumbs = await thumbBus.getThumbnailsByKeyWordAll("abcd");
                             for (var thumb in thumbs) {
-//                              print(thumb.toString());
-//                              noteCreatedModel.addToList(thumb);
+                              print(thumb.toString());
+//                              //noteCreatedModel.addToList(thumb);
                             }
-
-//                            print("|Load Thumbnails|");
+                            print("|Load FTS|");
 
                             Navigator.of(context)
                                 .push(MaterialPageRoute(builder: (context) {
@@ -432,6 +416,7 @@ class NoteItemWidget extends StatelessWidget {
       return EditText(item);
     } else if (item.type == "Image") {
       enCodeImg();
+      print("Bytes:"+bytes.toString());
       return Container(
           width: w * 100,
           height: w * 100,

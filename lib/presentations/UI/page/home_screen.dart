@@ -129,7 +129,6 @@ class HomeScreenState extends State<HomeScreen>
   }
 
   Widget build(BuildContext context) {
-//    print(listTBNote.length);
     return MultiProvider(
         providers: [
           ChangeNotifierProvider<TagCreatedModel>(
@@ -216,8 +215,12 @@ class HomeScreenState extends State<HomeScreen>
                               return NoteGrid(listTBNote.getNoteCreated());
                             }
                             return Center(
-                                child:
-                                    Text("Empty data.Let's create new note !"));
+                                child: Text(
+                                    "Empty data.Let's create new note !",
+                                    style: TextStyle(
+                                        color: Theme.of(context)
+                                            .iconTheme
+                                            .color)));
                           })))
                 ])));
   }

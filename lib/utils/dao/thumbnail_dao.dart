@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'dart:collection';
+
 
 import 'package:note_app/utils/dao/tag_dao.dart';
 import 'package:note_app/utils/db_commands.dart';
@@ -136,12 +138,44 @@ class ThumbnailNoteDAO {
     final db = await dbProvider.database;
     //Using full text search sql table Note
     final List<Map<String, dynamic>> notes =
-        await db.rawQuery(FTS_NOTE, [keyword]);
+        await db.rawQuery(FTS_NOTE + keyword + "*\'");
 
     if (notes.isNotEmpty) {
       List<ThumbnailNote> thumbs = new List<ThumbnailNote>();
       for (var note in notes) {
         var thumb = await getThumbnailByID(note['note_id']);
+        thumbs.add(thumb);
+      }
+      return thumbs;
+    } else
+      return [];
+  }
+
+  //Get all Thumbnails that Note contain keyword in title and content
+  //FULL TEXT SEARCH
+  //Return List Thumbnail object or null
+  Future<List<ThumbnailNote>> findThumbnailByKeyWordAll(String keyword) async {
+    final db = await dbProvider.database;
+    //Using full text search sql table Note
+    final List<Map<String, dynamic>> notes =
+        await db.rawQuery(FTS_NOTE + keyword + "*\'");
+
+    final List<Map<String, dynamic>> noteItems =
+        await db.rawQuery(FTS_NOTE_ITEM + keyword + "*\'");
+
+    if (noteItems.isNotEmpty || notes.isNotEmpty) {
+      List<String> noteIdList = new List<String>();
+      for (var note in notes) {
+        noteIdList.add(note['note_id']);
+      }
+      for (var noteItem in noteItems) {
+        noteIdList.add(noteItem['note_id']);
+      }
+      List<String> res = LinkedHashSet<String>.from(noteIdList).toList();
+
+      List<ThumbnailNote> thumbs = new List<ThumbnailNote>();
+      for(var noteId in res){
+        var thumb = await getThumbnailByID(noteId);
         thumbs.add(thumb);
       }
       return thumbs;
