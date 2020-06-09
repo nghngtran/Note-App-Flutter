@@ -7,7 +7,7 @@ class TagRepository {
   Future getAllTags({String query}) => tagDao.getTags(query: query);
 
   Future getTag(String id) => tagDao.getTagByID(id);
-  Future getTagByTitle(String title) => tagDao.getTagByTitle(title);
+  Future isTagExist(String title) => tagDao.exist(title);
 
   Future insertTag(Tag tag) => tagDao.createTag(tag);
   Future updateTags(Tag tag) => tagDao.updateTag(tag);

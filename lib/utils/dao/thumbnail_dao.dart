@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'dart:math';
+import 'dart:collection';
 
 import 'package:note_app/utils/dao/tag_dao.dart';
 import 'package:note_app/utils/db_commands.dart';
@@ -16,9 +16,10 @@ class ThumbnailNoteDAO {
 
   //Insert new Thumbnail
   //Return row id
-  Future<int> createThumbnail(ThumbnailNote thumbnail,{Transaction txn}) async {
+  Future<int> createThumbnail(ThumbnailNote thumbnail,
+      {Transaction txn}) async {
     var thumbId = -1;
-    if(txn!=null){
+    if (txn != null) {
       thumbId = await txn.insert(
         'thumbnails',
         thumbnail.toDatabaseJson(),
@@ -26,8 +27,7 @@ class ThumbnailNoteDAO {
       );
       LogHistory.trackLog("[Thumbnail]",
           "INSERT new thumbnail note:" + thumbnail.noteId.toString());
-    }
-    else {
+    } else {
       final db = await dbProvider.database;
       thumbId = await db.insert(
         'thumbnails',
@@ -42,11 +42,17 @@ class ThumbnailNoteDAO {
 
   //Insert new Thumbnail
   //Return row id
-  Future<int> createThumbnailByNote(Notes note,{Transaction txn}) async {
+  Future<int> createThumbnailByNote(Notes note, {Transaction txn}) async {
     var thumbId = -1;
-    if(txn!= null){
-      ThumbnailNote thumbnail = new ThumbnailNote(note.id, note.title,
-          note.tags, note.contents[0].content, note.modified_time);
+    if (txn != null) {
+      ThumbnailNote thumbnail = new ThumbnailNote(
+          note.id,
+          note.title,
+          note.tags,
+          note.contents[0].type,
+          note.contents[0].noteColor,
+          note.contents[0].content,
+          note.modified_time);
 
       thumbId = await txn.insert(
         'thumbnails',
@@ -55,12 +61,17 @@ class ThumbnailNoteDAO {
       );
       LogHistory.trackLog("[Thumbnail]",
           "INSERT new thumbnail note:" + thumbnail.noteId.toString());
-    }
-    else {
+    } else {
       final db = await dbProvider.database;
 
-      ThumbnailNote thumbnail = new ThumbnailNote(note.id, note.title,
-          note.tags, note.contents[0].content, note.modified_time);
+      ThumbnailNote thumbnail = new ThumbnailNote(
+          note.id,
+          note.title,
+          note.tags,
+          note.contents[0].type,
+          note.contents[0].noteColor,
+          note.contents[0].content,
+          note.modified_time);
 
       thumbId = await db.insert(
         'thumbnails',
@@ -108,13 +119,15 @@ class ThumbnailNoteDAO {
     }
 
     if (result.isNotEmpty) {
-      List<ThumbnailNote> thumbs = result.map((item) => ThumbnailNote.fromDatabaseJson(item)).toList();
+      List<ThumbnailNote> thumbs =
+          result.map((item) => ThumbnailNote.fromDatabaseJson(item)).toList();
       for (var thumb in thumbs) {
         var tags = await tagDao.getTagsByNoteID(thumb.noteId);
         thumb.setTag(tags);
       }
       return thumbs;
-    } else  return [];
+    } else
+      return [];
   }
 
   //Get all Thumbnails that Note contain keyword
@@ -124,7 +137,7 @@ class ThumbnailNoteDAO {
     final db = await dbProvider.database;
     //Using full text search sql table Note
     final List<Map<String, dynamic>> notes =
-        await db.rawQuery(FTS_NOTE, [keyword]);
+        await db.rawQuery(FTS_NOTE + keyword + "*\'");
 
     if (notes.isNotEmpty) {
       List<ThumbnailNote> thumbs = new List<ThumbnailNote>();
@@ -133,9 +146,42 @@ class ThumbnailNoteDAO {
         thumbs.add(thumb);
       }
       return thumbs;
-    }
-    else return [];
+    } else
+      return [];
   }
+
+  //Get all Thumbnails that Note contain keyword in title and content
+  //FULL TEXT SEARCH
+  //Return List Thumbnail object or null
+  Future<List<ThumbnailNote>> findThumbnailByKeyWordAll(String keyword) async {
+    final db = await dbProvider.database;
+    //Using full text search sql table Note
+    final List<Map<String, dynamic>> notes =
+        await db.rawQuery(FTS_NOTE + keyword + "*\'");
+
+    final List<Map<String, dynamic>> noteItems =
+        await db.rawQuery(FTS_NOTE_ITEM + keyword + "*\'");
+
+    if (noteItems.isNotEmpty || notes.isNotEmpty) {
+      List<String> noteIdList = new List<String>();
+      for (var note in notes) {
+        noteIdList.add(note['note_id']);
+      }
+      for (var noteItem in noteItems) {
+        noteIdList.add(noteItem['note_id']);
+      }
+      List<String> res = LinkedHashSet<String>.from(noteIdList).toList();
+
+      List<ThumbnailNote> thumbs = new List<ThumbnailNote>();
+      for(var noteId in res){
+        var thumb = await getThumbnailByID(noteId);
+        thumbs.add(thumb);
+      }
+      return thumbs;
+    } else
+      return [];
+  }
+
   //Delete All Thumbnail Record
   //Return number of record was applied
   Future deleteAllThumbnails() async {
@@ -144,6 +190,7 @@ class ThumbnailNoteDAO {
     LogHistory.trackLog("[Thumbnail]", "DELETE All thumbnail");
     return count;
   }
+
   //Delete Thumbnail Record by NoteId
   //Return number of record was applied
   Future<int> deleteThumbnail(String noteId) async {
@@ -154,6 +201,7 @@ class ThumbnailNoteDAO {
         "[Thumbnail]", "DELETE thumbnail of note: " + noteId.toString());
     return count;
   }
+
   //Update a Thumbnail
   //Return number of record was applied
   Future<int> updateThumbnail(ThumbnailNote thumbnail) async {

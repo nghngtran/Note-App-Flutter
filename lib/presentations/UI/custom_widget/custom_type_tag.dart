@@ -1,11 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:note_app/application/constants.dart';
+import 'package:note_app/presentations/UI/page/base_view.dart';
 
 import 'package:note_app/presentations/UI/page/create_tag.dart';
+import 'package:note_app/utils/bus/tag_bus.dart';
 import 'package:note_app/utils/dao/tag_dao.dart';
 import 'package:note_app/utils/model/tag.dart';
-import 'package:note_app/view_model/list_tag_viewmodel.dart';
+import 'package:note_app/view_model/list_tag_view_model.dart';
 import 'package:provider/provider.dart';
 import 'package:note_app/presentations/UI/custom_widget/custom_text_style.dart';
 
@@ -45,12 +47,13 @@ class CustomTag extends StatelessWidget {
 
 class TagBar extends StatelessWidget {
   ScrollController horizontal;
-
-  TagBar(ScrollController _scroll, this.model) : horizontal = _scroll;
-//  List<Tag> listTags = List<Tag>();
-  final TagCreatedModel model;
+  TagBar(ScrollController _scroll, TagCreatedModel _model)
+      : horizontal = _scroll,
+        model = _model;
+  TagCreatedModel model;
 
   Widget build(BuildContext context) {
+    model.loadData();
     return Row(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -74,26 +77,24 @@ class TagBar extends StatelessWidget {
                           backgroundColor: Theme.of(context).backgroundColor,
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(5)),
-                          child: CreateTag(model)));
+//                          child: CreateTag(model)
+                      ));
                 },
                 child: Icon(Icons.add,
                     size: 20, color: Theme.of(context).iconTheme.color),
               )),
-//      SizedBox (width: MediaQuery.of(context).size.width / 100 * 2),
-          model.listTagCreated.length > 0
-              ? Expanded(
-                  child: Container(
-                      width: MediaQuery.of(context).size.width / 100 * 85,
-                      height: MediaQuery.of(context).size.height / 100 * 6,
-                      child: ListView.builder(
-                          controller: horizontal,
-                          scrollDirection: Axis.horizontal,
-                          itemCount: model.listTagCreated.length,
-                          itemBuilder: (context, index) {
-                            final item = model.listTagCreated[index];
-                            return CustomTag(item);
-                          })))
-              : Container()
+          Expanded(
+              child: Container(
+                  width: MediaQuery.of(context).size.width / 100 * 85,
+                  height: MediaQuery.of(context).size.height / 100 * 6,
+                  child: ListView.builder(
+                      controller: horizontal,
+                      scrollDirection: Axis.horizontal,
+                      itemCount: model.getTagCreated().length,
+                      itemBuilder: (context, index) {
+                        final item = model.getTagCreated()[index];
+                        return CustomTag(item);
+                      })))
         ]);
   }
 }

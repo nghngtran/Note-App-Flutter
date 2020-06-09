@@ -21,10 +21,8 @@ class TagBUS {
   ///Required: Tag
   ///case tag exist return true;
   ///case tag not exist return false;
-  isTagExist(Tag tag) async {
-    var res = await _tagRepository.getTagByTitle(tag.title);
-    if (res == null) return false;
-    else return true;
+  isTitleTagExist(String title) async {
+    return await _tagRepository.isTagExist(title);
   }
   //Get list tag
   //Required: optional {query}
@@ -49,7 +47,7 @@ class TagBUS {
   //case exist tag won't add and return -1
   //case non-exist tag will add and return tagId
   addTag(Tag tag) async {
-    if (!(await isTagExist(tag))) {
+    if (!(await isTitleTagExist(tag.title))) {
       await _tagRepository.insertTag(tag);
       //getTags();
       return true;

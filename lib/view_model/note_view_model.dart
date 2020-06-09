@@ -1,9 +1,11 @@
 import 'dart:collection';
 
+import 'package:note_app/presentations/UI/page/base_view.dart';
 import 'package:note_app/utils/model/TimeUtils.dart';
 import 'package:note_app/utils/model/noteItem.dart';
 import 'package:note_app/utils/model/tag.dart';
-import 'package:note_app/view_model/list_tag_viewmodel.dart';
+import 'package:note_app/view_model/list_tag_view_model.dart';
+import 'package:scoped_model/scoped_model.dart';
 
 class Audio extends NoteItem {
   String path;
