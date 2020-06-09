@@ -13,6 +13,11 @@ class NoteCreatedModel extends BaseModel {
     notifyListeners();
   }
 
+  void loadDataByKeyword(String key) async {
+    listNoteCreated = await noteBus.getThumbnailsByKeyWord(key);
+    notifyListeners();
+  }
+
   int get listSize {
     return listNoteCreated != null ? listNoteCreated.length : 0;
   }

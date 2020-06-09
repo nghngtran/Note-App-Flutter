@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:note_app/application/constants.dart';
 import 'package:note_app/presentations/UI/custom_widget/custom_text_style.dart';
+import 'package:note_app/presentations/UI/page/edit_note.dart';
 import 'package:note_app/utils/model/thumbnailNote.dart';
 
 class NoteCard extends StatefulWidget {
@@ -86,7 +87,11 @@ class NoteCardState extends State<NoteCard> {
 //    } else if (noteCard.imgUrl == null) {
     return InkWell(
         splashColor: Colors.blue.withAlpha(30),
-        onTap: () {},
+        onTap: () {Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => EditNote()),
+        );},
         child: Container(
             margin: EdgeInsets.only(
                 top: 2 * MediaQuery.of(context).size.height / 100),

@@ -112,7 +112,8 @@ class HomeScreenState extends State<HomeScreen>
               Navigator.pop(context);
               return;
             }
-            _clearSearchQuery();
+            //_clearSearchQuery();
+            search(context);
           },
         ),
       ];
@@ -126,6 +127,28 @@ class HomeScreenState extends State<HomeScreen>
         color: Theme.of(context).iconTheme.color,
       )
     ];
+  }
+
+  Widget search(BuildContext context) {
+    return ChangeNotifierProvider(create:(context)=> NoteCreatedModel(), child : SingleChildScrollView(
+        child: Container(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
+            child: Consumer<NoteCreatedModel>(
+                builder: (context, listTBNote, _) {
+                  listTBNote.loadDataByKeyword(_searchQuery.text);
+                  if (listTBNote.listSize > 0) {
+                    return NoteGrid(listTBNote.getNoteCreated());
+                  }
+                  return Center(
+                      child: Text(
+                          "No match!",
+                          style: TextStyle(
+                              color: Theme.of(context)
+                                  .iconTheme
+                                  .color)));
+                })))
+    );
   }
 
   Widget build(BuildContext context) {
@@ -204,7 +227,7 @@ class HomeScreenState extends State<HomeScreen>
                     tagCreatedModel.loadData();
                     return TagBar(mainController, tagCreatedModel);
                   }),
-                  SingleChildScrollView(
+                  (!_isSearching) ? SingleChildScrollView(
                       child: Container(
                           width: MediaQuery.of(context).size.width,
                           height: MediaQuery.of(context).size.height,
@@ -221,7 +244,7 @@ class HomeScreenState extends State<HomeScreen>
                                         color: Theme.of(context)
                                             .iconTheme
                                             .color)));
-                          })))
+                          }))):search(context)
                 ])));
   }
 }
