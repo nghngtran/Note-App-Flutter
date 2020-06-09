@@ -137,6 +137,7 @@ class HomeScreenState extends State<HomeScreen>
             child: Consumer<NoteCreatedModel>(
                 builder: (context, listTBNote, _) {
                   listTBNote.loadDataByKeyword(_searchQuery.text);
+                  print("SEARCH: " + _searchQuery.text);
                   if (listTBNote.listSize > 0) {
                     return NoteGrid(listTBNote.getNoteCreated());
                   }
@@ -239,7 +240,7 @@ class HomeScreenState extends State<HomeScreen>
                             }
                             return Center(
                                 child: Text(
-                                    "Empty data.Let's create new note !",
+                                    "Nothing is here yet. Live up the space by creating new notes!",
                                     style: TextStyle(
                                         color: Theme.of(context)
                                             .iconTheme
