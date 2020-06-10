@@ -90,10 +90,12 @@ class HomeScreenState extends State<HomeScreen>
       onChanged: updateSearchQuery,
     );
   }
+
   TagBUS tagBUS = TagBUS();
   List<Tag> listCreatedTag;
   void loadTagData() async {
-    listCreatedTag = await tagBUS.getTags();}
+    listCreatedTag = await tagBUS.getTags();
+  }
 
   void updateSearchQuery(String newQuery) {
     setState(() {
@@ -112,8 +114,8 @@ class HomeScreenState extends State<HomeScreen>
               Navigator.pop(context);
               return;
             }
-            //_clearSearchQuery();
-            search(context);
+            _clearSearchQuery();
+//            search(context);
           },
         ),
       ];
@@ -129,27 +131,26 @@ class HomeScreenState extends State<HomeScreen>
     ];
   }
 
-  Widget search(BuildContext context) {
-    return ChangeNotifierProvider(create:(context)=> NoteCreatedModel(), child : SingleChildScrollView(
-        child: Container(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height,
-            child: Consumer<NoteCreatedModel>(
-                builder: (context, listTBNote, _) {
-                  listTBNote.loadDataByKeyword(_searchQuery.text);
-                  print("SEARCH: " + _searchQuery.text);
-                  if (listTBNote.listSize > 0) {
-                    return NoteGrid(listTBNote.getNoteCreated());
-                  }
-                  return Center(
-                      child: Text(
-                          "No match!",
+  Widget search(BuildContext context, NoteCreatedModel model) {
+    _stopSearching();
+    return FutureBuilder(
+        future: model.loadDataByKeyword(_searchQuery.text),
+        builder: (context, state) {
+          return Container(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
+              child: (state.connectionState == ConnectionState.done)
+                  ?
+//                  Consumer<NoteCreatedModel>(builder: (context, listTBNote, _) {
+//                listTBNote.loadDataByKeyword(_searchQuery.text);
+//                print("SEARCH: " + _searchQuery.text);
+//                 > 0) ?
+                  NoteGrid(model.getNoteCreated())
+                  : Center(
+                      child: Text("No match!",
                           style: TextStyle(
-                              color: Theme.of(context)
-                                  .iconTheme
-                                  .color)));
-                })))
-    );
+                              color: Theme.of(context).iconTheme.color))));
+        });
   }
 
   Widget build(BuildContext context) {
@@ -228,24 +229,33 @@ class HomeScreenState extends State<HomeScreen>
                     tagCreatedModel.loadData();
                     return TagBar(mainController, tagCreatedModel);
                   }),
-                  (!_isSearching) ? SingleChildScrollView(
-                      child: Container(
-                          width: MediaQuery.of(context).size.width,
-                          height: MediaQuery.of(context).size.height,
-                          child: Consumer<NoteCreatedModel>(
-                              builder: (context, listTBNote, _) {
-                            listTBNote.loadData();
-                            if (listTBNote.listSize > 0) {
-                              return NoteGrid(listTBNote.getNoteCreated());
-                            }
-                            return Center(
-                                child: Text(
-                                    "Nothing is here yet. Live up the space by creating new notes!",
-                                    style: TextStyle(
-                                        color: Theme.of(context)
-                                            .iconTheme
-                                            .color)));
-                          }))):search(context)
+                  (!_isSearching)
+                      ? SingleChildScrollView(
+                          child: Container(
+                              width: MediaQuery.of(context).size.width,
+                              height: MediaQuery.of(context).size.height,
+                              child: Consumer<NoteCreatedModel>(
+                                  builder: (context, listTBNote, _) {
+                                listTBNote.loadData();
+                                if (listTBNote.listSize > 0) {
+                                  return NoteGrid(listTBNote.getNoteCreated());
+                                }
+                                return Center(
+                                    child: Text(
+                                        "Nothing is here yet. Live up the space by creating new notes!",
+                                        style: TextStyle(
+                                            color: Theme.of(context)
+                                                .iconTheme
+                                                .color)));
+                              })))
+                      : SingleChildScrollView(
+                          child: Container(
+                              width: MediaQuery.of(context).size.width,
+                              height: MediaQuery.of(context).size.height,
+                              child: Consumer<NoteCreatedModel>(
+                                  builder: (context, listTBNote, _) {
+                                return search(context, listTBNote);
+                              })))
                 ])));
   }
 }
