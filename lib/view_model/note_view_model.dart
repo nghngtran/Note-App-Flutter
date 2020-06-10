@@ -16,7 +16,7 @@ class Audio extends NoteItem {
 }
 
 class NoteViewModel extends BaseModel {
-  String title = "New untitled note";
+  String title = "Sao tui kho qua vay ne";
   List<Tag> tags = [];
   List<NoteItem> contents = [];
   int get size {
@@ -28,7 +28,7 @@ class NoteViewModel extends BaseModel {
     notifyListeners();
   }
 
-  List<NoteItem> getListItems() {
+  List<NoteItem> getListItems() { //
     return contents;
   }
 
@@ -38,9 +38,9 @@ class NoteViewModel extends BaseModel {
   }
 
   NoteViewModel() : super() {
-    this.title = "New untitled note";
-    this.tags = new List<Tag>();
-    this.contents = new List<NoteItem>();
+    //this.title = "New untitled note";
+    //this.tags = new List<Tag>();
+    //this.contents = new List<NoteItem>();
   }
 //  NoteViewModel.withFullInfo(
 //      this.id, this.title, DateTime created_time, DateTime modified_time) {
