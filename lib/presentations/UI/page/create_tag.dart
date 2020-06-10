@@ -22,7 +22,7 @@ class CreateTag extends StatelessWidget {
   final textController = TextEditingController();
   final TagCreatedModel tagCreatedModel;
   CreateTag(this.tagCreatedModel);
-//  AutoCompleteTextField searchTag;
+
   Widget build(BuildContext context) {
     tag.setColor(Colors.green);
     return Container(
@@ -50,9 +50,8 @@ class CreateTag extends StatelessWidget {
                   SizedBox(width: MediaQuery.of(context).size.width / 100),
                   Expanded(
                       flex: 7,
-                      child: AutoCompleteTextField<Tag>(
+                      child: TextFormField(
                         controller: textController,
-//                        textAlign: TextAlign.start,
                         style: TextStyle(
                             fontSize: 18,
                             color: Theme.of(context).iconTheme.color),
@@ -72,28 +71,29 @@ class CreateTag extends StatelessWidget {
                             hintStyle: TextStyle(
                                 color: Theme.of(context).iconTheme.color,
                                 fontSize: 13)),
-                        itemBuilder: (context, item) {
-                          return Container(
-                              height:
-                                  MediaQuery.of(context).size.height / 100 * 6,
-                              padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
-                              child: Text(item.title,
-                                  style: TextStyle(
-                                      color: Theme.of(context).iconTheme.color,
-                                      fontSize: 15)));
-                        },
-                        itemFilter: (item, query) {
-                          return item.title
-                              .toLowerCase()
-                              .startsWith(query.toLowerCase());
-                        },
-                        itemSorter: (a, b) {
-                          return a.title.compareTo(b.title);
-                        },
-                        itemSubmitted: (item) {
-                          textController.text = item.title;
-                        },
-                        suggestions: tagCreatedModel.getTagCreated(), key: null,
+//                        itemBuilder: (context, item) {
+//                          return Container(
+//                              height:
+//                                  MediaQuery.of(context).size.height / 100 * 6,
+//                              padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
+//                              child: Text(item.title,
+//                                  style: TextStyle(
+//                                      color: Theme.of(context).iconTheme.color,
+//                                      fontSize: 16)));
+//                        },
+//                        itemFilter: (item, query) {
+//                          return item.title
+//                              .toLowerCase()
+//                              .startsWith(query.toLowerCase());
+//                        },
+//                        itemSorter: (a, b) {
+//                          return a.title.compareTo(b.title);
+//                        },
+//                        itemSubmitted: (Tag item) {
+//                          textController.text = item.title;
+//                        },
+//                        suggestions: tagCreatedModel.getTagCreated(),
+//                        key: null,
                       )),
                   SizedBox(width: MediaQuery.of(context).size.width / 100 * 2),
                 ])),
