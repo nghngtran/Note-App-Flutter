@@ -259,7 +259,8 @@ class CreateNoteState extends State<CreateNote> {
 
                             final ThumbnailBUS thumbBus = ThumbnailBUS();
                             print("|Load FTS|");
-                            var thumbs = await thumbBus.getThumbnailsByKeyWordAll("abcd");
+                            var thumbs = await thumbBus
+                                .getThumbnailsByKeyWordAll("abcd");
                             for (var thumb in thumbs) {
                               print(thumb.toString());
 //                              //noteCreatedModel.addToList(thumb);
@@ -405,7 +406,6 @@ class NoteItemWidget extends StatelessWidget {
     final picker = ImagePicker();
     File imgFile = File(item.content);
     print(item.content);
-    ImagePicker.pickImage(source: ImageSource.gallery);
     bytes = imgFile.readAsBytesSync();
   }
 
@@ -415,8 +415,8 @@ class NoteItemWidget extends StatelessWidget {
     if (item.type == "Text") {
       return EditText(item);
     } else if (item.type == "Image") {
-      enCodeImg();
-      print("Bytes:"+bytes.toString());
+//      enCodeImg();
+      print(item.content);
       return Container(
           width: w * 100,
           height: w * 100,
@@ -426,7 +426,7 @@ class NoteItemWidget extends StatelessWidget {
               border: Border.all(width: 1, color: Colors.black),
               borderRadius: BorderRadius.all(Radius.circular(10)),
               color: Colors.white),
-          child: Image.memory(bytes));
+          child: Image.file(File(item.content)));
     }
     advancedPlayer.startHeadlessService();
     print(item.content);

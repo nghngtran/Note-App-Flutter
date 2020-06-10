@@ -32,8 +32,8 @@ class _PreviewImageScreenState extends State<PreviewImageScreen> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) =>
-                              CustomPaintPage(tmp, widget.model)));
+                          builder: (context) => CustomPaintPage(
+                              File(widget.imagePath), widget.model)));
                 },
                 child: Image.file(File(widget.imagePath), fit: BoxFit.cover))));
   }

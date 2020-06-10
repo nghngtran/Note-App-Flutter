@@ -1,22 +1,20 @@
+import 'dart:io';
 import 'dart:typed_data';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:note_app/utils/model/noteItem.dart';
 import 'package:note_app/view_model/note_view_model.dart';
-
-import 'package:image_picker/image_picker.dart';
-import 'package:note_app/application/constants.dart';
-import 'package:note_app/presentations/UI/page/create_note.dart';
 import 'package:note_app/utils/model/note.dart';
-
 import 'package:painter2/painter2.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
 class CustomPaintPage extends StatefulWidget {
   final NoteViewModel model;
-  Image path;
-  CustomPaintPage(Image _path, NoteViewModel _model)
-      : path = _path,
+  File img;
+  CustomPaintPage(File _img, NoteViewModel _model)
+      : img = _img,
         model = _model;
   @override
   _CustomPaintPageState createState() => new _CustomPaintPageState();
@@ -25,6 +23,7 @@ class CustomPaintPage extends StatefulWidget {
 class _CustomPaintPageState extends State<CustomPaintPage> {
   bool _finished;
   PainterController _controller;
+  String fileName;
   @override
   void initState() {
     super.initState();
@@ -36,11 +35,21 @@ class _CustomPaintPageState extends State<CustomPaintPage> {
   PainterController _newController() {
     PainterController controller = new PainterController();
     controller.thickness = 5.0;
-//    _controller.backgroundColor = Colors.transparent;
-    controller.backgroundImage = widget.path;
+    controller.backgroundImage = Image.file(widget.img);
     super.initState();
     return controller;
   }
+
+//  Future<String> getFilePath() async {
+//    Directory storageDirectory = await getApplicationDocumentsDirectory();
+//    String sdPath = storageDirectory.path + "/img";
+//    var d = Directory(sdPath);
+//    if (!d.existsSync()) {
+//      d.createSync(recursive: true);
+//    }
+//    fileName = sdPath + "/img_paint";
+//    return fileName;
+//  }
 
   Widget build(BuildContext context) {
     List<Widget> actions;
@@ -94,7 +103,8 @@ class _CustomPaintPageState extends State<CustomPaintPage> {
                           onPressed: () {
                             NoteItem tmp = NoteItem("Image");
                             print(widget.model.getListItems().length);
-                            tmp.content = widget.path.toString();
+                            tmp.content = widget.img.path;
+//                            tmp.content = widget.img.toString();
                             Provider.of<Notes>(context, listen: false)
                                 .addNoteItem(tmp);
                             widget.model.addNoteItem(tmp);
