@@ -9,6 +9,8 @@ import 'package:note_app/utils/model/note.dart';
 import 'package:painter2/painter2.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:album_saver/album_saver.dart';
+import 'package:gallery_saver/gallery_saver.dart';
 
 class CustomPaintPage extends StatefulWidget {
   final NoteViewModel model;
@@ -42,19 +44,19 @@ class _CustomPaintPageState extends State<CustomPaintPage> {
 
   int i = 0;
 
-  Future<File> saveFile(File img) async {
-    File paintImg = widget.img;
-//        .copy("/imgPaint_${i++}.jpg");
-//    Directory storageDirectory = await getApplicationDocumentsDirectory();
-//    String sdPath = storageDirectory.path + "/img";
-//    var d = Directory(sdPath);
-//    if (!d.existsSync()) {
-//      d.createSync(recursive: true);
-//    }
-//    fileName = sdPath + "/img_paint";
-    Uint8List byte = paintImg.readAsBytesSync();
-    return paintImg.writeAsBytesSync(byte);
-  }
+//  Future<File> saveFile(File img) async {
+//    File paintImg = widget.img;
+////        .copy("/imgPaint_${i++}.jpg");
+////    Directory storageDirectory = await getApplicationDocumentsDirectory();
+////    String sdPath = storageDirectory.path + "/img";
+////    var d = Directory(sdPath);
+////    if (!d.existsSync()) {
+////      d.createSync(recursive: true);
+////    }
+////    fileName = sdPath + "/img_paint";
+//    Uint8List byte = paintImg.readAsBytesSync();
+//    return paintImg.writeAsBytesSync(byte);
+//  }
 
   Widget build(BuildContext context) {
     List<Widget> actions;
@@ -106,6 +108,9 @@ class _CustomPaintPageState extends State<CustomPaintPage> {
                       IconButton(
                           icon: Icon(Icons.check),
                           onPressed: () {
+                            GallerySaver.saveImage(widget.img.path,
+                                albumName: "NoteApp");
+
                             NoteItem tmp = NoteItem("Image");
                             print(widget.model.getListItems().length);
                             tmp.content = widget.img.path;
