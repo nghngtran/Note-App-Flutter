@@ -14,7 +14,10 @@ class NoteCreatedModel extends BaseModel {
   }
 
   void loadDataByKeyword(String key) async {
-    listNoteCreated = await noteBus.getThumbnailsByKeyWord(key);
+    if(key.compareTo("") == 0)
+      listNoteCreated = await noteBus.getThumbnails();
+    else
+      listNoteCreated = await noteBus.getThumbnailsByKeyWordAll(key);
     notifyListeners();
   }
 

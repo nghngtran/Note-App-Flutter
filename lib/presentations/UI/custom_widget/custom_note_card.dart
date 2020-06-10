@@ -90,7 +90,7 @@ class NoteCardState extends State<NoteCard> {
         onTap: () {Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => EditNote()),
+              builder: (context) => EditNote(noteCard)),
         );},
         child: Container(
             margin: EdgeInsets.only(
