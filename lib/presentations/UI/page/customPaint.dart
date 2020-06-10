@@ -40,7 +40,11 @@ class _CustomPaintPageState extends State<CustomPaintPage> {
     return controller;
   }
 
-//  Future<String> getFilePath() async {
+  int i = 0;
+
+  Future<File> saveFile(File img) async {
+    File paintImg = widget.img;
+//        .copy("/imgPaint_${i++}.jpg");
 //    Directory storageDirectory = await getApplicationDocumentsDirectory();
 //    String sdPath = storageDirectory.path + "/img";
 //    var d = Directory(sdPath);
@@ -48,8 +52,9 @@ class _CustomPaintPageState extends State<CustomPaintPage> {
 //      d.createSync(recursive: true);
 //    }
 //    fileName = sdPath + "/img_paint";
-//    return fileName;
-//  }
+    Uint8List byte = paintImg.readAsBytesSync();
+    return paintImg.writeAsBytesSync(byte);
+  }
 
   Widget build(BuildContext context) {
     List<Widget> actions;
@@ -105,6 +110,7 @@ class _CustomPaintPageState extends State<CustomPaintPage> {
                             print(widget.model.getListItems().length);
                             tmp.content = widget.img.path;
 //                            tmp.content = widget.img.toString();
+
                             Provider.of<Notes>(context, listen: false)
                                 .addNoteItem(tmp);
                             widget.model.addNoteItem(tmp);
