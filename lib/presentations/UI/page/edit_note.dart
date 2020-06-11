@@ -30,9 +30,7 @@ import 'package:unicorndial/unicorndial.dart';
 
 class EditNote extends StatefulWidget {
   final ThumbnailNote current;
-  //Notes cur = Notes();
-  EditNote(ThumbnailNote pass) : current = pass; //?????????
-
+  EditNote(ThumbnailNote pass) : current = pass;
   EditNoteState createState() => EditNoteState();
 }
 
@@ -44,19 +42,16 @@ class EditNoteState extends State<EditNote> {
   NoteCreatedModel noteCreatedModel;
   FileType _pickingType = FileType.audio;
 
-  //var note = new Notes();
-
   Notes cur = Notes();
 
-  void Load() async
-  {
+  Future<void> loadNoteItems() async {
     var notebus = new NoteBUS();
     cur = await notebus.getNoteById(widget.current.noteId);
     print(cur.title);
   }
+
   void initState() {
     super.initState();
-    //Load();
   }
 
   @override
@@ -138,8 +133,6 @@ class EditNoteState extends State<EditNote> {
     children.add(_profileOption(
         iconData: Icons.camera_alt,
         onPressed: () {
-//          final NoteItem noteItem = NoteItem("Image");
-//          model.addNoteItem(noteItem);
           showDialog(context: context, child: dialogImg(context, model));
         },
         hero: "img"));
@@ -195,111 +188,133 @@ class EditNoteState extends State<EditNote> {
   Widget build(BuildContext context) {
     double w = MediaQuery.of(context).size.width / 100; //giờ đếm đi
     double h = MediaQuery.of(context).size.height / 100;
-    Load();
-    return BaseView<NoteViewModel>(
-        onModelReady: (noteViewModel) => noteViewModel.Set(cur),
-        builder: (context, noteViewModel, child) => Scaffold(
-            backgroundColor: Theme.of(context).backgroundColor,
-            resizeToAvoidBottomPadding: false,
-            floatingActionButton: UnicornDialer(
-              parentButtonBackground: Colors.blue,
-              orientation: UnicornOrientation.VERTICAL,
-              parentButton:
-                  Icon(Icons.add, color: Theme.of(context).primaryColor),
-              childButtons: _getProfileMenu(noteViewModel),
-            ),
-            appBar: AppBar(
-                title: Text('View Note',
-                    style: TextStyle(color: Theme.of(context).iconTheme.color)),
-                leading: BackButton(
-                  color: Theme.of(context).iconTheme.color,
-                  onPressed: () {
-                    _handleClickMe();
-                  },
-                )),
-            body: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  SizedBox(height: h * 2),
-                  Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-                        Expanded(
-                            flex: 6,
-                            child: InkWell(
-                                onTap: () {
-                                  showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) => Dialog(
-                                          elevation: 0.0,
-                                          backgroundColor:
-                                              Theme.of(context).backgroundColor,
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(5)),
-                                          child: ChooseTitle(noteViewModel)));
-                                },
-                                child: Container(
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: <Widget>[
-                                      SizedBox(width: w * 4),
-                                      Text(
-                                        cur.title, //uhm
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .subhead
-                                            .copyWith(
-                                                color: Theme.of(context)
-                                                    .iconTheme
-                                                    .color,
-                                                fontWeight: Font.Regular),
-                                      ),
-                                      SizedBox(width: w * 2),
-                                      Icon(Icons.edit,
-                                          size: 20,
-                                          color:
-                                              Theme.of(context).iconTheme.color)
-                                    ],
-                                  ),
-                                ))),
-                        Expanded(
-                            child: GestureDetector(
-                          onTap: () async {
-                            //note.setListNoteItems(noteViewModel.contents);
-                            //note.setTitle(noteViewModel.title);
-                            //note.setTag(noteViewModel.tags);
-                            final NoteBUS noteBus = NoteBUS();
-                            //await noteBus.addNote(note);
 
-                            final ThumbnailBUS thumbBus = ThumbnailBUS();
-                            print("|Load FTS|");
-                            var thumbs = await thumbBus
-                                .getThumbnailsByKeyWordAll("abcd");
-                            for (var thumb in thumbs) {
-                              print(thumb.toString());
-//                              //noteCreatedModel.addToList(thumb);
-                            }
-                            print("|Load FTS|");
-
-                            Navigator.of(context)
-                                .push(MaterialPageRoute(builder: (context) {
-                              return HomeScreen();
-                            }));
+    return FutureBuilder(
+        future: loadNoteItems(),
+        builder: (context, state) {
+          if (state.connectionState == ConnectionState.done)
+            return BaseView<NoteViewModel>(
+                onModelReady: (noteViewModel) => noteViewModel.Set(cur),
+                builder: (context, noteViewModel, child) => Scaffold(
+                    backgroundColor: Theme.of(context).backgroundColor,
+                    resizeToAvoidBottomPadding: false,
+                    floatingActionButton: UnicornDialer(
+                      parentButtonBackground: Colors.blue,
+                      orientation: UnicornOrientation.VERTICAL,
+                      parentButton: Icon(Icons.add,
+                          color: Theme.of(context).primaryColor),
+                      childButtons: _getProfileMenu(noteViewModel),
+                    ),
+                    appBar: AppBar(
+                        title: Text('View Note',
+                            style: TextStyle(
+                                color: Theme.of(context).iconTheme.color)),
+                        leading: BackButton(
+                          color: Theme.of(context).iconTheme.color,
+                          onPressed: () {
+                            _handleClickMe();
                           },
-                          child: Text(
-                            "Save",
-                            style: Theme.of(context).textTheme.title.copyWith(
-                                color: Colors.blue, fontWeight: Font.Regular),
-                          ),
-                        ))
-                      ]),
-                  TagBarOfNote(noteViewModel, heroTag: "TagNote"),
-                  (noteViewModel.contents.length != null)
-                      ? Expanded(
-                          child: Container(child: ListNoteItems(noteViewModel)))
-                      : Text("")
-                ])));
+                        )),
+                    body: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          SizedBox(height: h * 2),
+                          Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: <Widget>[
+                                Expanded(
+                                    flex: 6,
+                                    child: InkWell(
+                                        onTap: () {
+                                          showDialog(
+                                              context: context,
+                                              builder: (BuildContext context) =>
+                                                  Dialog(
+                                                      elevation: 0.0,
+                                                      backgroundColor:
+                                                          Theme.of(context)
+                                                              .backgroundColor,
+                                                      shape:
+                                                          RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          5)),
+                                                      child: ChooseTitle(
+                                                          noteViewModel)));
+                                        },
+                                        child: Container(
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            children: <Widget>[
+                                              SizedBox(width: w * 4),
+                                              Text(
+                                                cur.title, //uhm
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .subhead
+                                                    .copyWith(
+                                                        color: Theme.of(context)
+                                                            .iconTheme
+                                                            .color,
+                                                        fontWeight:
+                                                            Font.Regular),
+                                              ),
+                                              SizedBox(width: w * 2),
+                                              Icon(Icons.edit,
+                                                  size: 20,
+                                                  color: Theme.of(context)
+                                                      .iconTheme
+                                                      .color)
+                                            ],
+                                          ),
+                                        ))),
+                                Expanded(
+                                    child: GestureDetector(
+                                  onTap: () async {
+                                    //note.setListNoteItems(noteViewModel.contents);
+                                    //note.setTitle(noteViewModel.title);
+                                    //note.setTag(noteViewModel.tags);
+//                                    final NoteBUS noteBus = NoteBUS();
+                                    //await noteBus.addNote(note);
+
+//                                    final ThumbnailBUS thumbBus =
+//                                        ThumbnailBUS();
+//                                    print("|Load FTS|");
+//                                    var thumbs = await thumbBus
+//                                        .getThumbnailsByKeyWordAll("abcd");
+//                                    for (var thumb in thumbs) {
+//                                      print(thumb.toString());
+//                              //noteCreatedModel.addToList(thumb);
+//                                    }
+//                                    print("|Load FTS|");
+
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(builder: (context) {
+                                      return HomeScreen();
+                                    }));
+                                  },
+                                  child: Text(
+                                    "Save",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .title
+                                        .copyWith(
+                                            color: Colors.blue,
+                                            fontWeight: Font.Regular),
+                                  ),
+                                ))
+                              ]),
+                          TagBarOfNote(noteViewModel, heroTag: "TagNote"),
+                          (noteViewModel.contents.length != null)
+                              ? Expanded(
+                                  child: Container(
+                                      child: ListNoteItems(noteViewModel)))
+                              : Text("")
+                        ])));
+          return Container();
+        });
   }
 }
 
@@ -333,19 +348,23 @@ class EditText extends StatefulWidget {
 }
 
 class EditTextState extends State<EditText> {
-  TextEditingController txtController = TextEditingController();
+//  TextEditingController txtController = TextEditingController();
   var noteColor;
   var _editableNote;
 
   void initState() {
     _editableNote = widget.item;
     noteColor = _editableNote.noteColor;
+//    txtController = TextEditingController.fromValue(TextEditingValue(
+//      text: widget.item.content,
+//      selection: TextSelection.collapsed(offset: widget.item.content.length),
+//    ));
   }
 
   @override
   void dispose() {
     // Clean up the controller when the widget is disposed.
-    txtController.dispose();
+//    txtController.dispose();
     super.dispose();
   }
 
@@ -371,7 +390,8 @@ class EditTextState extends State<EditText> {
   Widget build(BuildContext context) {
     double w = MediaQuery.of(context).size.width / 100;
     double h = MediaQuery.of(context).size.height / 100;
-    widget.item.setContent(txtController.text);
+//    widget.item.setContent(widget.item.content);
+
     return SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: InkWell(
@@ -382,7 +402,6 @@ class EditTextState extends State<EditText> {
                 padding: EdgeInsets.fromLTRB(w * 4, h / 2, w * 2, h),
                 child: Wrap(children: <Widget>[
                   TextFormField(
-                      initialValue: widget.item.content,
                       autocorrect: false,
                       decoration: InputDecoration(
                         contentPadding: EdgeInsets.fromLTRB(w, h, w, h),
@@ -399,15 +418,24 @@ class EditTextState extends State<EditText> {
                       ),
                       maxLength: null,
                       maxLines: null,
-                      controller: txtController,
+                      controller:
+                          TextEditingController.fromValue(TextEditingValue(
+                        text: widget.item.content,
+                        selection: TextSelection.collapsed(
+                            offset: widget.item.content.length),
+                      )),
                       style: TextStyle(
                           fontSize: 17,
                           fontStyle: FontStyle.normal,
                           color: Theme.of(context).iconTheme.color),
                       onSaved: (value) {
-                        widget.item.setContent(txtController.text);
+                        widget.item.setContent(
+                            TextEditingController.fromValue(TextEditingValue(
+                          text: widget.item.content,
+                          selection: TextSelection.collapsed(
+                              offset: widget.item.content.length),
+                        )).text);
                         widget.item.setBgColor(noteColor);
-                        print(widget.item.content);
                       })
                 ]))));
   }

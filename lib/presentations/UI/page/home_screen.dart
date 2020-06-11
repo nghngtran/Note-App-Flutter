@@ -243,9 +243,6 @@ class HomeScreenState extends State<HomeScreen>
                               height: MediaQuery.of(context).size.height,
                               child: Consumer<NoteCreatedModel>(
                                   builder: (context, listTBNote, _) {
-//                                for (var i in listTBNote.getNoteCreated()) {
-//                                  print(i.toString());
-//                                }
                                 return search(context, listTBNote);
                               })))
                 ])));

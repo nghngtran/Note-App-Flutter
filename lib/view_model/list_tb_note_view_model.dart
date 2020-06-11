@@ -14,6 +14,7 @@ class NoteCreatedModel extends BaseModel {
   }
 
   Future<void> loadDataByKeyword(String key) async {
+    print("i");
     if (key.compareTo("") == 0)
       listNoteCreated = await noteBus.getThumbnails();
     else
