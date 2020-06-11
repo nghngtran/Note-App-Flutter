@@ -69,7 +69,10 @@ class _PickImageState extends State<PickImage> {
         } else {
           return Text(
             'No Image Selected',
-            style: Theme.of(context).textTheme.subhead,
+            style: Theme.of(context)
+                .textTheme
+                .subhead
+                .copyWith(color: Theme.of(context).iconTheme.color),
             textAlign: TextAlign.center,
           );
         }
@@ -82,18 +85,21 @@ class _PickImageState extends State<PickImage> {
     double w = MediaQuery.of(context).size.width / 100;
     double h = MediaQuery.of(context).size.height / 100;
     return Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).backgroundColor,
         resizeToAvoidBottomPadding: false,
         appBar: AppBar(
-            title: Text('Select image', style: TextStyle(color: Colors.black)),
-            backgroundColor: Color.fromRGBO(255, 209, 16, 1.0),
+            title: Text('Select image',
+                style: TextStyle(color: Theme.of(context).iconTheme.color)),
+//            backgroundColor: Color.fromRGBO(255, 209, 16, 1.0),
             leading: BackButton(
-              color: Colors.black,
+              color: Theme.of(context).iconTheme.color,
               onPressed: () {
-                NoteItem noteItem =
-                    Provider.of<Notes>(context, listen: true).contents.last;
-                Provider.of<Notes>(context, listen: true)
-                    .removeNoteItem(noteItem);
+                if (widget.model.contents.length > 0) {
+                  NoteItem noteItem =
+                      Provider.of<Notes>(context, listen: true).contents.last;
+                  Provider.of<Notes>(context, listen: false)
+                      .removeNoteItem(noteItem);
+                }
                 Navigator.of(context).pop();
               },
             )),

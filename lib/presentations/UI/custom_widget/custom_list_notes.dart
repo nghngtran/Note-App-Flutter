@@ -4,29 +4,29 @@ import 'package:note_app/presentations/UI/custom_widget/custom_note_card.dart';
 import 'package:note_app/utils/bus/thumbnail_bus.dart';
 import 'package:note_app/utils/model/thumbnailNote.dart';
 
-class Note extends StatelessWidget {
-  DateNote dateNote = DateNote();
-  List<ThumbnailNote> listNote = List<ThumbnailNote>();
-  Note({@required DateNote date, @required List<ThumbnailNote> list})
-      : dateNote = date,
-        listNote = list;
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        SizedBox(height: MediaQuery.of(context).size.height / 100 * 2),
-        Padding(
-            padding: EdgeInsets.only(
-                left: 4 * MediaQuery.of(context).size.width / 100),
-            child: Text(dateNote.date,
-                style: Theme.of(context).textTheme.body2.copyWith(
-                    color: Theme.of(context).iconTheme.color, fontSize: 20))),
-        noteGridBuilder(context, listNote)
-      ],
-    );
-  }
-}
+//class Note extends StatelessWidget {
+//  DateNote dateNote = DateNote();
+//  List<ThumbnailNote> listNote = List<ThumbnailNote>();
+//  Note({@required DateNote date, @required List<ThumbnailNote> list})
+//      : dateNote = date,
+//        listNote = list;
+//  Widget build(BuildContext context) {
+//    return Column(
+//      crossAxisAlignment: CrossAxisAlignment.start,
+//      mainAxisSize: MainAxisSize.min,
+//      children: <Widget>[
+//        SizedBox(height: MediaQuery.of(context).size.height / 100 * 2),
+//        Padding(
+//            padding: EdgeInsets.only(
+//                left: 4 * MediaQuery.of(context).size.width / 100),
+//            child: Text(dateNote.date,
+//                style: Theme.of(context).textTheme.body2.copyWith(
+//                    color: Theme.of(context).iconTheme.color, fontSize: 20))),
+//        noteGridBuilder(context, listNote)
+//      ],
+//    );
+//  }
+//}
 
 Widget noteGridBuilder(BuildContext context, List<ThumbnailNote> indexes) {
   List<Widget> columnOne = List<Widget>();
