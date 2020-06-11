@@ -2,6 +2,7 @@ import 'dart:collection';
 
 import 'package:note_app/presentations/UI/page/base_view.dart';
 import 'package:note_app/utils/model/TimeUtils.dart';
+import 'package:note_app/utils/model/note.dart';
 import 'package:note_app/utils/model/noteItem.dart';
 import 'package:note_app/utils/model/tag.dart';
 import 'package:note_app/view_model/list_tag_view_model.dart';
@@ -41,6 +42,13 @@ class NoteViewModel extends BaseModel {
     this.title = "New untitled note";
     this.tags = new List<Tag>();
     this.contents = new List<NoteItem>();
+  }
+
+  void Set(Notes pass) {
+    this.title = pass.title;
+    this.tags = pass.tags;
+    this.contents = pass.contents;
+    notifyListeners();
   }
 //  NoteViewModel.withFullInfo(
 //      this.id, this.title, DateTime created_time, DateTime modified_time) {
