@@ -263,12 +263,14 @@ class HandleAudioState extends State<HandleAudio> {
                               size: 24,
                               color: Theme.of(context).iconTheme.color),
                           SizedBox(width: w * 2),
-                          Text(url.split('/').last,
-                              style: TextStyle(
-                                  fontSize: 17,
-                                  fontFamily: Font.Name,
-                                  fontWeight: Font.Regular,
-                                  color: Theme.of(context).iconTheme.color))
+                          url.length > 0
+                              ? Text(url.split('/').last,
+                                  style: TextStyle(
+                                      fontSize: 17,
+                                      fontFamily: Font.Name,
+                                      fontWeight: Font.Regular,
+                                      color: Theme.of(context).iconTheme.color))
+                              : null
                         ]))));
   }
 }

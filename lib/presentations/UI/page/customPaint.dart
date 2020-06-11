@@ -107,17 +107,28 @@ class _CustomPaintPageState extends State<CustomPaintPage> {
                     actions: <Widget>[
                       IconButton(
                           icon: Icon(Icons.check),
-                          onPressed: () {
-                            GallerySaver.saveImage(widget.img.path,
+                          onPressed: () async {
+                            print("save " + widget.img.path);
+                            await GallerySaver.saveImage(widget.img.path,
                                 albumName: "NoteApp");
 
                             NoteItem tmp = NoteItem("Image");
-                            print(widget.model.getListItems().length);
+//                            print(widget.model.getListItems().length);
+//                            print(widget.img.path);
+//                            print('/storage/emulated/0/NoteApp/' +
+//                                widget.img.path.split("/").last);
+//                            Directory tmpPath =
+//                                await getApplicationDocumentsDirectory();
+//                            String pathImg =
+//                                tmpPath.path + widget.img.path.split("/").last;
+//                            print(pathImg);
+//                            var pathImg = '/storage/emulated/0/NoteApp/' +
+//                                widget.img.path.split("/").last;
                             tmp.content = widget.img.path;
 //                            tmp.content = widget.img.toString();
 
-                            Provider.of<Notes>(context, listen: false)
-                                .addNoteItem(tmp);
+//                            Provider.of<Notes>(context, listen: false)
+//                                .addNoteItem(tmp);
                             widget.model.addNoteItem(tmp);
 //                            widget.model
 //                                .setContentChildItem(widget.path.toString());
@@ -125,7 +136,7 @@ class _CustomPaintPageState extends State<CustomPaintPage> {
 //                            Navigator.of(context).push(MaterialPageRoute(
 //                                builder: (BuildContext context) {
 //                              return CreateNote();
-                            Navigator.popAndPushNamed(context, 'create_note');
+                            Navigator.of(context).pushNamed('create_note');
 //                            }));
                           })
                     ],

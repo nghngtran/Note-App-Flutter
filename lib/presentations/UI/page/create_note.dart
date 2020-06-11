@@ -25,6 +25,7 @@ import 'package:note_app/utils/model/noteItem.dart';
 import 'package:note_app/view_model/list_tb_note_view_model.dart';
 import 'package:note_app/view_model/list_tag_view_model.dart';
 import 'package:note_app/view_model/note_view_model.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:unicorndial/unicorndial.dart';
 
 class CreateNote extends StatefulWidget {
@@ -123,8 +124,6 @@ class CreateNoteState extends State<CreateNote> {
     children.add(_profileOption(
         iconData: Icons.camera_alt,
         onPressed: () {
-//          final NoteItem noteItem = NoteItem("Image");
-//          model.addNoteItem(noteItem);
           showDialog(context: context, child: dialogImg(context, model));
         },
         hero: "img"));
@@ -403,20 +402,25 @@ class NoteItemWidget extends StatelessWidget {
   NoteItemWidget(NoteItem _item) : item = _item;
   Uint8List bytes;
   void enCodeImg() {
-    final picker = ImagePicker();
     File imgFile = File(item.content);
     print(item.content);
     bytes = imgFile.readAsBytesSync();
   }
 
+  Future<File> _getFile(String fileName) async {
+//    Directory dir = await getApplicationDocumentsDirectory();
+    File f = File('$fileName');
+    return f;
+  }
+
   Widget build(BuildContext context) {
     double w = MediaQuery.of(context).size.width / 100;
     double h = MediaQuery.of(context).size.height / 100;
+
     if (item.type == "Text") {
       return EditText(item);
     } else if (item.type == "Image") {
-//      enCodeImg();
-      print(item.content);
+      print("123");
       return Container(
           width: w * 100,
           height: w * 100,
@@ -425,8 +429,12 @@ class NoteItemWidget extends StatelessWidget {
           decoration: BoxDecoration(
               border: Border.all(width: 1, color: Colors.black),
               borderRadius: BorderRadius.all(Radius.circular(10)),
-              color: Colors.white),
-          child: Image.file(File(item.content)));
+              color: Colors.yellow),
+          child: Image.file(File(item.content))
+//            File(item.content),
+//            fit: BoxFit.cover,
+          );
+//          });
     }
     advancedPlayer.startHeadlessService();
     print(item.content);
