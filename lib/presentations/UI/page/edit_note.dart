@@ -22,16 +22,21 @@ import 'package:note_app/utils/bus/tag_bus.dart';
 import 'package:note_app/utils/bus/thumbnail_bus.dart';
 import 'package:note_app/utils/model/note.dart';
 import 'package:note_app/utils/model/noteItem.dart';
+import 'package:note_app/utils/model/thumbnailNote.dart';
 import 'package:note_app/view_model/list_tb_note_view_model.dart';
 import 'package:note_app/view_model/list_tag_view_model.dart';
 import 'package:note_app/view_model/note_view_model.dart';
 import 'package:unicorndial/unicorndial.dart';
 
-class CreateNote extends StatefulWidget {
-  CreateNoteState createState() => CreateNoteState();
+class EditNote extends StatefulWidget {
+  final ThumbnailNote current;
+  //Notes cur = Notes();
+  EditNote(ThumbnailNote pass) : current = pass; //?????????
+
+  EditNoteState createState() => EditNoteState();
 }
 
-class CreateNoteState extends State<CreateNote> {
+class EditNoteState extends State<EditNote> {
   ScrollController mainController = ScrollController();
   TagCreatedModel tagCreatedModel;
   String _fileName = "";
@@ -39,9 +44,19 @@ class CreateNoteState extends State<CreateNote> {
   NoteCreatedModel noteCreatedModel;
   FileType _pickingType = FileType.audio;
 
-  var note = new Notes();
+  //var note = new Notes();
+
+  Notes cur = Notes();
+
+  void Load() async
+  {
+    var notebus = new NoteBUS();
+    cur = await notebus.getNoteById(widget.current.noteId);
+    print(cur.title);
+  }
   void initState() {
     super.initState();
+    //Load();
   }
 
   @override
@@ -178,11 +193,11 @@ class CreateNoteState extends State<CreateNote> {
   }
 
   Widget build(BuildContext context) {
-    double w = MediaQuery.of(context).size.width / 100;
+    double w = MediaQuery.of(context).size.width / 100; //giờ đếm đi
     double h = MediaQuery.of(context).size.height / 100;
-
+    Load();
     return BaseView<NoteViewModel>(
-        onModelReady: (noteViewModel) => noteViewModel,
+        onModelReady: (noteViewModel) => noteViewModel.Set(cur),
         builder: (context, noteViewModel, child) => Scaffold(
             backgroundColor: Theme.of(context).backgroundColor,
             resizeToAvoidBottomPadding: false,
@@ -194,7 +209,7 @@ class CreateNoteState extends State<CreateNote> {
               childButtons: _getProfileMenu(noteViewModel),
             ),
             appBar: AppBar(
-                title: Text('Create new note',
+                title: Text('View Note',
                     style: TextStyle(color: Theme.of(context).iconTheme.color)),
                 leading: BackButton(
                   color: Theme.of(context).iconTheme.color,
@@ -230,7 +245,7 @@ class CreateNoteState extends State<CreateNote> {
                                     children: <Widget>[
                                       SizedBox(width: w * 4),
                                       Text(
-                                        noteViewModel.title,
+                                        cur.title, //uhm
                                         style: Theme.of(context)
                                             .textTheme
                                             .subhead
@@ -251,15 +266,16 @@ class CreateNoteState extends State<CreateNote> {
                         Expanded(
                             child: GestureDetector(
                           onTap: () async {
-                            note.setListNoteItems(noteViewModel.contents);
-                            note.setTitle(noteViewModel.title);
-                            note.setTag(noteViewModel.tags);
+                            //note.setListNoteItems(noteViewModel.contents);
+                            //note.setTitle(noteViewModel.title);
+                            //note.setTag(noteViewModel.tags);
                             final NoteBUS noteBus = NoteBUS();
-                            await noteBus.addNote(note);
+                            //await noteBus.addNote(note);
 
                             final ThumbnailBUS thumbBus = ThumbnailBUS();
                             print("|Load FTS|");
-                            var thumbs = await thumbBus.getThumbnailsByKeyWordAll("abcd");
+                            var thumbs = await thumbBus
+                                .getThumbnailsByKeyWordAll("abcd");
                             for (var thumb in thumbs) {
                               print(thumb.toString());
 //                              //noteCreatedModel.addToList(thumb);
@@ -288,7 +304,7 @@ class CreateNoteState extends State<CreateNote> {
 }
 
 class ListNoteItems extends StatelessWidget {
-  final NoteViewModel model;
+  final NoteViewModel model; //có đâu
   ListNoteItems(this.model);
 
   ScrollController _controller = new ScrollController();
@@ -366,6 +382,7 @@ class EditTextState extends State<EditText> {
                 padding: EdgeInsets.fromLTRB(w * 4, h / 2, w * 2, h),
                 child: Wrap(children: <Widget>[
                   TextFormField(
+                      initialValue: widget.item.content,
                       autocorrect: false,
                       decoration: InputDecoration(
                         contentPadding: EdgeInsets.fromLTRB(w, h, w, h),
@@ -416,7 +433,7 @@ class NoteItemWidget extends StatelessWidget {
       return EditText(item);
     } else if (item.type == "Image") {
       enCodeImg();
-      print("Bytes:"+bytes.toString());
+      print("Bytes:" + bytes.toString());
       return Container(
           width: w * 100,
           height: w * 100,

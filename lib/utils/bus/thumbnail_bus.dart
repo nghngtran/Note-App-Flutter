@@ -19,8 +19,11 @@ class ThumbnailBUS {
     getThumbnails();
   }
 
-  getThumbnailsByKeyWord() async{
-    return await getThumbnails();
+  getThumbnailsByKeyWordAll(String keyword) async{
+    return await await _thumbnailRepository.findThumbnailByKeyWordAll(keyword);
+  }
+  getThumbnailsByKeyWord(String keyword) async{
+    return await await _thumbnailRepository.findThumbnailByKeyWord(keyword);
   }
   getThumbnails({String query}) async {
     //sink is a way of adding data reactively to the stream

@@ -75,9 +75,7 @@ Widget noteGridBuilder(BuildContext context, List<ThumbnailNote> indexes) {
 
 class NoteGrid extends StatefulWidget {
   List<ThumbnailNote> _note = List<ThumbnailNote>();
-  NoteGrid(List<ThumbnailNote> note, {Key key})
-      : _note = note,
-        super(key: key);
+  NoteGrid(List<ThumbnailNote> note) : _note = note;
   NoteGridState createState() => NoteGridState();
 }
 

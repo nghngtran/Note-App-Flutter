@@ -80,13 +80,13 @@ class HomeScreenState extends State<HomeScreen>
     return TextField(
       controller: _searchQuery,
       autofocus: true,
-      decoration: const InputDecoration(
+      decoration: InputDecoration(
         hintText: 'Search...',
         border: InputBorder.none,
-        hintStyle: TextStyle(color: Colors.white10),
+        hintStyle: TextStyle(color: Theme.of(context).iconTheme.color),
       ),
-      style: TextStyle(
-          color: Theme.of(context).textTheme.caption.color, fontSize: 18.0),
+      style:
+          TextStyle(color: Theme.of(context).iconTheme.color, fontSize: 18.0),
       onChanged: updateSearchQuery,
     );
   }
@@ -109,6 +109,7 @@ class HomeScreenState extends State<HomeScreen>
               return;
             }
             _clearSearchQuery();
+//            search(context);
           },
         ),
       ];
@@ -122,6 +123,25 @@ class HomeScreenState extends State<HomeScreen>
         color: Theme.of(context).iconTheme.color,
       )
     ];
+  }
+
+  Widget search(BuildContext context, NoteCreatedModel model) {
+    return FutureBuilder(
+        future: model.loadDataByKeyword(_searchQuery.text),
+        builder: (context, state) {
+          if (state.connectionState == ConnectionState.done) {
+            return Container(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height,
+                child: model.getNoteCreated().length > 0
+                    ? NoteGrid(model.getNoteCreated())
+                    : Center(
+                        child: Text("No match!",
+                            style: TextStyle(
+                                color: Theme.of(context).iconTheme.color))));
+          }
+          return Container();
+        });
   }
 
   Widget build(BuildContext context) {
@@ -200,24 +220,36 @@ class HomeScreenState extends State<HomeScreen>
                     tagCreatedModel.loadData();
                     return TagBar(mainController, tagCreatedModel);
                   }),
-                  SingleChildScrollView(
-                      child: Container(
-                          width: MediaQuery.of(context).size.width,
-                          height: MediaQuery.of(context).size.height,
-                          child: Consumer<NoteCreatedModel>(
-                              builder: (context, listTBNote, _) {
-                            listTBNote.loadData();
-                            if (listTBNote.listSize > 0) {
-                              return NoteGrid(listTBNote.getNoteCreated());
-                            }
-                            return Center(
-                                child: Text(
-                                    "Empty data.Let's create new note !",
-                                    style: TextStyle(
-                                        color: Theme.of(context)
-                                            .iconTheme
-                                            .color)));
-                          })))
+                  (!_isSearching)
+                      ? SingleChildScrollView(
+                          child: Container(
+                              width: MediaQuery.of(context).size.width,
+                              height: MediaQuery.of(context).size.height,
+                              child: Consumer<NoteCreatedModel>(
+                                  builder: (context, listTBNote, _) {
+                                listTBNote.loadData();
+                                if (listTBNote.listSize > 0) {
+                                  return NoteGrid(listTBNote.getNoteCreated());
+                                }
+                                return Center(
+                                    child: Text(
+                                        "Nothing is here yet. Live up the space by creating new notes!",
+                                        style: TextStyle(
+                                            color: Theme.of(context)
+                                                .iconTheme
+                                                .color)));
+                              })))
+                      : SingleChildScrollView(
+                          child: Container(
+                              width: MediaQuery.of(context).size.width,
+                              height: MediaQuery.of(context).size.height,
+                              child: Consumer<NoteCreatedModel>(
+                                  builder: (context, listTBNote, _) {
+//                                for (var i in listTBNote.getNoteCreated()) {
+//                                  print(i.toString());
+//                                }
+                                return search(context, listTBNote);
+                              })))
                 ])));
   }
 }
