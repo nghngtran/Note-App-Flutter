@@ -1,17 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:note_app/presentations/UI/custom_widget/custom_list_notes.dart';
-
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:note_app/presentations/UI/custom_widget/custom_note_card.dart';
 import 'package:note_app/presentations/UI/custom_widget/custom_type_tag.dart';
 import 'package:note_app/presentations/UI/page/base_view.dart';
 import 'package:note_app/presentations/UI/page/create_note.dart';
-import 'package:note_app/presentations/UI/page/image_pick.dart';
-import 'package:note_app/utils/bus/tag_bus.dart';
-import 'package:note_app/utils/bus/thumbnail_bus.dart';
-import 'package:scoped_model/scoped_model.dart';
-import 'package:note_app/utils/model/tag.dart';
-import 'package:note_app/utils/model/thumbnailNote.dart';
+
 import 'package:note_app/view_model/list_tb_note_view_model.dart';
 import 'package:note_app/view_model/list_tag_view_model.dart';
 import 'package:note_app/view_model/tag_view_model.dart';
@@ -139,6 +134,9 @@ class HomeScreenState extends State<HomeScreen>
                         child: Text("No match!",
                             style: TextStyle(
                                 color: Theme.of(context).iconTheme.color))));
+          } else if (_searchQuery.text != null) {
+            return Center(
+                child: SpinKitCircle(color: Theme.of(context).iconTheme.color));
           }
           return Container();
         });
