@@ -120,23 +120,4 @@ class NoteViewModel extends BaseModel {
     return this.contents[index];
   }
 
-//  String toString() {
-//    return id + "  |  " + title + "  |  ";
-//        created_time.toString() +
-//        "  |  " +
-//        modified_time.toString();
-//  }
-
-//  Map<String, dynamic> toMap() {
-//    var formatter = TimeUtils.formatter;
-//    return {
-//      'note_id': id,
-//      'title': title,
-////      'created_time': formatter.format(created_time),
-////      'modified_time': formatter.format(modified_time)
-//    };
-//  }
-//
-//  UnmodifiableListView<NoteItem> get allTasks =>
-//      UnmodifiableListView(this.contents);
 }
