@@ -18,7 +18,7 @@ class NoteCreatedModel extends BaseModel {
       listNoteCreated = await noteBus.getThumbnails();
     else
       listNoteCreated = await noteBus.getThumbnailsByKeyWordAll(key);
-    notifyListeners();
+//    notifyListeners();
   }
 
   int get listSize {

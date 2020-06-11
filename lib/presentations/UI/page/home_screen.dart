@@ -80,21 +80,15 @@ class HomeScreenState extends State<HomeScreen>
     return TextField(
       controller: _searchQuery,
       autofocus: true,
-      decoration: const InputDecoration(
+      decoration: InputDecoration(
         hintText: 'Search...',
         border: InputBorder.none,
-        hintStyle: TextStyle(color: Colors.white10),
+        hintStyle: TextStyle(color: Theme.of(context).iconTheme.color),
       ),
-      style: TextStyle(
-          color: Theme.of(context).textTheme.caption.color, fontSize: 18.0),
+      style:
+          TextStyle(color: Theme.of(context).iconTheme.color, fontSize: 18.0),
       onChanged: updateSearchQuery,
     );
-  }
-
-  TagBUS tagBUS = TagBUS();
-  List<Tag> listCreatedTag;
-  void loadTagData() async {
-    listCreatedTag = await tagBUS.getTags();
   }
 
   void updateSearchQuery(String newQuery) {
@@ -132,24 +126,21 @@ class HomeScreenState extends State<HomeScreen>
   }
 
   Widget search(BuildContext context, NoteCreatedModel model) {
-    _stopSearching();
     return FutureBuilder(
         future: model.loadDataByKeyword(_searchQuery.text),
         builder: (context, state) {
-          return Container(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height,
-              child: (state.connectionState == ConnectionState.done)
-                  ?
-//                  Consumer<NoteCreatedModel>(builder: (context, listTBNote, _) {
-//                listTBNote.loadDataByKeyword(_searchQuery.text);
-//                print("SEARCH: " + _searchQuery.text);
-//                 > 0) ?
-                  NoteGrid(model.getNoteCreated())
-                  : Center(
-                      child: Text("No match!",
-                          style: TextStyle(
-                              color: Theme.of(context).iconTheme.color))));
+          if (state.connectionState == ConnectionState.done) {
+            return Container(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height,
+                child: model.getNoteCreated().length > 0
+                    ? NoteGrid(model.getNoteCreated())
+                    : Center(
+                        child: Text("No match!",
+                            style: TextStyle(
+                                color: Theme.of(context).iconTheme.color))));
+          }
+          return Container();
         });
   }
 
@@ -254,6 +245,9 @@ class HomeScreenState extends State<HomeScreen>
                               height: MediaQuery.of(context).size.height,
                               child: Consumer<NoteCreatedModel>(
                                   builder: (context, listTBNote, _) {
+//                                for (var i in listTBNote.getNoteCreated()) {
+//                                  print(i.toString());
+//                                }
                                 return search(context, listTBNote);
                               })))
                 ])));
