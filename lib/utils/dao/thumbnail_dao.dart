@@ -52,6 +52,7 @@ class ThumbnailNoteDAO {
           note.contents[0].type,
           note.contents[0].noteColor,
           note.contents[0].content,
+          note.created_time,
           note.modified_time);
 
       thumbId = await txn.insert(
@@ -71,6 +72,7 @@ class ThumbnailNoteDAO {
           note.contents[0].type,
           note.contents[0].noteColor,
           note.contents[0].content,
+          note.created_time,
           note.modified_time);
 
       thumbId = await db.insert(
@@ -124,6 +126,22 @@ class ThumbnailNoteDAO {
       for (var thumb in thumbs) {
         var tags = await tagDao.getTagsByNoteID(thumb.noteId);
         thumb.setTag(tags);
+      }
+      return thumbs;
+    } else
+      return [];
+  }
+  Future<List<ThumbnailNote>> findThumbnailByTagId(String tagId) async {
+    final db = await dbProvider.database;
+    //Using full text search sql table Note
+    final List<Map<String, dynamic>> notes =
+    await db.rawQuery(SELECT_THUMBNAILS_BY_TAGID , [tagId]);
+
+    if (notes.isNotEmpty) {
+      List<ThumbnailNote> thumbs = new List<ThumbnailNote>();
+      for (var note in notes) {
+        var thumb = await getThumbnailByID(note['note_id']);
+        thumbs.add(thumb);
       }
       return thumbs;
     } else

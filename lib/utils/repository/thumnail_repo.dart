@@ -8,6 +8,7 @@ class ThumbnailRepository {
 
   Future findThumbnailByKeyWord(String keyword) => thumbnailDao.findThumbnailByKeyWord(keyword);
   Future findThumbnailByKeyWordAll(String keyword) => thumbnailDao.findThumbnailByKeyWordAll(keyword);
+  Future findThumbnailByTagId(String tagId) => thumbnailDao.findThumbnailByTagId(tagId);
 
   Future getAllThumbnails({String query}) => thumbnailDao.getThumbnails(query: query);
 
