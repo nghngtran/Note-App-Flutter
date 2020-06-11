@@ -13,7 +13,7 @@ class NoteCreatedModel extends BaseModel {
     notifyListeners();
   }
 
-  void loadDataByKeyword(String key) async {
+  Future<void> loadDataByKeyword(String key) async {
     if(key.compareTo("") == 0)
       listNoteCreated = await noteBus.getThumbnails();
     else
@@ -31,7 +31,9 @@ class NoteCreatedModel extends BaseModel {
   }
 
   List<ThumbnailNote> getNoteCreated() {
+//    notifyListeners();
     return listNoteCreated;
+
   }
 
   void clear() {

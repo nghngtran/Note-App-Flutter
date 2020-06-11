@@ -112,8 +112,8 @@ class HomeScreenState extends State<HomeScreen>
               Navigator.pop(context);
               return;
             }
-            //_clearSearchQuery();
-            search(context);
+            _clearSearchQuery();
+//            search(context);
           },
         ),
       ];
@@ -130,16 +130,18 @@ class HomeScreenState extends State<HomeScreen>
   }
 
   Widget search(BuildContext context) {
-    return ChangeNotifierProvider(create:(context)=> NoteCreatedModel(), child : SingleChildScrollView(
-        child: Container(
+    return  Container(
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height,
-            child: Consumer<NoteCreatedModel>(
+            child:    Consumer<NoteCreatedModel>(
                 builder: (context, listTBNote, _) {
+
                   listTBNote.loadDataByKeyword(_searchQuery.text);
-                  print("SEARCH: " + _searchQuery.text);
+                  //print(listTBNote);
+                  for(var i in listTBNote.getNoteCreated()) {
+                      print(i.toString()); }
                   if (listTBNote.listSize > 0) {
-                    return NoteGrid(listTBNote.getNoteCreated());
+                    return NoteGrid(listTBNote.listNoteCreated);
                   }
                   return Center(
                       child: Text(
@@ -148,8 +150,7 @@ class HomeScreenState extends State<HomeScreen>
                               color: Theme.of(context)
                                   .iconTheme
                                   .color)));
-                })))
-    );
+                }));
   }
 
   Widget build(BuildContext context) {

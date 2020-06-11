@@ -17,6 +17,9 @@ class CustomTag extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
         onTap: () {},
+        onLongPress: (){
+
+        },
         child: Wrap(children: <Widget>[
           Container(
               margin: EdgeInsets.only(

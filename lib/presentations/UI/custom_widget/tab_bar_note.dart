@@ -5,16 +5,31 @@ import 'package:note_app/presentations/UI/custom_widget/custom_type_tag.dart';
 import 'package:note_app/utils/bus/tag_bus.dart';
 import 'package:note_app/utils/dao/tag_dao.dart';
 import 'package:note_app/utils/model/tag.dart';
+import 'package:note_app/view_model/list_tag_view_model.dart';
 import 'package:note_app/view_model/note_view_model.dart';
 import 'package:note_app/presentations/UI/custom_widget/custom_text_style.dart';
+import 'package:autocomplete_textfield/autocomplete_textfield.dart';
+class CreateTagNote extends StatefulWidget{
 
-class CreateTagNote extends StatelessWidget {
-  Tag tag = new Tag();
-  final textController = TextEditingController();
   final NoteViewModel noteModel;
   CreateTagNote(this.noteModel);
+//  CreateTagNoteState creatState() => CreateTagNoteState();
+
+  @override
+  State<StatefulWidget> createState() {
+  return CreateTagNoteState();
+  }
+
+}
+
+class CreateTagNoteState extends State<CreateTagNote> {
+  Tag tag = new Tag();
+//  Tag tagCreated;
+  TagCreatedModel tagCreatedModel = TagCreatedModel();
+  final textController = TextEditingController();
   Widget build(BuildContext context) {
     tag.setColor(Colors.green);
+    tagCreatedModel.loadData();
     return Container(
         width: MediaQuery.of(context).size.width / 100 * 80,
         height: MediaQuery.of(context).size.height / 100 * 20,
@@ -40,30 +55,51 @@ class CreateTagNote extends StatelessWidget {
                   SizedBox(width: MediaQuery.of(context).size.width / 100),
                   Expanded(
                       flex: 7,
-                      child: TextField(
-                        controller: textController,
-                        textAlign: TextAlign.start,
-                        style: TextStyle(
-                            fontSize: 18,
-                            color: Theme.of(context).iconTheme.color),
-                        decoration: InputDecoration(
-                            alignLabelWithHint: true,
-                            enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(5),
-                                borderSide: BorderSide(
-                                    color: Theme.of(context).iconTheme.color,
-                                    width: 1)),
-                            focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(5),
-                                borderSide: BorderSide(
-                                    color: Theme.of(context).iconTheme.color,
-                                    width: 1)),
-                            hintText: "Enter tag's name",
-                            contentPadding: EdgeInsets.fromLTRB(5, 15, 0, 15),
-                            hintStyle: TextStyle(
-                                color: Theme.of(context).iconTheme.color,
-                                fontSize: 13)),
-                      )),
+                      child:
+                      AutoCompleteTextField<Tag>(
+                          style: new TextStyle(color: Colors.black, fontSize: 16.0),
+                          decoration: new InputDecoration(
+                              suffixIcon: Container(
+                                width: 85.0,
+                                height: 60.0,
+                              ),
+                              contentPadding: EdgeInsets.fromLTRB(10.0, 30.0, 10.0, 20.0),
+                              filled: true,
+                              hintText: 'Search Player Name',
+                              hintStyle: TextStyle(color: Colors.black)),
+                          itemSubmitted: (item) {
+//                            setState(() => searchTextField.textField.controller.text =
+//                                item.autocompleteterm);
+                          setState(() {
+                            textController.text = item.title;
+                          });
+                          },
+                          clearOnSubmit: false,
+                          key: widget.key,
+                          suggestions: tagCreatedModel.getTagCreated(),
+                          itemBuilder: (context, item) {
+                            return Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: <Widget>[
+                                Text(item.title,
+                                  style: TextStyle(
+                                      fontSize: 16.0, color: Theme.of(context).iconTheme.color
+                                  ),),
+
+                              ],
+                            );
+                          },
+                          itemSorter: (a, b) {
+                            return a.title.compareTo(b.title);
+                          },
+                          itemFilter: (item, query) {
+                            return item.title
+                                .toLowerCase()
+                                .startsWith(query.toLowerCase());
+                          }),
+
+
+                  ),
                   SizedBox(width: MediaQuery.of(context).size.width / 100 * 2),
                 ])),
             Expanded(
@@ -117,7 +153,7 @@ class CreateTagNote extends StatelessWidget {
 //                          Provider.of<TagCreated>(context, listen: true)
 //                              .addTag(tag);
 
-                          noteModel.addTag(tag);
+                          widget.noteModel.addTag(tag);
                           Navigator.of(context).pop();
                         },
                         shape: RoundedRectangleBorder(
@@ -129,6 +165,9 @@ class CreateTagNote extends StatelessWidget {
           ],
         ));
   }
+
+
+
 }
 
 class DropDownButtonNote extends StatefulWidget {
