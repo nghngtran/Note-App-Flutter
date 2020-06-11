@@ -19,17 +19,29 @@ class ThumbnailBUS {
     getThumbnails();
   }
 
+  getThumbnailsByTag(String tagId) async{
+    final stopwatch = Stopwatch()..start();
+    var res =  await _thumbnailRepository.findThumbnailByTagId(tagId);
+    print('[Time] Query Search by Tag executed in ${stopwatch.elapsed}');
+    return res;
+  }
+
   getThumbnailsByKeyWordAll(String keyword) async{
-    return await await _thumbnailRepository.findThumbnailByKeyWordAll(keyword);
+    final stopwatch = Stopwatch()..start();
+    var res =  await _thumbnailRepository.findThumbnailByKeyWordAll(keyword);
+    print('[Time] Query Search All executed in ${stopwatch.elapsed}');
+    return res;
   }
   getThumbnailsByKeyWord(String keyword) async{
-    return await await _thumbnailRepository.findThumbnailByKeyWord(keyword);
+    return await _thumbnailRepository.findThumbnailByKeyWord(keyword);
   }
   getThumbnails({String query}) async {
     //sink is a way of adding data reactively to the stream
     //by registering a new event
+    final stopwatch = Stopwatch()..start();
     var result = await _thumbnailRepository.getAllThumbnails(query: query);
     //_thumbnailController.sink.add(result);
+    print('[Time] Query Thumbnail executed in ${stopwatch.elapsed}');
     return result;
   }
 
