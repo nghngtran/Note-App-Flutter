@@ -26,10 +26,15 @@ class CreateTagNoteState extends State<CreateTagNote> {
   Tag tag = new Tag();
 //  Tag tagCreated;
   TagCreatedModel tagCreatedModel = TagCreatedModel();
+  void initState(){
+    super.initState();
+    tagCreatedModel.loadData();
+  }
   final textController = TextEditingController();
   Widget build(BuildContext context) {
     tag.setColor(Colors.green);
-    tagCreatedModel.loadData();
+    for(var i in tagCreatedModel.getTagCreated())
+      print(i.title);
     return Container(
         width: MediaQuery.of(context).size.width / 100 * 80,
         height: MediaQuery.of(context).size.height / 100 * 20,
@@ -65,14 +70,14 @@ class CreateTagNoteState extends State<CreateTagNote> {
                               ),
                               contentPadding: EdgeInsets.fromLTRB(10.0, 30.0, 10.0, 20.0),
                               filled: true,
-                              hintText: 'Search Player Name',
+
                               hintStyle: TextStyle(color: Colors.black)),
                           itemSubmitted: (item) {
 //                            setState(() => searchTextField.textField.controller.text =
 //                                item.autocompleteterm);
-                          setState(() {
+
                             textController.text = item.title;
-                          });
+
                           },
                           clearOnSubmit: false,
                           key: widget.key,

@@ -86,18 +86,22 @@ class _CustomPaintPageState extends State<CustomPaintPage> {
               Navigator.of(context)
                   .push(MaterialPageRoute(builder: (BuildContext context) {
                 return Scaffold(
+                  backgroundColor: Theme.of(context).backgroundColor,
                   appBar: AppBar(
-                    backgroundColor: Color.fromRGBO(255, 209, 16, 1.0),
                     actions: <Widget>[
                       IconButton(
-                          icon: Icon(Icons.check),
+                          icon: Icon(Icons.check,
+                              color: Theme.of(context).iconTheme.color),
                           onPressed: () {
                             NoteItem tmp = NoteItem("Image");
                             print(widget.model.getListItems().length);
+                            print(widget.path.toString());
                             tmp.content = widget.path.toString();
                             Provider.of<Notes>(context, listen: false)
                                 .addNoteItem(tmp);
                             widget.model.addNoteItem(tmp);
+
+//                          --- luu file anh(doan tren)
 //                            widget.model
 //                                .setContentChildItem(widget.path.toString());
 
@@ -109,7 +113,9 @@ class _CustomPaintPageState extends State<CustomPaintPage> {
                           })
                     ],
                     elevation: 0.0,
-                    title: Text('View your image'),
+                    title: Text('View your image',
+                        style: TextStyle(
+                            color: Theme.of(context).iconTheme.color)),
                   ),
                   body: Container(
                     child: Image.memory(bytes),
@@ -121,10 +127,11 @@ class _CustomPaintPageState extends State<CustomPaintPage> {
     }
     return Scaffold(
       appBar: AppBar(
-          backgroundColor: Color.fromRGBO(255, 209, 16, 1.0),
+          backgroundColor: Theme.of(context).backgroundColor,
 //          backgroundColor: Colors.transparent,
           elevation: 0.0,
-          title: Text('Edit image'),
+          title: Text('Edit image',
+              style: TextStyle(color: Theme.of(context).iconTheme.color)),
           actions: actions,
           bottom: PreferredSize(
             child: DrawBar(_controller),
@@ -200,12 +207,14 @@ class _ColorPickerButtonState extends State<ColorPickerButton> {
             fullscreenDialog: true,
             builder: (BuildContext context) {
               return Scaffold(
+                  backgroundColor: Theme.of(context).backgroundColor,
                   appBar: AppBar(
-                    leading: BackButton(),
-                    backgroundColor: Color.fromRGBO(255, 209, 16, 1.0),
-//          backgroundColor: Colors.transparent,
+                    leading:
+                        BackButton(color: Theme.of(context).iconTheme.color),
                     elevation: 0.0,
-                    title: Text('Pick color'),
+                    title: Text('Pick color',
+                        style: TextStyle(
+                            color: Theme.of(context).iconTheme.color)),
                   ),
                   body: Container(
                       alignment: Alignment.center,

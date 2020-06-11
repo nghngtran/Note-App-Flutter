@@ -1,17 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:note_app/presentations/UI/custom_widget/custom_list_notes.dart';
-
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:note_app/presentations/UI/custom_widget/custom_note_card.dart';
 import 'package:note_app/presentations/UI/custom_widget/custom_type_tag.dart';
 import 'package:note_app/presentations/UI/page/base_view.dart';
 import 'package:note_app/presentations/UI/page/create_note.dart';
-import 'package:note_app/presentations/UI/page/image_pick.dart';
 import 'package:note_app/utils/bus/tag_bus.dart';
-import 'package:note_app/utils/bus/thumbnail_bus.dart';
-import 'package:scoped_model/scoped_model.dart';
 import 'package:note_app/utils/model/tag.dart';
-import 'package:note_app/utils/model/thumbnailNote.dart';
+
 import 'package:note_app/view_model/list_tb_note_view_model.dart';
 import 'package:note_app/view_model/list_tag_view_model.dart';
 import 'package:note_app/view_model/tag_view_model.dart';
@@ -112,8 +109,8 @@ class HomeScreenState extends State<HomeScreen>
               Navigator.pop(context);
               return;
             }
-            _clearSearchQuery();
-//            search(context);
+            //_clearSearchQuery();
+            search(context);
           },
         ),
       ];
@@ -130,18 +127,16 @@ class HomeScreenState extends State<HomeScreen>
   }
 
   Widget search(BuildContext context) {
-    return  Container(
+    return ChangeNotifierProvider(create:(context)=> NoteCreatedModel(), child : SingleChildScrollView(
+        child: Container(
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height,
-            child:    Consumer<NoteCreatedModel>(
+            child: Consumer<NoteCreatedModel>(
                 builder: (context, listTBNote, _) {
-
                   listTBNote.loadDataByKeyword(_searchQuery.text);
-                  //print(listTBNote);
-                  for(var i in listTBNote.getNoteCreated()) {
-                      print(i.toString()); }
+                  print("SEARCH: " + _searchQuery.text);
                   if (listTBNote.listSize > 0) {
-                    return NoteGrid(listTBNote.listNoteCreated);
+                    return NoteGrid(listTBNote.getNoteCreated());
                   }
                   return Center(
                       child: Text(
@@ -150,7 +145,8 @@ class HomeScreenState extends State<HomeScreen>
                               color: Theme.of(context)
                                   .iconTheme
                                   .color)));
-                }));
+                })))
+    );
   }
 
   Widget build(BuildContext context) {

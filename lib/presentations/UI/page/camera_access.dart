@@ -7,13 +7,6 @@ import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' show join;
 
 class TakePictureScreen extends StatefulWidget {
-//  final CameraDescription camera;
-
-//  const TakePictureScreen({
-//    Key key,
-//    @required this.camera,
-//  }) : super(key: key);
-
   @override
   TakePictureScreenState createState() => TakePictureScreenState();
 }
@@ -143,19 +136,6 @@ class TakePictureScreenState extends State<TakePictureScreen> {
       // 3
       print('Error: $err.code\nError Message: $err.message');
     });
-    // To display the current output from the Camera,
-    // create a CameraController.
-//    availableCameras().then((availableCameras) {
-//    _controller = CameraController(
-//      // Get a specific camera from the list of available cameras.
-//      widget.camera,
-//      // Define the resolution to use.
-//      ResolutionPreset.medium,
-//    );
-
-//    // Next, initialize the controller. This returns a Future.
-//    _initializeControllerFuture = _controller.initialize();
-//    });
   }
 
   @override
@@ -234,7 +214,10 @@ class DisplayPictureScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Display the Picture')),
+      backgroundColor: Theme.of(context).backgroundColor,
+      appBar: AppBar(
+          title: Text('Display the Picture',
+              style: TextStyle(color: Theme.of(context).iconTheme.color))),
       body: GestureDetector(
           onTap: () {
             Navigator.of(context).pushNamed('image_pick');
