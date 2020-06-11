@@ -7,7 +7,6 @@ import 'package:note_app/utils/model/note.dart';
 import 'package:note_app/utils/model/noteItem.dart';
 import 'package:note_app/view_model/note_view_model.dart';
 import 'package:provider/provider.dart';
-import 'package:album_saver/album_saver.dart';
 
 class PickImage extends StatefulWidget {
   final NoteViewModel model;
@@ -78,20 +77,18 @@ class _PickImageState extends State<PickImage> {
         backgroundColor: Colors.white,
         resizeToAvoidBottomPadding: false,
         appBar: AppBar(
-          title: Text('Select image', style: TextStyle(color: Colors.black)),
-          backgroundColor: Color.fromRGBO(255, 209, 16, 1.0),
-          leading: BackButton(
-            color: Colors.black,
-            onPressed: () {
-              NoteItem noteItem =
-                  Provider.of<Notes>(context, listen: true).contents.last;
-              Provider.of<Notes>(context, listen: true)
-                  .removeNoteItem(noteItem);
-              Navigator.of(context).pop();
-            },
-          ),
-        ),
-//                            tmp.content = widget.img.toString();),
+            title: Text('Select image', style: TextStyle(color: Colors.black)),
+            backgroundColor: Color.fromRGBO(255, 209, 16, 1.0),
+            leading: BackButton(
+              color: Colors.black,
+              onPressed: () {
+                NoteItem noteItem =
+                    Provider.of<Notes>(context, listen: true).contents.last;
+                Provider.of<Notes>(context, listen: true)
+                    .removeNoteItem(noteItem);
+                Navigator.of(context).pop();
+              },
+            )),
         body: Column(children: <Widget>[
           SizedBox(height: h * 3),
           Expanded(flex: 8, child: showImage(context)),
