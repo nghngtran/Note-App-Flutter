@@ -63,6 +63,7 @@ dev_dependencies:
   flutter_spinkit: ^4.1.2+1
   scoped_model: ^1.0.1
   autocomplete_textfield: ^1.6.4
+  gallery_saver: ^2.0.1
 
 
 # For information on the generic Dart part of this file, see the

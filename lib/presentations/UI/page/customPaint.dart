@@ -7,6 +7,7 @@ import 'package:note_app/utils/model/noteItem.dart';
 import 'package:note_app/view_model/note_view_model.dart';
 import 'package:note_app/utils/model/note.dart';
 import 'package:painter2/painter2.dart';
+import 'package:gallery_saver/gallery_saver.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -105,14 +106,10 @@ class _CustomPaintPageState extends State<CustomPaintPage> {
                     actions: <Widget>[
                       IconButton(
                           icon: Icon(Icons.check),
-
                           onPressed: () async {
                             print("save " + widget.img.path);
                             await GallerySaver.saveImage(widget.img.path,
                                 albumName: "NoteApp");
-
-
-                          onPressed: () {
 
                             NoteItem tmp = NoteItem("Image");
 //                            print(widget.model.getListItems().length);
