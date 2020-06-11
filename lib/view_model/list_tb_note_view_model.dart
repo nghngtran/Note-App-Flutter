@@ -9,8 +9,7 @@ class NoteCreatedModel extends BaseModel {
   List<ThumbnailNote> listNoteCreated = [];
 
   void loadData() async {
-    Future.delayed(Duration(microseconds: 100000),
-        () async => listNoteCreated = await noteBus.getThumbnails());
+    listNoteCreated = await noteBus.getThumbnails();
     notifyListeners();
   }
 
@@ -19,7 +18,6 @@ class NoteCreatedModel extends BaseModel {
       listNoteCreated = await noteBus.getThumbnails();
     else
       listNoteCreated = await noteBus.getThumbnailsByKeyWordAll(key);
-//    notifyListeners();
   }
 
   int get listSize {

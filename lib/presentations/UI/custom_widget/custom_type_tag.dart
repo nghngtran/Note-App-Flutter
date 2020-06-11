@@ -77,8 +77,7 @@ class TagBar extends StatelessWidget {
                           backgroundColor: Theme.of(context).backgroundColor,
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(5)),
-//                          child: CreateTag(model)
-                      ));
+                          child: CreateTag(model)));
                 },
                 child: Icon(Icons.add,
                     size: 20, color: Theme.of(context).iconTheme.color),
