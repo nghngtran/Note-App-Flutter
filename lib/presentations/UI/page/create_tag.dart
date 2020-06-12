@@ -9,28 +9,12 @@ import 'package:note_app/view_model/list_tag_view_model.dart';
 import 'package:note_app/presentations/UI/custom_widget/custom_text_style.dart';
 import 'package:autocomplete_textfield/autocomplete_textfield.dart';
 
-class CreateTag extends StatefulWidget {
-  final TagCreatedModel tagCreatedModel;
-  CreateTag(this.tagCreatedModel);
-  CreateTagState createState() => CreateTagState();
-}
-
-class CreateTagState extends State<CreateTag> {
+class CreateTag extends StatelessWidget {
   var key = new GlobalKey();
   Tag tag = new Tag();
-  bool valid;
   final textController = TextEditingController();
-  void initState() {
-    super.initState();
-    setState(() {
-      valid = true;
-    });
-  }
-
-  void dispose() {
-    super.dispose();
-    textController.dispose();
-  }
+  final TagCreatedModel tagCreatedModel;
+  CreateTag(this.tagCreatedModel);
 
   Widget build(BuildContext context) {
     tag.setColor(Colors.green);
@@ -50,19 +34,7 @@ class CreateTagState extends State<CreateTag> {
                 style: Theme.of(context).textTheme.title.copyWith(
                     fontWeight: Font.SemiBold,
                     color: Theme.of(context).iconTheme.color)),
-            (!valid)
-                ? Expanded(
-                    child: Container(
-                        alignment: Alignment.topRight,
-                        padding: EdgeInsets.only(
-                            right: MediaQuery.of(context).size.width / 100 * 2),
-                        child: Text("Tag exists!",
-                            style: TextStyle(
-                                fontSize: 12,
-                                fontWeight: Font.Regular,
-                                color: Colors.red))))
-                : SizedBox(
-                    height: MediaQuery.of(context).size.height / 100 * 2),
+            SizedBox(height: MediaQuery.of(context).size.height / 100 * 2),
             Expanded(
                 child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -154,16 +126,32 @@ class CreateTagState extends State<CreateTag> {
                                 fontWeight: Font.Regular,
                                 color: Colors.blue)),
                         onPressed: () async {
+//                          Provider.of<Tag>(context, listen: false)
+//                              .setTitle(textController.text);
                           tag.setTitle(textController.text);
+//                          Provider.of<Tag>(context, listen: false).setColor()
+//                              .setTitle(textController.text);
+
                           TagBUS tagbus = new TagBUS();
                           var stt = await tagbus.addTag(tag);
-                          if (stt) {
-                            widget.tagCreatedModel.addToList(tag);
-                            Navigator.of(context).pop();
-                          }
-                          setState(() {
-                            valid = false;
-                          });
+//                          print(stt);
+//                          print("|TAG|");
+//                          var _listTags = await tagbus.getTags();
+//                          List<Tag> listTags = List<Tag>();
+//                          _listTags.forEach((tag) => listTags.add(tag));
+//                          listTags.forEach((listT) => print(listT));
+//                          print("|TAG|");
+//
+//                             ThumbnailBUS thumbnailbus = new ThumbnailBUS();
+//                          ThumbnailNote thumb = new ThumbnailNote("note1", "day la thumbnail", listTags, "day la noi dung", DateTime.now());
+//                          thumbnailbus.addThumbnail(thumb);
+//
+//                          var _listThumbnail = await thumbnailbus.getThumbnails();
+//                          _listThumbnail.forEach((thumbnail) => print(thumbnail));
+//                          Provider.of<TagCreated>(context, listen: true)
+//                              .addTag(tag);
+                          tagCreatedModel.addToList(tag);
+                          Navigator.of(context).pop();
                         },
                         shape: RoundedRectangleBorder(
                             borderRadius: new BorderRadius.circular(5),

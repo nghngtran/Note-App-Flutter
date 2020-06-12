@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:note_app/application/constants.dart';
 import 'package:note_app/presentations/UI/custom_widget/custom_type_tag.dart';
-import 'package:note_app/presentations/UI/page/base_view.dart';
 import 'package:note_app/utils/bus/tag_bus.dart';
 import 'package:note_app/utils/dao/tag_dao.dart';
 import 'package:note_app/utils/model/tag.dart';
@@ -50,6 +49,17 @@ class CreateTagNoteState extends State<CreateTagNote> {
     textController.dispose();
   }
 
+}
+
+class CreateTagNoteState extends State<CreateTagNote> {
+  Tag tag = new Tag();
+//  Tag tagCreated;
+  TagCreatedModel tagCreatedModel = TagCreatedModel();
+  void initState(){
+    super.initState();
+    tagCreatedModel.loadData();
+  }
+  final textController = TextEditingController();
   Widget build(BuildContext context) {
     for (var i in tagsCreated) {
       print(i.title);
@@ -255,6 +265,9 @@ class CreateTagNoteState extends State<CreateTagNote> {
           ],
         ));
   }
+
+
+
 }
 
 class DropDownButtonNote extends StatefulWidget {
@@ -369,6 +382,7 @@ class CustomTagNote extends StatelessWidget {
               margin: EdgeInsets.only(
                   left: 4 * MediaQuery.of(context).size.width / 100,
                   top: MediaQuery.of(context).size.height / 100),
+//            width: MediaQuery.of(context).size.width / 100 * 25,
               height: MediaQuery.of(context).size.height / 100 * 5,
               padding: EdgeInsets.fromLTRB(
                   MediaQuery.of(context).size.width / 100 * 2,
