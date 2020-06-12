@@ -14,9 +14,9 @@ class NoteCreatedModel extends BaseModel {
     notifyListeners();
   }
 
-  void loadDataByTag(String tagId) async {
+  Future<void> loadDataByTag(String tagId) async {
     listNoteCreated = await noteBus.getThumbnailsByTag(tagId);
-    notifyListeners();
+    //notifyListeners();
   }
 
   Future<void> loadDataByKeyword(String key) async {
