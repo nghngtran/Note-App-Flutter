@@ -29,12 +29,13 @@ class CreateTagNoteState extends State<CreateTagNote> {
   void initState(){
     super.initState();
     tagCreatedModel.loadData();
+    print("AHIHI");
+    for(var i in tagCreatedModel.getTagCreated())
+      print(i.title);
   }
   final textController = TextEditingController();
   Widget build(BuildContext context) {
     tag.setColor(Colors.green);
-    for(var i in tagCreatedModel.getTagCreated())
-      print(i.title);
     return Container(
         width: MediaQuery.of(context).size.width / 100 * 80,
         height: MediaQuery.of(context).size.height / 100 * 20,
