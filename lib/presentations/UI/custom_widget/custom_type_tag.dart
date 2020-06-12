@@ -13,10 +13,13 @@ import 'package:note_app/presentations/UI/custom_widget/custom_text_style.dart';
 
 class CustomTag extends StatelessWidget {
   Tag tag;
-  CustomTag(Tag _tag) : tag = _tag;
+  final ValueChanged<String> parentAction;
+  CustomTag(Tag _tag, ValueChanged<String> _parent) : tag = _tag, parentAction = _parent;
   Widget build(BuildContext context) {
     return GestureDetector(
-        onTap: () {},
+        onTap: () {
+          parentAction(tag.id);
+        },
         onLongPress: () {
           TagBUS tagbus = new TagBUS();
           tagbus.deleteTagById(tag.id);
@@ -51,10 +54,12 @@ class CustomTag extends StatelessWidget {
 
 class TagBar extends StatelessWidget {
   ScrollController horizontal;
-  TagBar(ScrollController _scroll, TagCreatedModel _model)
+  TagBar(ScrollController _scroll, TagCreatedModel _model, ValueChanged<String> _parent)
       : horizontal = _scroll,
-        model = _model;
+        model = _model,
+        parentAction = _parent;
   TagCreatedModel model;
+  final ValueChanged<String> parentAction; ////callback
 
   Widget build(BuildContext context) {
     model.loadData();
@@ -96,7 +101,7 @@ class TagBar extends StatelessWidget {
                       itemCount: model.getTagCreated().length,
                       itemBuilder: (context, index) {
                         final item = model.getTagCreated()[index];
-                        return CustomTag(item);
+                        return CustomTag(item, parentAction);
                       })))
         ]);
   }

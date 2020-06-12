@@ -27,6 +27,7 @@ class HomeScreenState extends State<HomeScreen>
     with SingleTickerProviderStateMixin {
   TagCreatedModel model = TagCreatedModel();
   bool _isSearching = false;
+  String SearchTag = "";
   String searchQuery = "Search for a word ...";
   TextEditingController _searchQuery;
 
@@ -68,6 +69,14 @@ class HomeScreenState extends State<HomeScreen>
 
     setState(() {
       _isSearching = true;
+    });
+  }
+
+  _updateMyTitle(String text) { /////function callback from tag class
+    print("CHOSEN TAG: " + text);
+    setState(() {
+      SearchTag = text;
+      _stopSearching();
     });
   }
 
@@ -217,7 +226,7 @@ class HomeScreenState extends State<HomeScreen>
                   Consumer<TagCreatedModel>(
                       builder: (context, tagCreatedModel, _) {
                     tagCreatedModel.loadData();
-                    return TagBar(mainController, tagCreatedModel);
+                    return TagBar(mainController, tagCreatedModel, _updateMyTitle);
                   }),
                   (!_isSearching)
                       ? SingleChildScrollView(
@@ -226,7 +235,13 @@ class HomeScreenState extends State<HomeScreen>
                               height: MediaQuery.of(context).size.height,
                               child: Consumer<NoteCreatedModel>(
                                   builder: (context, listTBNote, _) {
-                                listTBNote.loadData();
+                                if(SearchTag.compareTo("") == 0)    { listTBNote.loadData(); }
+                                else {
+                                  listTBNote.loadDataByTag(SearchTag);
+                                  SearchTag = "";
+                                  for(var i in listTBNote.getNoteCreated())
+                                    print("SOMETHING: "  + i.title);
+                                }
                                 if (listTBNote.listSize > 0) {
                                   return NoteGrid(listTBNote.getNoteCreated());
                                 }

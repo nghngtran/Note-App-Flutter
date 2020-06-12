@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:note_app/utils/bus/note_bus.dart';
 import 'package:note_app/utils/bus/thumbnail_bus.dart';
 import 'package:note_app/utils/model/note.dart';
@@ -10,6 +11,11 @@ class NoteCreatedModel extends BaseModel {
 
   void loadData() async {
     listNoteCreated = await noteBus.getThumbnails();
+    notifyListeners();
+  }
+
+  void loadDataByTag(String tagId) async {
+    listNoteCreated = await noteBus.getThumbnailsByTag(tagId);
     notifyListeners();
   }
 
