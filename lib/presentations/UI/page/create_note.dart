@@ -257,14 +257,14 @@ class CreateNoteState extends State<CreateNote> {
                             final NoteBUS noteBus = NoteBUS();
                             await noteBus.addNote(note);
 
-                            final ThumbnailBUS thumbBus = ThumbnailBUS();
-                            print("|Load FTS|");
-                            var thumbs = await thumbBus.getThumbnailsByKeyWordAll("abcd");
-                            for (var thumb in thumbs) {
-                              print(thumb.toString());
-//                              //noteCreatedModel.addToList(thumb);
-                            }
-                            print("|Load FTS|");
+//                            final ThumbnailBUS thumbBus = ThumbnailBUS();
+//                            print("|Load FTS|");
+//                            var thumbs = await thumbBus.getThumbnailsByKeyWordAll("abcd");
+//                            for (var thumb in thumbs) {
+//                              print(thumb.toString());
+////                              //noteCreatedModel.addToList(thumb);
+//                            }
+//                            print("|Load FTS|");
 
                             Navigator.of(context)
                                 .push(MaterialPageRoute(builder: (context) {
@@ -416,7 +416,7 @@ class NoteItemWidget extends StatelessWidget {
       return EditText(item);
     } else if (item.type == "Image") {
       enCodeImg();
-      print("Bytes:"+bytes.toString());
+      print("Bytes:" + bytes.toString());
       return Container(
           width: w * 100,
           height: w * 100,
