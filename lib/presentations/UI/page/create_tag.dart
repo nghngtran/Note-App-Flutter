@@ -3,18 +3,41 @@ import 'package:flutter/material.dart';
 import 'package:note_app/application/constants.dart';
 import 'package:note_app/utils/bus/note_bus.dart';
 import 'package:note_app/utils/bus/tag_bus.dart';
+import 'package:note_app/utils/bus/thumbnail_bus.dart';
+import 'package:note_app/utils/dao/note_dao.dart';
+import 'package:note_app/utils/dao/tag_dao.dart';
+import 'package:note_app/utils/dao/thumbnail_dao.dart';
+import 'package:note_app/utils/database/database.dart';
+import 'package:note_app/utils/model/note.dart';
+import 'package:note_app/utils/model/noteItem.dart';
 import 'package:note_app/utils/model/tag.dart';
 import 'package:note_app/utils/model/thumbnailNote.dart';
 import 'package:note_app/view_model/list_tag_view_model.dart';
 import 'package:note_app/presentations/UI/custom_widget/custom_text_style.dart';
 import 'package:autocomplete_textfield/autocomplete_textfield.dart';
 
-class CreateTag extends StatelessWidget {
-  var key = new GlobalKey();
-  Tag tag = new Tag();
-  final textController = TextEditingController();
+class CreateTag extends StatefulWidget {
   final TagCreatedModel tagCreatedModel;
   CreateTag(this.tagCreatedModel);
+  CreateTagState createState() => CreateTagState();
+}
+
+class CreateTagState extends State<CreateTag> {
+  var key = new GlobalKey();
+  Tag tag = new Tag();
+  bool valid;
+  final textController = TextEditingController();
+  void initState() {
+    super.initState();
+    setState(() {
+      valid = true;
+    });
+  }
+
+  void dispose() {
+    super.dispose();
+    textController.dispose();
+  }
 
   Widget build(BuildContext context) {
     tag.setColor(Colors.green);
@@ -34,7 +57,19 @@ class CreateTag extends StatelessWidget {
                 style: Theme.of(context).textTheme.title.copyWith(
                     fontWeight: Font.SemiBold,
                     color: Theme.of(context).iconTheme.color)),
-            SizedBox(height: MediaQuery.of(context).size.height / 100 * 2),
+            (!valid)
+                ? Expanded(
+                    child: Container(
+                        alignment: Alignment.topRight,
+                        padding: EdgeInsets.only(
+                            right: MediaQuery.of(context).size.width / 100 * 2),
+                        child: Text("Tag exists!",
+                            style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: Font.Regular,
+                                color: Colors.red))))
+                : SizedBox(
+                    height: MediaQuery.of(context).size.height / 100 * 2),
             Expanded(
                 child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -126,32 +161,16 @@ class CreateTag extends StatelessWidget {
                                 fontWeight: Font.Regular,
                                 color: Colors.blue)),
                         onPressed: () async {
-//                          Provider.of<Tag>(context, listen: false)
-//                              .setTitle(textController.text);
                           tag.setTitle(textController.text);
-//                          Provider.of<Tag>(context, listen: false).setColor()
-//                              .setTitle(textController.text);
-
                           TagBUS tagbus = new TagBUS();
                           var stt = await tagbus.addTag(tag);
-//                          print(stt);
-//                          print("|TAG|");
-//                          var _listTags = await tagbus.getTags();
-//                          List<Tag> listTags = List<Tag>();
-//                          _listTags.forEach((tag) => listTags.add(tag));
-//                          listTags.forEach((listT) => print(listT));
-//                          print("|TAG|");
-//
-//                             ThumbnailBUS thumbnailbus = new ThumbnailBUS();
-//                          ThumbnailNote thumb = new ThumbnailNote("note1", "day la thumbnail", listTags, "day la noi dung", DateTime.now());
-//                          thumbnailbus.addThumbnail(thumb);
-//
-//                          var _listThumbnail = await thumbnailbus.getThumbnails();
-//                          _listThumbnail.forEach((thumbnail) => print(thumbnail));
-//                          Provider.of<TagCreated>(context, listen: true)
-//                              .addTag(tag);
-                          tagCreatedModel.addToList(tag);
-                          Navigator.of(context).pop();
+                          if (stt) {
+                            widget.tagCreatedModel.addToList(tag);
+                            Navigator.of(context).pop();
+                          }
+                          setState(() {
+                            valid = false;
+                          });
                         },
                         shape: RoundedRectangleBorder(
                             borderRadius: new BorderRadius.circular(5),
