@@ -17,7 +17,9 @@ class Audio extends NoteItem {
 }
 
 class NoteViewModel extends BaseModel {
-  String title = "New untitled note";
+
+  String title = "Untitled note";
+
   List<Tag> tags = [];
   List<NoteItem> contents = [];
   int get size {
@@ -119,5 +121,4 @@ class NoteViewModel extends BaseModel {
   NoteItem getNoteItemAt(index) {
     return this.contents[index];
   }
-
 }

@@ -17,7 +17,7 @@ class BaseModel extends ChangeNotifier {
 class TagCreatedModel extends BaseModel {
   TagBUS tagBus = TagBUS();
   List<Tag> listTagCreated = [];
-  void loadData() async {
+  Future<void> loadData() async {
     listTagCreated = await tagBus.getTags();
     notifyListeners();
   }

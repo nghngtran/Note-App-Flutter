@@ -4,6 +4,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:note_app/application/constants.dart';
 import 'package:note_app/presentations/UI/custom_widget/custom_text_style.dart';
 import 'package:note_app/presentations/UI/page/edit_note.dart';
+import 'package:note_app/utils/bus/note_bus.dart';
+import 'package:note_app/utils/bus/thumbnail_bus.dart';
 import 'package:note_app/utils/model/thumbnailNote.dart';
 
 class NoteCard extends StatefulWidget {
@@ -87,11 +89,20 @@ class NoteCardState extends State<NoteCard> {
 //    } else if (noteCard.imgUrl == null) {
     return InkWell(
         splashColor: Colors.blue.withAlpha(30),
-        onTap: () {Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => EditNote(noteCard)),
-        );},
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => EditNote(noteCard)),
+          );
+        },
+        onLongPress: () {
+//          Thumbnail xóa đúng, nhưng noteBus sai !!
+//          NoteBUS noteBus = NoteBUS();
+//          noteBus.getNoteById(noteCard.noteId);
+//          noteBus.deleteNoteById(noteCard.noteId);
+          ThumbnailBUS tbBus = ThumbnailBUS();
+          tbBus.deleteThumbnailById(noteCard.noteId);
+        },
         child: Container(
             margin: EdgeInsets.only(
                 top: 2 * MediaQuery.of(context).size.height / 100),
