@@ -20,6 +20,7 @@ class CustomTag extends StatelessWidget {
         onLongPress: (){
 
         },
+
         child: Wrap(children: <Widget>[
           Container(
               margin: EdgeInsets.only(

@@ -9,13 +9,14 @@ class ThumbnailNote {
   final String type;
   final Color color;
   final String content;
-  final DateTime modified_time;
+  final DateTime createdTime;
+  final DateTime modifiedTime;
 
   ThumbnailNote(this.noteId, this.title, this.tags, this.type, this.color,
-      this.content, this.modified_time);
+      this.content,this.createdTime, this.modifiedTime);
 
   ThumbnailNote.withOutTag(this.noteId, this.title, this.type, this.color,
-      this.content, this.modified_time) {
+      this.content,this.createdTime, this.modifiedTime) {
     this.tags = new List<Tag>();
   }
 
@@ -39,8 +40,10 @@ class ThumbnailNote {
         color.toString() +
         "\" Content=\"" +
         content +
+        "\" Created_Time=\"" +
+        createdTime.toString() +
         "\" Modified_Time=\"" +
-        modified_time.toString() +
+        modifiedTime.toString() +
         "\">\n\t<Tags>\n" +
         tag +
         "\t</Tags>\n" +
@@ -49,7 +52,7 @@ class ThumbnailNote {
   }
 
   ThumbnailNote.withBasicInfo(this.noteId, this.title, this.type, this.color,
-      this.content, this.modified_time) {
+      this.content,this.createdTime, this.modifiedTime) {
     this.tags = new List<Tag>();
   }
 
@@ -60,6 +63,7 @@ class ThumbnailNote {
           data['type'],
           Color(data['color']),
           data['content'],
+          DateTime.parse(data['created_time']),
           DateTime.parse(data['modified_time']));
 
   Map<String, dynamic> toDatabaseJson() {
@@ -70,7 +74,8 @@ class ThumbnailNote {
       'type': type,
       'color': color == null ? 0 : color.value,
       'content': content,
-      'modified_time': formatter.format(modified_time)
+      'created_time': formatter.format(createdTime),
+      'modified_time': formatter.format(modifiedTime)
     };
   }
 
@@ -83,5 +88,6 @@ class ThumbnailNote {
           data['type'],
           Color(data['color']),
           data['content'],
+          DateTime.parse(data['created_time']),
           DateTime.parse(data['modified_time']));
 }

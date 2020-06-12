@@ -5,9 +5,9 @@ import 'package:note_app/presentations/UI/custom_widget/custom_type_tag.dart';
 import 'package:note_app/utils/bus/tag_bus.dart';
 import 'package:note_app/utils/dao/tag_dao.dart';
 import 'package:note_app/utils/model/tag.dart';
-import 'package:note_app/view_model/list_tag_view_model.dart';
 import 'package:note_app/view_model/note_view_model.dart';
 import 'package:note_app/presentations/UI/custom_widget/custom_text_style.dart';
+
 import 'package:autocomplete_textfield/autocomplete_textfield.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
@@ -80,6 +80,7 @@ class CreateTagNoteState extends State<CreateTagNote> {
                 style: Theme.of(context).textTheme.title.copyWith(
                     fontWeight: Font.SemiBold,
                     color: Theme.of(context).iconTheme.color)),
+
             SizedBox(height: MediaQuery.of(context).size.height / 100 * 1),
             (!valid)
                 ? Expanded(
@@ -94,13 +95,7 @@ class CreateTagNoteState extends State<CreateTagNote> {
                                 color: Colors.red))))
                 : SizedBox(
                     height: MediaQuery.of(context).size.height / 100 * 1),
-            Expanded(
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: <Widget>[
-                  Wrap(children: <Widget>[DropDownButtonNote(tag)]),
-                  SizedBox(width: MediaQuery.of(context).size.width / 100),
-                  Expanded(
+
                     flex: 7,
                     child: AutoCompleteTextField<Tag>(
                         controller: textController,
@@ -207,6 +202,7 @@ class CreateTagNoteState extends State<CreateTagNote> {
 //                      key: null,
                         ),
                   ),
+
                   SizedBox(width: MediaQuery.of(context).size.width / 100 * 2),
                 ])),
             Expanded(
@@ -255,6 +251,7 @@ class CreateTagNoteState extends State<CreateTagNote> {
                           setState(() {
                             valid = false;
                           });
+                        
                         },
                         shape: RoundedRectangleBorder(
                             borderRadius: new BorderRadius.circular(5),

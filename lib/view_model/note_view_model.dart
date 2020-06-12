@@ -17,7 +17,9 @@ class Audio extends NoteItem {
 }
 
 class NoteViewModel extends BaseModel {
+
   String title = "Untitled note";
+
   List<Tag> tags = [];
   List<NoteItem> contents = [];
   int get size {
@@ -30,7 +32,6 @@ class NoteViewModel extends BaseModel {
   }
 
   List<NoteItem> getListItems() {
-    //
     return contents;
   }
 
@@ -40,9 +41,9 @@ class NoteViewModel extends BaseModel {
   }
 
   NoteViewModel() : super() {
-    //this.title = "New untitled note";
-    //this.tags = new List<Tag>();
-    //this.contents = new List<NoteItem>();
+    this.title = "New untitled note";
+    this.tags = new List<Tag>();
+    this.contents = new List<NoteItem>();
   }
 
   void Set(Notes pass) {

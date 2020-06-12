@@ -134,10 +134,11 @@ class HomeScreenState extends State<HomeScreen>
                         child: Text("No match!",
                             style: TextStyle(
                                 color: Theme.of(context).iconTheme.color))));
-          } else if (_searchQuery.text != null) {
-            return Center(
-                child: SpinKitCircle(color: Theme.of(context).iconTheme.color));
           }
+//          else if (_searchQuery.text != null) {
+//            return Center(
+//                child: SpinKitCircle(color: Theme.of(context).iconTheme.color));
+//          }
           return Container();
         });
   }
