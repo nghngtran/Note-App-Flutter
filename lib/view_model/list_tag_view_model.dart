@@ -39,10 +39,4 @@ class TagCreatedModel extends BaseModel {
     listTagCreated = [];
     notifyListeners();
   }
-
-//  Future getTags() async {
-//    applyState(ViewState.Busy);
-//    listTagCreated = await getTags();
-//    applyState(ViewState.Idle);
-//  }
 }
