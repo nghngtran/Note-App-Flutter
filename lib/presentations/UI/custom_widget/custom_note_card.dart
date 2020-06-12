@@ -110,8 +110,13 @@ class NoteCardState extends State<NoteCard> {
                 EdgeInsets.all(4 * MediaQuery.of(context).size.width / 100),
             width: 45 * MediaQuery.of(context).size.width / 100,
             decoration: BoxDecoration(
+              border: Border.all(
+                  color: Theme.of(context).iconTheme.color.withOpacity(0.6),
+                  width: 0.5),
               borderRadius: BorderRadius.all(Radius.circular(5)),
-              color: Colors.yellow,
+              color: (noteCard.color == Colors.transparent)
+                  ? Theme.of(context).backgroundColor
+                  : noteCard.color,
             ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -119,10 +124,11 @@ class NoteCardState extends State<NoteCard> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(noteCard.title,
-                    style: Theme.of(context)
-                        .textTheme
-                        .title
-                        .copyWith(color: Colors.black)),
+                    style: TextStyle(
+                        fontSize: 17,
+                        fontFamily: Font.Name,
+                        fontWeight: Font.Medium,
+                        color: Theme.of(context).iconTheme.color)),
                 SizedBox(height: MediaQuery.of(context).size.height / 100),
                 Row(
                       mainAxisSize: MainAxisSize.min,
@@ -149,7 +155,7 @@ class NoteCardState extends State<NoteCard> {
                         fontSize: 15,
                         fontFamily: Font.Name,
                         fontWeight: Font.Regular,
-                        color: Colors.black))
+                        color: Theme.of(context).iconTheme.color))
               ],
             )));
   }
