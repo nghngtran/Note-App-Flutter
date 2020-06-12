@@ -17,8 +17,9 @@ class CustomTag extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
         onTap: () {},
-        onLongPress: (){
-
+        onLongPress: () {
+          TagBUS tagbus = new TagBUS();
+          tagbus.deleteTagById(tag.id);
         },
         child: Wrap(children: <Widget>[
           Container(
