@@ -15,7 +15,7 @@ import 'package:flutter_typeahead/flutter_typeahead.dart';
 
 class CreateTagNote extends StatefulWidget {
   final NoteViewModel noteModel;
-  CreateTagNote(this.noteModel);
+  CreateTagNote(NoteViewModel _model) : noteModel = _model;
   CreateTagNoteState createState() => CreateTagNoteState();
 }
 
@@ -45,6 +45,7 @@ class CreateTagNoteState extends State<CreateTagNote> {
   }
 
   Widget build(BuildContext context) {
+    tag.setColor(Colors.green);
     for (var i in tagsCreated) {
       print(i.title);
     }
@@ -77,48 +78,54 @@ class CreateTagNoteState extends State<CreateTagNote> {
                               color: Colors.red))))
               : SizedBox(height: MediaQuery.of(context).size.height / 100 * 1),
           Expanded(
-            flex: 7,
-            child: AutoCompleteTextField<Tag>(
-                controller: textController,
-                style: TextStyle(color: Theme.of(context).iconTheme.color),
-                decoration: InputDecoration(
-                    suffixIcon: Container(
-                      width: 85.0,
-                      height: 60.0,
-                    ),
-                    contentPadding: EdgeInsets.fromLTRB(10.0, 30.0, 10.0, 20.0),
-                    filled: true,
-                    hintText: "Tag's title",
-                    hintStyle:
-                        TextStyle(color: Theme.of(context).iconTheme.color)),
-                submitOnSuggestionTap: true,
-                clearOnSubmit: true,
-                suggestions: tagCreatedModel.getTagCreated(),
-                itemBuilder: (context, item) {
-                  return Container(
-                      color: Colors.lightBlue,
-                      height: MediaQuery.of(context).size.height / 100 * 6,
-                      padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
-                      child: Text(item.title,
-                          style: TextStyle(
-                              color: Theme.of(context).iconTheme.color,
-                              fontSize: 16)));
-                },
-                key: widget.key,
-                itemSubmitted: (item) {
-                  setState(() {
-                    tag = item;
-                    textController.text = item.title;
-                  });
-                },
-                itemSorter: (a, b) {
-                  return a.title.compareTo(b.title);
-                },
-                itemFilter: (item, query) {
-                  return item.title
-                      .toLowerCase()
-                      .startsWith(query.toLowerCase());
-                }
+              child: Row(mainAxisAlignment: MainAxisAlignment.start, children: <
+                  Widget>[
+            Wrap(children: <Widget>[DropDownButtonNote(tag)]),
+            SizedBox(width: MediaQuery.of(context).size.width / 100),
+            Expanded(
+              flex: 7,
+              child: AutoCompleteTextField<Tag>(
+                  controller: textController,
+                  style: TextStyle(color: Theme.of(context).iconTheme.color),
+                  decoration: InputDecoration(
+                      suffixIcon: Container(
+                        width: 85.0,
+                        height: 60.0,
+                      ),
+                      contentPadding:
+                          EdgeInsets.fromLTRB(10.0, 30.0, 10.0, 20.0),
+                      filled: true,
+                      hintText: "Tag's title",
+                      hintStyle:
+                          TextStyle(color: Theme.of(context).iconTheme.color)),
+                  submitOnSuggestionTap: true,
+                  clearOnSubmit: true,
+                  suggestions: tagCreatedModel.getTagCreated(),
+                  itemBuilder: (context, item) {
+                    return Container(
+                        color: Colors.lightBlue,
+                        height: MediaQuery.of(context).size.height / 100 * 6,
+                        padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
+                        child: Text(item.title,
+                            style: TextStyle(
+                                color: Theme.of(context).iconTheme.color,
+                                fontSize: 16)));
+                  },
+                  key: widget.key,
+                  itemSubmitted: (item) {
+                    setState(() {
+                      tag = item;
+                      textController.text = item.title;
+                    });
+                  },
+                  itemSorter: (a, b) {
+                    return a.title.compareTo(b.title);
+                  },
+                  itemFilter: (item, query) {
+                    return item.title
+                        .toLowerCase()
+                        .startsWith(query.toLowerCase());
+                  }
 //                      textFieldConfiguration: TextFieldConfiguration(
 //                          style: TextStyle(color: Colors.black, fontSize: 16.0),
 //                          controller: textController,
@@ -178,9 +185,10 @@ class CreateTagNoteState extends State<CreateTagNote> {
 //                            .startsWith(query.toLowerCase());
 //                      },
 //                      key: null,
-                ),
-          ),
-          SizedBox(width: MediaQuery.of(context).size.width / 100 * 2),
+                  ),
+            ),
+            SizedBox(width: MediaQuery.of(context).size.width / 100 * 2)
+          ])),
           Expanded(
               child: Row(mainAxisAlignment: MainAxisAlignment.start, children: <
                   Widget>[
@@ -221,10 +229,12 @@ class CreateTagNoteState extends State<CreateTagNote> {
                     if (stt) {
                       widget.noteModel.addTag(tag);
                       Navigator.of(context).pop();
+                      print(widget.noteModel.tags.first);
+                    } else {
+                      setState(() {
+                        valid = false;
+                      });
                     }
-                    setState(() {
-                      valid = false;
-                    });
                   },
                   shape: RoundedRectangleBorder(
                       borderRadius: new BorderRadius.circular(5),

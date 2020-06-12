@@ -17,7 +17,6 @@ class Audio extends NoteItem {
 }
 
 class NoteViewModel extends BaseModel {
-
   String title = "Untitled note";
 
   List<Tag> tags = [];
@@ -52,33 +51,7 @@ class NoteViewModel extends BaseModel {
     this.contents = pass.contents;
     notifyListeners();
   }
-//  NoteViewModel.withFullInfo(
-//      this.id, this.title, DateTime created_time, DateTime modified_time) {
-//    this.tags = new List<Tag>();
-//    this.contents = new List<NoteItem>();
-////    this.created_time = created_time;
-////    this.modified_time = modified_time;
-//  }
-//  NoteViewModel.withTitle(String title) {
-//    this.id = "note" + ((++order).toString());
-//    this.tags = new List<Tag>();
-//    this.contents = new List<NoteItem>();
-//    this.history = new List<String>();
-//    this.history.add(TimeUtils.formatter.format(DateTime.now()));
-//    this.title = title;
-//  }
-//
-//  NoteViewModel.withTag(Tag tag) : super() {
-//    this.id = "note" + ((++order).toString());
-//    this.title = "New Note";
-//    this.tags = new List<Tag>();
-//    this.contents = new List<NoteItem>();
-//    this.history = new List<String>();
-//    this.history.add(TimeUtils.formatter.format(DateTime.now()));
-//    this.tags.add(tag);
-//  }
 
-//  //Set Attribute
   void setTitle(String title) {
     this.title = title;
     notifyListeners();
