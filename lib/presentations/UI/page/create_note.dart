@@ -415,7 +415,6 @@ class NoteItemWidget extends StatelessWidget {
     } else if (item.type == "Image") {
       enCodeImg();
       print("Bytes:" + bytes.toString());
-
       return Container(
           width: w * 100,
           height: w * 100,

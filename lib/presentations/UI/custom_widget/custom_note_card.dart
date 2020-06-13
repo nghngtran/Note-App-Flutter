@@ -11,6 +11,7 @@ import 'package:note_app/presentations/UI/page/edit_note.dart';
 import 'package:note_app/utils/bus/note_bus.dart';
 import 'package:note_app/utils/bus/thumbnail_bus.dart';
 import 'package:note_app/utils/model/thumbnailNote.dart';
+import 'package:note_app/view_model/list_tb_note_view_model.dart';
 
 class NoteCard extends StatefulWidget {
   ThumbnailNote noteCard;
@@ -52,8 +53,10 @@ class NoteCardState extends State<NoteCard> {
                   EdgeInsets.all(4 * MediaQuery.of(context).size.width / 100),
               width: 45 * MediaQuery.of(context).size.width / 100,
               decoration: BoxDecoration(
+                border: Border.all(
+                    color: Theme.of(context).iconTheme.color, width: 0.6),
                 borderRadius: BorderRadius.all(Radius.circular(5)),
-                color: Colors.white,
+                color: Theme.of(context).backgroundColor,
               ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -102,13 +105,12 @@ class NoteCardState extends State<NoteCard> {
               MaterialPageRoute(builder: (context) => EditNote(noteCard)),
             );
           },
-          onLongPress: () {
+          onLongPress: () async {
 //          Thumbnail xóa đúng, nhưng noteBus sai !!
-//          NoteBUS noteBus = NoteBUS();
-//          noteBus.getNoteById(noteCard.noteId);
-//          noteBus.deleteNoteById(noteCard.noteId);
-            ThumbnailBUS tbBus = ThumbnailBUS();
-            tbBus.deleteThumbnailById(noteCard.noteId);
+            NoteBUS noteBus = NoteBUS();
+            var stt = await noteBus.deleteNoteById(noteCard.noteId);
+            NoteCreatedModel model = NoteCreatedModel();
+            model.deleteNote(noteCard);
           },
           child: Container(
               margin: EdgeInsets.only(

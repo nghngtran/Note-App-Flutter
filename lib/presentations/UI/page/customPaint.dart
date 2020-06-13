@@ -119,22 +119,9 @@ class _CustomPaintPageState extends State<CustomPaintPage> {
                                 albumName: "NoteApp");
 
                             NoteItem tmp = NoteItem("Image");
-//                            print(widget.model.getListItems().length);
-//                            print(widget.img.path);
-//                            print('/storage/emulated/0/NoteApp/' +
-//                                widget.img.path.split("/").last);
-//                            Directory tmpPath =
-//                                await getApplicationDocumentsDirectory();
-//                            String pathImg =
-//                                tmpPath.path + widget.img.path.split("/").last;
-//                            print(pathImg);
                             var pathImg = '/storage/emulated/0/NoteApp/' +
                                 widget.img.path.split("/").last;
                             tmp.content = pathImg;
-//                            tmp.content = widget.img.toString();
-
-//                            Provider.of<Notes>(context, listen: false)
-//                                .addNoteItem(tmp);
                             widget.model.addNoteItem(tmp);
 //                            widget.model
 //                                .setContentChildItem(widget.path.toString());
@@ -142,13 +129,12 @@ class _CustomPaintPageState extends State<CustomPaintPage> {
 //                                context, ModalRoute.withName('create_note'));
 //                            Navigator.of(context).push(
 
-//                            MaterialPageRoute(builder: (BuildContext context) {
-//                              return CreateNote();
-//                              Navigator.of(context).pushNamed('create_note');
-////                            })
-//                            });
-                            Navigator.of(context).pushNamedAndRemoveUntil(
-                                'create_note', (route) => true);
+                            MaterialPageRoute(builder: (BuildContext context) {
+                              return CreateNote();
+                              Navigator.of(context).pushNamed('create_note');
+//                            })
+                            });
+//                            Navigator.of(context).pushNamed('create_note');
                           })
                     ],
                     elevation: 0.0,

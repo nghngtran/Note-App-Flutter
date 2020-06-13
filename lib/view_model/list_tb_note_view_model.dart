@@ -8,11 +8,8 @@ class NoteCreatedModel extends BaseModel {
   ThumbnailBUS noteBus = ThumbnailBUS();
   List<ThumbnailNote> listNoteCreated = [];
 
-  void loadData() async {
-    Future.delayed(const Duration(milliseconds: 2000), () async {
-      listNoteCreated = await noteBus.getThumbnails();
-      notifyListeners();
-    });
+  Future<void> loadData() async {
+    listNoteCreated = await noteBus.getThumbnails();
   }
 
   Future<void> loadDataByKeyword(String key) async {
@@ -38,6 +35,12 @@ class NoteCreatedModel extends BaseModel {
 
   void clear() {
     listNoteCreated = [];
+    notifyListeners();
+  }
+
+  void deleteNote(ThumbnailNote note) {
+    listNoteCreated.remove(note);
+    print("delete");
     notifyListeners();
   }
 }
