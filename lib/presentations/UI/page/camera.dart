@@ -4,7 +4,6 @@ import 'package:note_app/presentations/UI/page/preview.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 
-
 class CameraScreen extends StatefulWidget {
   @override
   _CameraScreenState createState() {
@@ -22,7 +21,6 @@ class _CameraScreenState extends State {
   void initState() {
     super.initState();
     availableCameras().then((availableCameras) {
-
       cameras = availableCameras;
 
       if (cameras.length > 0) {
@@ -31,7 +29,7 @@ class _CameraScreenState extends State {
         });
 
         _initCameraController(cameras[selectedCameraIdx]).then((void v) {});
-      }else{
+      } else {
         print("No camera available");
       }
     }).catchError((err) {
@@ -177,7 +175,7 @@ class _CameraScreenState extends State {
 
   void _onSwitchCamera() {
     selectedCameraIdx =
-    selectedCameraIdx < cameras.length - 1 ? selectedCameraIdx + 1 : 0;
+        selectedCameraIdx < cameras.length - 1 ? selectedCameraIdx + 1 : 0;
     CameraDescription selectedCamera = cameras[selectedCameraIdx];
     _initCameraController(selectedCamera);
   }

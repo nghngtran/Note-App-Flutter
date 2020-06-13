@@ -8,6 +8,12 @@ import 'package:note_app/utils/model/noteItem.dart';
 import 'package:note_app/view_model/note_view_model.dart';
 import 'package:provider/provider.dart';
 
+class Arg {
+  final File data;
+  final NoteViewModel model;
+  Arg(this.data, this.model);
+}
+
 class PickImage extends StatefulWidget {
   final NoteViewModel model;
   PickImage(NoteViewModel _model) : model = _model;
@@ -17,11 +23,18 @@ class PickImage extends StatefulWidget {
 
 class _PickImageState extends State<PickImage> {
   Future<File> imageFile;
-
   pickImageFromGallery(ImageSource source) {
     setState(() {
       imageFile = ImagePicker.pickImage(source: source);
     });
+  }
+
+  void initState() {
+    super.initState();
+  }
+
+  void dispose() {
+    super.dispose();
   }
 
   Widget showImage(BuildContext context) {
@@ -34,13 +47,21 @@ class _PickImageState extends State<PickImage> {
             snapshot.data != null) {
           return GestureDetector(
               onTap: () {
-                Image tmp = new Image.file(snapshot.data);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          CustomPaintPage(snapshot.data, widget.model)),
-                );
+                File tmp = snapshot.data;
+//                Navigator.push(
+//                  context,
+//                  MaterialPageRoute(
+//                      builder: (context) =>
+//                          CustomPaintPage(snapshot.data, widget.model)),
+//                );
+//                Navigator.of(context).pushAndRemoveUntil(
+//                    MaterialPageRoute(
+//                        builder: (context) =>
+//                            CustomPaintPage(snapshot.data, widget.model)),
+//                    (Route<dynamic> route) => true);
+
+                Navigator.of(context).popAndPushNamed('custom_paint',
+                    arguments: Arg(tmp, widget.model));
               },
               child: Container(
                   width: w * 100,

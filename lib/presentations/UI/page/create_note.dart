@@ -403,10 +403,7 @@ class NoteItemWidget extends StatelessWidget {
   NoteItemWidget(NoteItem _item) : item = _item;
   Uint8List bytes;
   void enCodeImg() {
-    final picker = ImagePicker();
     File imgFile = File(item.content);
-    print(item.content);
-    ImagePicker.pickImage(source: ImageSource.gallery);
     bytes = imgFile.readAsBytesSync();
   }
 
@@ -417,17 +414,21 @@ class NoteItemWidget extends StatelessWidget {
       return EditText(item);
     } else if (item.type == "Image") {
       enCodeImg();
-      print("Bytes:"+bytes.toString());
+      print("Bytes:" + bytes.toString());
+
       return Container(
           width: w * 100,
           height: w * 100,
           margin: EdgeInsets.fromLTRB(w * 2, h, w * 2, h),
           padding: EdgeInsets.fromLTRB(w, h, w, h),
           decoration: BoxDecoration(
-              border: Border.all(width: 1, color: Colors.black),
+              border: Border.all(width: 1, color: Colors.transparent),
               borderRadius: BorderRadius.all(Radius.circular(10)),
-              color: Colors.yellow),
-          child: Image.file(File(item.content))
+              color: Theme.of(context).backgroundColor),
+          child: Image.memory(
+            bytes,
+            fit: BoxFit.fitWidth,
+          )
 //            File(item.content),
 //            fit: BoxFit.cover,
           );

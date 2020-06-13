@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:note_app/presentations/UI/page/create_note.dart';
 import 'package:note_app/utils/model/noteItem.dart';
 import 'package:note_app/view_model/note_view_model.dart';
 import 'package:note_app/utils/model/note.dart';
@@ -30,6 +31,11 @@ class _CustomPaintPageState extends State<CustomPaintPage> {
     super.initState();
     _finished = false;
     _controller = _newController();
+  }
+
+  void dispose() {
+    super.dispose();
+    _controller.dispose();
   }
 
   @override
@@ -122,9 +128,9 @@ class _CustomPaintPageState extends State<CustomPaintPage> {
 //                            String pathImg =
 //                                tmpPath.path + widget.img.path.split("/").last;
 //                            print(pathImg);
-//                            var pathImg = '/storage/emulated/0/NoteApp/' +
-//                                widget.img.path.split("/").last;
-                            tmp.content = widget.img.path;
+                            var pathImg = '/storage/emulated/0/NoteApp/' +
+                                widget.img.path.split("/").last;
+                            tmp.content = pathImg;
 //                            tmp.content = widget.img.toString();
 
 //                            Provider.of<Notes>(context, listen: false)
@@ -132,12 +138,17 @@ class _CustomPaintPageState extends State<CustomPaintPage> {
                             widget.model.addNoteItem(tmp);
 //                            widget.model
 //                                .setContentChildItem(widget.path.toString());
+//                            Navigator.popUntil(
+//                                context, ModalRoute.withName('create_note'));
+//                            Navigator.of(context).push(
 
-//                            Navigator.of(context).push(MaterialPageRoute(
-//                                builder: (BuildContext context) {
+//                            MaterialPageRoute(builder: (BuildContext context) {
 //                              return CreateNote();
-                            Navigator.of(context).pushNamed('create_note');
-//                            }));
+//                              Navigator.of(context).pushNamed('create_note');
+////                            })
+//                            });
+                            Navigator.of(context).pushNamedAndRemoveUntil(
+                                'create_note', (route) => true);
                           })
                     ],
                     elevation: 0.0,
@@ -154,9 +165,8 @@ class _CustomPaintPageState extends State<CustomPaintPage> {
       ];
     }
     return Scaffold(
+      backgroundColor: Theme.of(context).backgroundColor,
       appBar: AppBar(
-          backgroundColor: Theme.of(context).backgroundColor,
-//          backgroundColor: Colors.transparent,
           elevation: 0.0,
           title: Text('Edit image',
               style: TextStyle(color: Theme.of(context).iconTheme.color)),
