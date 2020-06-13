@@ -65,6 +65,7 @@ dev_dependencies:
   autocomplete_textfield: ^1.6.4
   gallery_saver: ^2.0.1
 
+  flutter_typeahead: ^1.8.3
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

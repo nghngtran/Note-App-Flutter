@@ -16,13 +16,29 @@ import 'package:note_app/view_model/list_tag_view_model.dart';
 import 'package:note_app/presentations/UI/custom_widget/custom_text_style.dart';
 import 'package:autocomplete_textfield/autocomplete_textfield.dart';
 
-class CreateTag extends StatelessWidget {
-  var key = new GlobalKey();
-  Tag tag = new Tag();
-  final textController = TextEditingController();
+class CreateTag extends StatefulWidget {
   final TagCreatedModel tagCreatedModel;
   CreateTag(this.tagCreatedModel);
-//  AutoCompleteTextField searchTag;
+  CreateTagState createState() => CreateTagState();
+}
+
+class CreateTagState extends State<CreateTag> {
+  var key = new GlobalKey();
+  Tag tag = new Tag();
+  bool valid;
+  final textController = TextEditingController();
+  void initState() {
+    super.initState();
+    setState(() {
+      valid = true;
+    });
+  }
+
+  void dispose() {
+    super.dispose();
+    textController.dispose();
+  }
+
   Widget build(BuildContext context) {
     tag.setColor(Colors.green);
     return Container(
@@ -41,7 +57,19 @@ class CreateTag extends StatelessWidget {
                 style: Theme.of(context).textTheme.title.copyWith(
                     fontWeight: Font.SemiBold,
                     color: Theme.of(context).iconTheme.color)),
-            SizedBox(height: MediaQuery.of(context).size.height / 100 * 2),
+            (!valid)
+                ? Expanded(
+                    child: Container(
+                        alignment: Alignment.topRight,
+                        padding: EdgeInsets.only(
+                            right: MediaQuery.of(context).size.width / 100 * 2),
+                        child: Text("Tag exists!",
+                            style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: Font.Regular,
+                                color: Colors.red))))
+                : SizedBox(
+                    height: MediaQuery.of(context).size.height / 100 * 2),
             Expanded(
                 child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -50,9 +78,8 @@ class CreateTag extends StatelessWidget {
                   SizedBox(width: MediaQuery.of(context).size.width / 100),
                   Expanded(
                       flex: 7,
-                      child: AutoCompleteTextField<Tag>(
+                      child: TextFormField(
                         controller: textController,
-//                        textAlign: TextAlign.start,
                         style: TextStyle(
                             fontSize: 18,
                             color: Theme.of(context).iconTheme.color),
@@ -72,28 +99,29 @@ class CreateTag extends StatelessWidget {
                             hintStyle: TextStyle(
                                 color: Theme.of(context).iconTheme.color,
                                 fontSize: 13)),
-                        itemBuilder: (context, item) {
-                          return Container(
-                              height:
-                                  MediaQuery.of(context).size.height / 100 * 6,
-                              padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
-                              child: Text(item.title,
-                                  style: TextStyle(
-                                      color: Theme.of(context).iconTheme.color,
-                                      fontSize: 15)));
-                        },
-                        itemFilter: (item, query) {
-                          return item.title
-                              .toLowerCase()
-                              .startsWith(query.toLowerCase());
-                        },
-                        itemSorter: (a, b) {
-                          return a.title.compareTo(b.title);
-                        },
-                        itemSubmitted: (item) {
-                          textController.text = item.title;
-                        },
-                        suggestions: tagCreatedModel.getTagCreated(), key: null,
+//                        itemBuilder: (context, item) {
+//                          return Container(
+//                              height:
+//                                  MediaQuery.of(context).size.height / 100 * 6,
+//                              padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
+//                              child: Text(item.title,
+//                                  style: TextStyle(
+//                                      color: Theme.of(context).iconTheme.color,
+//                                      fontSize: 16)));
+//                        },
+//                        itemFilter: (item, query) {
+//                          return item.title
+//                              .toLowerCase()
+//                              .startsWith(query.toLowerCase());
+//                        },
+//                        itemSorter: (a, b) {
+//                          return a.title.compareTo(b.title);
+//                        },
+//                        itemSubmitted: (Tag item) {
+//                          textController.text = item.title;
+//                        },
+//                        suggestions: tagCreatedModel.getTagCreated(),
+//                        key: null,
                       )),
                   SizedBox(width: MediaQuery.of(context).size.width / 100 * 2),
                 ])),
@@ -133,32 +161,16 @@ class CreateTag extends StatelessWidget {
                                 fontWeight: Font.Regular,
                                 color: Colors.blue)),
                         onPressed: () async {
-//                          Provider.of<Tag>(context, listen: false)
-//                              .setTitle(textController.text);
                           tag.setTitle(textController.text);
-//                          Provider.of<Tag>(context, listen: false).setColor()
-//                              .setTitle(textController.text);
-
                           TagBUS tagbus = new TagBUS();
                           var stt = await tagbus.addTag(tag);
-//                          print(stt);
-//                          print("|TAG|");
-//                          var _listTags = await tagbus.getTags();
-//                          List<Tag> listTags = List<Tag>();
-//                          _listTags.forEach((tag) => listTags.add(tag));
-//                          listTags.forEach((listT) => print(listT));
-//                          print("|TAG|");
-//
-//                             ThumbnailBUS thumbnailbus = new ThumbnailBUS();
-//                          ThumbnailNote thumb = new ThumbnailNote("note1", "day la thumbnail", listTags, "day la noi dung", DateTime.now());
-//                          thumbnailbus.addThumbnail(thumb);
-//
-//                          var _listThumbnail = await thumbnailbus.getThumbnails();
-//                          _listThumbnail.forEach((thumbnail) => print(thumbnail));
-//                          Provider.of<TagCreated>(context, listen: true)
-//                              .addTag(tag);
-                          tagCreatedModel.addToList(tag);
-                          Navigator.of(context).pop();
+                          if (stt) {
+                            widget.tagCreatedModel.addToList(tag);
+                            Navigator.of(context).pop();
+                          }
+                          setState(() {
+                            valid = false;
+                          });
                         },
                         shape: RoundedRectangleBorder(
                             borderRadius: new BorderRadius.circular(5),

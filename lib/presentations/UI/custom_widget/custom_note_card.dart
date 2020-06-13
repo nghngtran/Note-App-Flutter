@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:note_app/application/constants.dart';
 import 'package:note_app/presentations/UI/custom_widget/custom_text_style.dart';
+import 'package:note_app/presentations/UI/page/edit_note.dart';
+import 'package:note_app/utils/bus/note_bus.dart';
+import 'package:note_app/utils/bus/thumbnail_bus.dart';
 import 'package:note_app/utils/model/thumbnailNote.dart';
 
 class NoteCard extends StatefulWidget {
@@ -86,7 +89,20 @@ class NoteCardState extends State<NoteCard> {
 //    } else if (noteCard.imgUrl == null) {
     return InkWell(
         splashColor: Colors.blue.withAlpha(30),
-        onTap: () {},
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => EditNote(noteCard)),
+          );
+        },
+        onLongPress: () {
+//          Thumbnail xóa đúng, nhưng noteBus sai !!
+//          NoteBUS noteBus = NoteBUS();
+//          noteBus.getNoteById(noteCard.noteId);
+//          noteBus.deleteNoteById(noteCard.noteId);
+          ThumbnailBUS tbBus = ThumbnailBUS();
+          tbBus.deleteThumbnailById(noteCard.noteId);
+        },
         child: Container(
             margin: EdgeInsets.only(
                 top: 2 * MediaQuery.of(context).size.height / 100),
@@ -94,8 +110,13 @@ class NoteCardState extends State<NoteCard> {
                 EdgeInsets.all(4 * MediaQuery.of(context).size.width / 100),
             width: 45 * MediaQuery.of(context).size.width / 100,
             decoration: BoxDecoration(
+              border: Border.all(
+                  color: Theme.of(context).iconTheme.color.withOpacity(0.6),
+                  width: 0.5),
               borderRadius: BorderRadius.all(Radius.circular(5)),
-              color: Colors.yellow,
+              color: (noteCard.color == Colors.transparent)
+                  ? Theme.of(context).backgroundColor
+                  : noteCard.color,
             ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -103,10 +124,11 @@ class NoteCardState extends State<NoteCard> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(noteCard.title,
-                    style: Theme.of(context)
-                        .textTheme
-                        .title
-                        .copyWith(color: Colors.black)),
+                    style: TextStyle(
+                        fontSize: 17,
+                        fontFamily: Font.Name,
+                        fontWeight: Font.Medium,
+                        color: Theme.of(context).iconTheme.color)),
                 SizedBox(height: MediaQuery.of(context).size.height / 100),
                 Row(
                       mainAxisSize: MainAxisSize.min,
@@ -133,7 +155,7 @@ class NoteCardState extends State<NoteCard> {
                         fontSize: 15,
                         fontFamily: Font.Name,
                         fontWeight: Font.Regular,
-                        color: Colors.black))
+                        color: Theme.of(context).iconTheme.color))
               ],
             )));
   }

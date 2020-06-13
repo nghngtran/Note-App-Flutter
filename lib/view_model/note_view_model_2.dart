@@ -8,17 +8,8 @@ import 'package:note_app/utils/model/tag.dart';
 import 'package:note_app/view_model/list_tag_view_model.dart';
 import 'package:scoped_model/scoped_model.dart';
 
-class Audio extends NoteItem {
-  String path;
-  Audio() : super("Audio");
-  void setPath(String _path) {
-    this.path = _path;
-  }
-}
-
-class NoteViewModel extends BaseModel {
-  String title = "Untitled note";
-
+class NoteViewModelLoad extends BaseModel {
+  String title = "New untitled note";
   List<Tag> tags = [];
   List<NoteItem> contents = [];
   int get size {
@@ -39,19 +30,13 @@ class NoteViewModel extends BaseModel {
     notifyListeners();
   }
 
-  NoteViewModel() : super() {
-    this.title = "New untitled note";
-    this.tags = new List<Tag>();
-    this.contents = new List<NoteItem>();
-  }
-
-  void Set(Notes pass) {
+  NoteViewModelLoad(Notes pass) : super() {
     this.title = pass.title;
     this.tags = pass.tags;
     this.contents = pass.contents;
-    notifyListeners();
   }
 
+//  //Set Attribute
   void setTitle(String title) {
     this.title = title;
     notifyListeners();
@@ -94,4 +79,5 @@ class NoteViewModel extends BaseModel {
   NoteItem getNoteItemAt(index) {
     return this.contents[index];
   }
+
 }

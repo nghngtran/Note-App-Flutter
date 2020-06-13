@@ -1,17 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:note_app/presentations/UI/custom_widget/custom_list_notes.dart';
-
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:note_app/presentations/UI/custom_widget/custom_note_card.dart';
 import 'package:note_app/presentations/UI/custom_widget/custom_type_tag.dart';
 import 'package:note_app/presentations/UI/page/base_view.dart';
 import 'package:note_app/presentations/UI/page/create_note.dart';
-import 'package:note_app/presentations/UI/page/image_pick.dart';
-import 'package:note_app/utils/bus/tag_bus.dart';
-import 'package:note_app/utils/bus/thumbnail_bus.dart';
-import 'package:scoped_model/scoped_model.dart';
-import 'package:note_app/utils/model/tag.dart';
-import 'package:note_app/utils/model/thumbnailNote.dart';
+
 import 'package:note_app/view_model/list_tb_note_view_model.dart';
 import 'package:note_app/view_model/list_tag_view_model.dart';
 import 'package:note_app/view_model/tag_view_model.dart';
@@ -80,22 +75,22 @@ class HomeScreenState extends State<HomeScreen>
     return TextField(
       controller: _searchQuery,
       autofocus: true,
-      decoration: const InputDecoration(
+      decoration: InputDecoration(
         hintText: 'Search...',
         border: InputBorder.none,
-        hintStyle: TextStyle(color: Colors.white10),
+        hintStyle: TextStyle(color: Theme.of(context).iconTheme.color),
       ),
-      style: TextStyle(
-          color: Theme.of(context).textTheme.caption.color, fontSize: 18.0),
+      style:
+          TextStyle(color: Theme.of(context).iconTheme.color, fontSize: 18.0),
       onChanged: updateSearchQuery,
     );
   }
 
-  TagBUS tagBUS = TagBUS();
-  List<Tag> listCreatedTag;
-  void loadTagData() async {
-    listCreatedTag = await tagBUS.getTags();
-  }
+//  TagBUS tagBUS = TagBUS();
+//  List<Tag> listCreatedTag;
+//  void loadTagData() async {
+//    listCreatedTag = await tagBUS.getTags();
+//  }
 
   void updateSearchQuery(String newQuery) {
     setState(() {
@@ -128,6 +123,29 @@ class HomeScreenState extends State<HomeScreen>
         color: Theme.of(context).iconTheme.color,
       )
     ];
+  }
+
+  Widget search(BuildContext context, NoteCreatedModel model) {
+    return FutureBuilder(
+        future: model.loadDataByKeyword(_searchQuery.text),
+        builder: (context, state) {
+          if (state.connectionState == ConnectionState.done) {
+            return Container(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height,
+                child: model.getNoteCreated().length > 0
+                    ? NoteGrid(model.getNoteCreated())
+                    : Center(
+                        child: Text("No match!",
+                            style: TextStyle(
+                                color: Theme.of(context).iconTheme.color))));
+          }
+//          else if (_searchQuery.text != null) {
+//            return Center(
+//                child: SpinKitCircle(color: Theme.of(context).iconTheme.color));
+//          }
+          return Container();
+        });
   }
 
   Widget build(BuildContext context) {
@@ -206,24 +224,33 @@ class HomeScreenState extends State<HomeScreen>
                     tagCreatedModel.loadData();
                     return TagBar(mainController, tagCreatedModel);
                   }),
-                  SingleChildScrollView(
-                      child: Container(
-                          width: MediaQuery.of(context).size.width,
-                          height: MediaQuery.of(context).size.height,
-                          child: Consumer<NoteCreatedModel>(
-                              builder: (context, listTBNote, _) {
-                            listTBNote.loadData();
-                            if (listTBNote.listSize > 0) {
-                              return NoteGrid(listTBNote.getNoteCreated());
-                            }
-                            return Center(
-                                child: Text(
-                                    "Empty data.Let's create new note !",
-                                    style: TextStyle(
-                                        color: Theme.of(context)
-                                            .iconTheme
-                                            .color)));
-                          })))
+                  (!_isSearching)
+                      ? SingleChildScrollView(
+                          child: Container(
+                              width: MediaQuery.of(context).size.width,
+                              height: MediaQuery.of(context).size.height,
+                              child: Consumer<NoteCreatedModel>(
+                                  builder: (context, listTBNote, _) {
+                                listTBNote.loadData();
+                                if (listTBNote.listSize > 0) {
+                                  return NoteGrid(listTBNote.getNoteCreated());
+                                }
+                                return Center(
+                                    child: Text(
+                                        "Nothing is here yet. Live up the space by creating new notes!",
+                                        style: TextStyle(
+                                            color: Theme.of(context)
+                                                .iconTheme
+                                                .color)));
+                              })))
+                      : SingleChildScrollView(
+                          child: Container(
+                              width: MediaQuery.of(context).size.width,
+                              height: MediaQuery.of(context).size.height,
+                              child: Consumer<NoteCreatedModel>(
+                                  builder: (context, listTBNote, _) {
+                                return search(context, listTBNote);
+                              })))
                 ])));
   }
 }

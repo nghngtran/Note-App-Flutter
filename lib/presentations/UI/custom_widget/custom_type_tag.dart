@@ -17,6 +17,10 @@ class CustomTag extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
         onTap: () {},
+        onLongPress: () {
+          TagBUS tagbus = new TagBUS();
+          tagbus.deleteTagById(tag.id);
+        },
         child: Wrap(children: <Widget>[
           Container(
               margin: EdgeInsets.only(
@@ -77,8 +81,7 @@ class TagBar extends StatelessWidget {
                           backgroundColor: Theme.of(context).backgroundColor,
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(5)),
-//                          child: CreateTag(model)
-                      ));
+                          child: CreateTag(model)));
                 },
                 child: Icon(Icons.add,
                     size: 20, color: Theme.of(context).iconTheme.color),

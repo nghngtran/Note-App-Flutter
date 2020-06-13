@@ -8,7 +8,7 @@
 			- []Trường hợp edit: Save file sau khi kết thúc edit
 			- []Trường hợp không edit: 
 		- [0/2] Audio: content:={path of file}
-			- []Loadfrom device:
+			- [:heavy_check_mark:]Loadfrom device:
 			- []Record: Trường hợp máy k có record trả về và báo lỗi
 		- [:heavy_check_mark:] Text: content:={content}
 	- [0/3] AddTag:
@@ -30,13 +30,13 @@
 	- [:heavy_check_mark:] Load list Thumbnail từ DB
 	- [:heavy_check_mark:] Load list tag từ db
 - #### [2/6] Search:
-	- [1/4] Search by Tag:
+	- [0/4] Search by Tag:
 		- [] Ấn vào tag ngoài Home
 		- [] gõ #{têntag} trên search bar
 		- [] Khi hiển thị kết quả search bar hiện tên và màu tag
-		- [:heavy_check_mark:] Load list thumbnail by tag
-	- [1/2] Search by keyword:Áp dụng cho cả content và title của Note, ưu tiên title 
-		- [] gõ keyword trên search bar
+		- [] Load list thumbnail by tag
+	- [2/2] Search by keyword:Áp dụng cho cả content và title của Note, ưu tiên title 
+		- [:heavy_check_mark:] gõ keyword trên search bar
 		- [:heavy_check_mark:] Load list thumbnail by findkeyword
 
 			

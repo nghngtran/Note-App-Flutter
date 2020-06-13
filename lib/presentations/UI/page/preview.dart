@@ -21,8 +21,10 @@ class _PreviewImageScreenState extends State<PreviewImageScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: Theme.of(context).backgroundColor,
         appBar: AppBar(
-          title: Text('Preview your image'),
+          title: Text('Preview your image',
+              style: TextStyle(color: Theme.of(context).iconTheme.color)),
           backgroundColor: Color.fromRGBO(255, 209, 16, 1.0),
         ),
         body: Center(
