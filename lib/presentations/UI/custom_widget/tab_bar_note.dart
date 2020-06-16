@@ -2,178 +2,246 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:note_app/application/constants.dart';
 import 'package:note_app/presentations/UI/custom_widget/custom_type_tag.dart';
-import 'package:note_app/presentations/UI/page/base_view.dart';
 import 'package:note_app/utils/bus/tag_bus.dart';
 import 'package:note_app/utils/dao/tag_dao.dart';
 import 'package:note_app/utils/model/tag.dart';
 import 'package:note_app/view_model/list_tag_view_model.dart';
 import 'package:note_app/view_model/note_view_model.dart';
 import 'package:note_app/presentations/UI/custom_widget/custom_text_style.dart';
+
 import 'package:autocomplete_textfield/autocomplete_textfield.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
 
-//class CreateTagNote extends StatefulWidget {
-//  final NoteViewModel noteModel;
-//  CreateTagNote(this.noteModel);
-////  CreateTagNoteState creatState() => CreateTagNoteState();
-//
-//  @override
-//  State<StatefulWidget> createState() {
-//    return CreateTagNoteState();
-//  }
-//}
+class CreateTagNote extends StatefulWidget {
+  final NoteViewModel noteModel;
+  CreateTagNote(NoteViewModel _model) : noteModel = _model;
+  CreateTagNoteState createState() => CreateTagNoteState();
+}
 
-class CreateTagNote extends StatelessWidget {
+class CreateTagNoteState extends State<CreateTagNote> {
   Tag tag = Tag();
   final textController = TextEditingController();
-  final NoteViewModel noteModel;
+  TagCreatedModel tagCreatedModel = TagCreatedModel();
 
-  CreateTagNote(this.noteModel);
+  TagBUS tagBus = TagBUS();
+  List<Tag> tagsCreated = List<Tag>();
+  bool valid;
+  Color tagColor;
+
+  void initState() {
+    tagCreatedModel.loadData();
+    tagsCreated = tagCreatedModel.getTagCreated();
+    super.initState();
+    setState(() {
+      tagColor = Colors.green;
+      valid = true;
+    });
+  }
 
   void dispose() {
+    super.dispose();
     textController.dispose();
   }
 
   Widget build(BuildContext context) {
     tag.setColor(Colors.green);
-
-    return ChangeNotifierProvider<TagCreatedModel>(
-        create: (BuildContext context) {
-      return TagCreatedModel();
-    }, child: Consumer<TagCreatedModel>(builder: (context, tagCreatedModel, _) {
-      tagCreatedModel.loadData();
-      List<Tag> tagsCreated = tagCreatedModel.getTagCreated();
-      return Container(
-          width: MediaQuery.of(context).size.width / 100 * 80,
-          height: MediaQuery.of(context).size.height / 100 * 20,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(5)),
-            color: Theme.of(context).backgroundColor,
-          ),
-          padding: EdgeInsets.only(
-              top: MediaQuery.of(context).size.height / 100 * 2),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              Text("Create new tag",
-                  style: Theme.of(context).textTheme.title.copyWith(
-                      fontWeight: Font.SemiBold,
-                      color: Theme.of(context).iconTheme.color)),
-              SizedBox(height: MediaQuery.of(context).size.height / 100 * 2),
-              Expanded(
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: <Widget>[
-                    Wrap(children: <Widget>[DropDownButtonNote(tag)]),
-                    SizedBox(width: MediaQuery.of(context).size.width / 100),
-                    Expanded(
-                      flex: 7,
-                      child: AutoCompleteTextField<Tag>(
-                          controller: textController,
-                          style: TextStyle(color: Colors.black, fontSize: 16.0),
-                          decoration: InputDecoration(
-                              suffixIcon: Container(
-                                width: 85.0,
-                                height: 60.0,
-                              ),
-                              contentPadding:
-                                  EdgeInsets.fromLTRB(10.0, 30.0, 10.0, 20.0),
-                              filled: true,
-                              hintStyle: TextStyle(color: Colors.black)),
-                          itemSubmitted: (Tag item) {
-                            textController.text = item.title;
-                          },
-                          clearOnSubmit: false,
-                          key: null,
-                          suggestions: tagsCreated,
-                          itemBuilder: (context, item) {
-                            return Container(
-                                height: MediaQuery.of(context).size.height /
-                                    100 *
-                                    6,
-                                padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
-                                child: Text(item.title,
-                                    style: TextStyle(
-                                        color:
-                                            Theme.of(context).iconTheme.color,
-                                        fontSize: 16)));
-                          },
-                          itemSorter: (a, b) {
-                            return a.title.compareTo(b.title);
-                          },
-                          itemFilter: (item, query) {
-                            return textController.text
-                                .toLowerCase()
-                                .startsWith(query.toLowerCase());
-                          }),
-                    ),
-                    SizedBox(
-                        width: MediaQuery.of(context).size.width / 100 * 2),
-                  ])),
-              Expanded(
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: <Widget>[
+    for (var i in tagsCreated) {
+      print(i.title);
+    }
+    return Container(
+        width: MediaQuery.of(context).size.width / 100 * 80,
+        height: MediaQuery.of(context).size.height / 100 * 20,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(5)),
+          color: Theme.of(context).backgroundColor,
+        ),
+        padding:
+            EdgeInsets.only(top: MediaQuery.of(context).size.height / 100 * 2),
+        child: Column(mainAxisAlignment: MainAxisAlignment.start, children: <
+            Widget>[
+          Text("Create new tag",
+              style: Theme.of(context).textTheme.title.copyWith(
+                  fontWeight: Font.SemiBold,
+                  color: Theme.of(context).iconTheme.color)),
+          SizedBox(height: MediaQuery.of(context).size.height / 100 * 1),
+          (!valid)
+              ? Expanded(
+                  child: Container(
+                      alignment: Alignment.topRight,
+                      padding: EdgeInsets.only(
+                          right: MediaQuery.of(context).size.width / 100 * 2),
+                      child: Text("Using available tag!",
+                          style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: Font.Regular,
+                              color: Colors.red))))
+              : SizedBox(height: MediaQuery.of(context).size.height / 100 * 1),
+          Expanded(
+              child: Row(mainAxisAlignment: MainAxisAlignment.start, children: <
+                  Widget>[
+            Wrap(children: <Widget>[DropDownButtonNote(tag)]),
+            SizedBox(width: MediaQuery.of(context).size.width / 100),
+            Expanded(
+              flex: 7,
+              child: AutoCompleteTextField<Tag>(
+                  controller: textController,
+                  style: TextStyle(color: Theme.of(context).iconTheme.color),
+                  decoration: InputDecoration(
+                      suffixIcon: Container(
+                        width: 85.0,
+                        height: 60.0,
+                      ),
+                      contentPadding:
+                          EdgeInsets.fromLTRB(10.0, 30.0, 10.0, 20.0),
+                      filled: true,
+                      hintText: "Tag's title",
+                      hintStyle:
+                          TextStyle(color: Theme.of(context).iconTheme.color)),
+                  submitOnSuggestionTap: true,
+                  clearOnSubmit: true,
+                  suggestions: tagCreatedModel.getTagCreated(),
+                  itemBuilder: (context, item) {
+                    return Container(
+                        color: Colors.lightBlue,
+                        height: MediaQuery.of(context).size.height / 100 * 6,
+                        padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
+                        child: Text(item.title,
+                            style: TextStyle(
+                                color: Theme.of(context).iconTheme.color,
+                                fontSize: 16)));
+                  },
+                  key: widget.key,
+                  itemSubmitted: (item) {
+                    setState(() {
+                      tag = item;
+                      textController.text = item.title;
+                    });
+                  },
+                  itemSorter: (a, b) {
+                    return a.title.compareTo(b.title);
+                  },
+                  itemFilter: (item, query) {
+                    return item.title
+                        .toLowerCase()
+                        .startsWith(query.toLowerCase());
+                  }
+//                      textFieldConfiguration: TextFieldConfiguration(
+//                          style: TextStyle(color: Colors.black, fontSize: 16.0),
+//                          controller: textController,
+//                          decoration: InputDecoration(
+//                              suffixIcon: Container(
+//                                width: 85.0,
+//                                height: 60.0,
+//                              ),
+//                              contentPadding:
+//                                  EdgeInsets.fromLTRB(10.0, 30.0, 10.0, 20.0),
+//                              filled: true,
+//                              hintStyle: TextStyle(color: Colors.black))),
+//                      suggestionsCallback: (pattern) async {
+//                        return tagCreatedModel.getTagCreated();
+//                      },
+//                      transitionBuilder: (context, suggestionsBox, controller) {
+//                        return suggestionsBox;
+//                      },
+////                      decoration: InputDecoration(
+////                          suffixIcon: Container(
+////                            width: 85.0,
+////                            height: 60.0,
+////                          ),
+////                          contentPadding:
+////                              EdgeInsets.fromLTRB(10.0, 30.0, 10.0, 20.0),
+////                          filled: true,
+////                          hintStyle: TextStyle(color: Colors.black)),
+////                      itemSubmitted: (Tag item) {
+////                        textController.text = item.title;
+////                      },
+////                      clearOnSubmit: true,
+////                      suggestions: tagsCreated,
+//                      itemBuilder: (context, item) {
+//                        return Container(
+//                            height:
+//                                MediaQuery.of(context).size.height / 100 * 6,
+//                            padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
+//                            child: Text(item.title,
+//                                style: TextStyle(
+//                                    color: Theme.of(context).iconTheme.color,
+//                                    fontSize: 16)));
+//                      },
+//                      onSuggestionSelected: (suggestion) {
+//                        textController.text = suggestion.title;
+//                        setState(() {
+//                          tagColor = suggestion.color;
+//                          tag = suggestion;
+//                          tag.setColor(tagColor);
+//                        });
+//                      },
+//                      itemSorter: (a, b) {
+//                        return a.title.compareTo(b.title);
+//                      },
+//                      itemFilter: (item, query) {
+//                        return item.title
+//                            .toLowerCase()
+//                            .startsWith(query.toLowerCase());
+//                      },
+//                      key: null,
+                  ),
+            ),
+            SizedBox(width: MediaQuery.of(context).size.width / 100 * 2)
+          ])),
+          Expanded(
+              child: Row(mainAxisAlignment: MainAxisAlignment.start, children: <
+                  Widget>[
 //                SizedBox(width: MediaQuery.of(context).size.width / 100 * 10),
-                    Expanded(
-                        flex: 1,
-                        child: FlatButton(
-                          color: Colors.transparent,
-                          textColor: Theme.of(context).iconTheme.color,
-                          child: Text("Cancel",
-                              style: TextStyle(
-                                fontSize: 15,
-                                fontFamily: Font.Name,
-                                fontWeight: Font.Regular,
-                              )),
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                          shape: RoundedRectangleBorder(
-                              borderRadius: new BorderRadius.circular(5),
-                              side: BorderSide(
-                                  color: Colors.transparent, width: 0.5)),
-                        )),
-                    Expanded(
-                        flex: 1,
-                        child: FlatButton(
-                          color: Colors.transparent,
-                          textColor: Theme.of(context).iconTheme.color,
-                          child: Text("Save",
-                              style: TextStyle(
-                                  fontSize: 15,
-                                  fontFamily: Font.Name,
-                                  fontWeight: Font.Regular,
-                                  color: Colors.blue)),
-                          onPressed: () {
-//                          Provider.of<Tag>(context, listen: false)
-//                              .setTitle(textController.text);
-                            tag.setTitle(textController.text);
-//                          Provider.of<Tag>(context, listen: false).setColor()
-//                              .setTitle(textController.text);
-                            (TagBUS()).addTag(tag);
-                            print(tag);
-                            var _listTags = (TagBUS()).getTags();
-                            List<Tag> listTags = List<Tag>();
-                            _listTags.then((list) =>
-                                list.forEach((tag) => listTags.add(tag)));
-                            listTags.forEach((listT) => listT.toString());
-//                          Provider.of<TagCreated>(context, listen: true)
-//                              .addTag(tag);
-
-                            noteModel.addTag(tag);
-                            Navigator.of(context).pop();
-                          },
-                          shape: RoundedRectangleBorder(
-                              borderRadius: new BorderRadius.circular(5),
-                              side: BorderSide(
-                                  color: Colors.transparent, width: 0.5)),
-                        ))
-                  ])),
-            ],
-          ));
-    }));
-//    });
+            Expanded(
+                flex: 1,
+                child: FlatButton(
+                  color: Colors.transparent,
+                  textColor: Theme.of(context).iconTheme.color,
+                  child: Text("Cancel",
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontFamily: Font.Name,
+                        fontWeight: Font.Regular,
+                      )),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  shape: RoundedRectangleBorder(
+                      borderRadius: new BorderRadius.circular(5),
+                      side: BorderSide(color: Colors.transparent, width: 0.5)),
+                )),
+            Expanded(
+                flex: 1,
+                child: FlatButton(
+                  color: Colors.transparent,
+                  textColor: Theme.of(context).iconTheme.color,
+                  child: Text("Save",
+                      style: TextStyle(
+                          fontSize: 15,
+                          fontFamily: Font.Name,
+                          fontWeight: Font.Regular,
+                          color: Colors.blue)),
+                  onPressed: () async {
+                    tag.setTitle(textController.text);
+                    TagBUS tagbus = new TagBUS();
+                    var stt = await tagbus.addTag(tag);
+                    if (stt) {
+                      widget.noteModel.addTag(tag);
+                      Navigator.of(context).pop();
+                      print(widget.noteModel.tags.first);
+                    } else {
+                      setState(() {
+                        valid = false;
+                      });
+                    }
+                  },
+                  shape: RoundedRectangleBorder(
+                      borderRadius: new BorderRadius.circular(5),
+                      side: BorderSide(color: Colors.transparent, width: 0.5)),
+                ))
+          ]))
+        ]));
   }
 }
 
@@ -289,6 +357,7 @@ class CustomTagNote extends StatelessWidget {
               margin: EdgeInsets.only(
                   left: 4 * MediaQuery.of(context).size.width / 100,
                   top: MediaQuery.of(context).size.height / 100),
+//            width: MediaQuery.of(context).size.width / 100 * 25,
               height: MediaQuery.of(context).size.height / 100 * 5,
               padding: EdgeInsets.fromLTRB(
                   MediaQuery.of(context).size.width / 100 * 2,

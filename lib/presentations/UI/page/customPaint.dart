@@ -1,22 +1,22 @@
+import 'dart:io';
 import 'dart:typed_data';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:note_app/presentations/UI/page/create_note.dart';
 import 'package:note_app/utils/model/noteItem.dart';
 import 'package:note_app/view_model/note_view_model.dart';
-
-import 'package:image_picker/image_picker.dart';
-import 'package:note_app/application/constants.dart';
-import 'package:note_app/presentations/UI/page/create_note.dart';
 import 'package:note_app/utils/model/note.dart';
-
 import 'package:painter2/painter2.dart';
+import 'package:gallery_saver/gallery_saver.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
 class CustomPaintPage extends StatefulWidget {
   final NoteViewModel model;
-  Image path;
-  CustomPaintPage(Image _path, NoteViewModel _model)
-      : path = _path,
+  File img;
+  CustomPaintPage(File _img, NoteViewModel _model)
+      : img = _img,
         model = _model;
   @override
   _CustomPaintPageState createState() => new _CustomPaintPageState();
@@ -25,6 +25,7 @@ class CustomPaintPage extends StatefulWidget {
 class _CustomPaintPageState extends State<CustomPaintPage> {
   bool _finished;
   PainterController _controller;
+  String fileName;
   @override
   void initState() {
     super.initState();
@@ -32,14 +33,34 @@ class _CustomPaintPageState extends State<CustomPaintPage> {
     _controller = _newController();
   }
 
+  void dispose() {
+    super.dispose();
+    _controller.dispose();
+  }
+
   @override
   PainterController _newController() {
     PainterController controller = new PainterController();
     controller.thickness = 5.0;
-//    _controller.backgroundColor = Colors.transparent;
-    controller.backgroundImage = widget.path;
+    controller.backgroundImage = Image.file(widget.img);
     super.initState();
     return controller;
+  }
+
+  int i = 0;
+
+  void _saveImage(Uint8List uint8List, Directory dir, String fileName,
+      {Function success, Function fail}) async {
+    bool isDirExist = await Directory(dir.path).exists();
+    if (!isDirExist) Directory(dir.path).create();
+    String tempPath = '${dir.path}$fileName';
+    File image = File(tempPath);
+    bool isExist = await image.exists();
+    if (isExist) await image.delete();
+    File(tempPath).writeAsBytes(uint8List).then((_) {
+      print("succéess");
+      if (success != null) success();
+    });
   }
 
   Widget build(BuildContext context) {
@@ -88,28 +109,25 @@ class _CustomPaintPageState extends State<CustomPaintPage> {
                 return Scaffold(
                   backgroundColor: Theme.of(context).backgroundColor,
                   appBar: AppBar(
+                    backgroundColor: Color.fromRGBO(255, 209, 16, 1.0),
                     actions: <Widget>[
                       IconButton(
-                          icon: Icon(Icons.check,
-                              color: Theme.of(context).iconTheme.color),
-                          onPressed: () {
+                          icon: Icon(Icons.check),
+                          onPressed: () async {
                             NoteItem tmp = NoteItem("Image");
-                            print(widget.model.getListItems().length);
-                            print(widget.path.toString());
-                            tmp.content = widget.path.toString();
-                            Provider.of<Notes>(context, listen: false)
-                                .addNoteItem(tmp);
+                            var pathImg = '/storage/emulated/0/NoteApp/' +
+                                widget.img.path.split("/").last;
+                            await _saveImage(
+                                bytes,
+                                Directory('/storage/emulated/0/NoteApp/'),
+                                widget.img.path.split("/").last);
+                            tmp.content = pathImg;
                             widget.model.addNoteItem(tmp);
-
-//                          --- luu file anh(doan tren)
-//                            widget.model
-//                                .setContentChildItem(widget.path.toString());
-
-//                            Navigator.of(context).push(MaterialPageRoute(
-//                                builder: (BuildContext context) {
-//                              return CreateNote();
-                            Navigator.popAndPushNamed(context, 'create_note');
-//                            }));
+//                            Navigator.of(context).pop(
+                            MaterialPageRoute(builder: (BuildContext context) {
+                              return CreateNote();
+                            });
+//                            );
                           })
                     ],
                     elevation: 0.0,
@@ -126,9 +144,8 @@ class _CustomPaintPageState extends State<CustomPaintPage> {
       ];
     }
     return Scaffold(
+      backgroundColor: Theme.of(context).backgroundColor,
       appBar: AppBar(
-          backgroundColor: Theme.of(context).backgroundColor,
-//          backgroundColor: Colors.transparent,
           elevation: 0.0,
           title: Text('Edit image',
               style: TextStyle(color: Theme.of(context).iconTheme.color)),

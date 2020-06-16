@@ -1,4 +1,6 @@
 import 'dart:collection';
+import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:note_app/presentations/UI/page/base_view.dart';
 import 'package:note_app/utils/model/TimeUtils.dart';
@@ -8,20 +10,28 @@ import 'package:note_app/utils/model/tag.dart';
 import 'package:note_app/view_model/list_tag_view_model.dart';
 import 'package:scoped_model/scoped_model.dart';
 
-class Audio extends NoteItem {
-  String path;
-  Audio() : super("Audio");
-  void setPath(String _path) {
-    this.path = _path;
-  }
-}
+//class Audio extends NoteItem {
+//  String path;
+//  Audio() : super("Audio");
+//  void setPath(String _path) {
+//    this.path = _path;
+//  }
+//}
 
 class NoteViewModel extends BaseModel {
-  String title = "Sao tui kho qua vay ne";
+  String title = "Untitled note";
+
   List<Tag> tags = [];
   List<NoteItem> contents = [];
   int get size {
     return contents != null ? contents.length : 0;
+  }
+
+  Future<Uint8List> enCodeImg(NoteItem item) async {
+    Uint8List bytes;
+    File imgFile = File(item.content);
+    bytes = imgFile.readAsBytesSync();
+    return bytes;
   }
 
   void setContentChildItem(String content) {
@@ -29,7 +39,7 @@ class NoteViewModel extends BaseModel {
     notifyListeners();
   }
 
-  List<NoteItem> getListItems() { //
+  List<NoteItem> getListItems() {
     return contents;
   }
 
@@ -39,9 +49,9 @@ class NoteViewModel extends BaseModel {
   }
 
   NoteViewModel() : super() {
-    //this.title = "New untitled note";
-    //this.tags = new List<Tag>();
-    //this.contents = new List<NoteItem>();
+    this.title = "New untitled note";
+    this.tags = new List<Tag>();
+    this.contents = new List<NoteItem>();
   }
 
   void Set(Notes pass) {
@@ -50,33 +60,7 @@ class NoteViewModel extends BaseModel {
     this.contents = pass.contents;
     notifyListeners();
   }
-//  NoteViewModel.withFullInfo(
-//      this.id, this.title, DateTime created_time, DateTime modified_time) {
-//    this.tags = new List<Tag>();
-//    this.contents = new List<NoteItem>();
-////    this.created_time = created_time;
-////    this.modified_time = modified_time;
-//  }
-//  NoteViewModel.withTitle(String title) {
-//    this.id = "note" + ((++order).toString());
-//    this.tags = new List<Tag>();
-//    this.contents = new List<NoteItem>();
-//    this.history = new List<String>();
-//    this.history.add(TimeUtils.formatter.format(DateTime.now()));
-//    this.title = title;
-//  }
-//
-//  NoteViewModel.withTag(Tag tag) : super() {
-//    this.id = "note" + ((++order).toString());
-//    this.title = "New Note";
-//    this.tags = new List<Tag>();
-//    this.contents = new List<NoteItem>();
-//    this.history = new List<String>();
-//    this.history.add(TimeUtils.formatter.format(DateTime.now()));
-//    this.tags.add(tag);
-//  }
 
-//  //Set Attribute
   void setTitle(String title) {
     this.title = title;
     notifyListeners();
@@ -119,5 +103,4 @@ class NoteViewModel extends BaseModel {
   NoteItem getNoteItemAt(index) {
     return this.contents[index];
   }
-
 }

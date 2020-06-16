@@ -131,11 +131,12 @@ class ThumbnailNoteDAO {
     } else
       return [];
   }
+
   Future<List<ThumbnailNote>> findThumbnailByTagId(String tagId) async {
     final db = await dbProvider.database;
     //Using full text search sql table Note
     final List<Map<String, dynamic>> notes =
-    await db.rawQuery(SELECT_THUMBNAILS_BY_TAGID , [tagId]);
+        await db.rawQuery(SELECT_THUMBNAILS_BY_TAGID, [tagId]);
 
     if (notes.isNotEmpty) {
       List<ThumbnailNote> thumbs = new List<ThumbnailNote>();
@@ -191,7 +192,7 @@ class ThumbnailNoteDAO {
       List<String> res = LinkedHashSet<String>.from(noteIdList).toList();
 
       List<ThumbnailNote> thumbs = new List<ThumbnailNote>();
-      for(var noteId in res){
+      for (var noteId in res) {
         var thumb = await getThumbnailByID(noteId);
         thumbs.add(thumb);
       }
@@ -211,13 +212,22 @@ class ThumbnailNoteDAO {
 
   //Delete Thumbnail Record by NoteId
   //Return number of record was applied
-  Future<int> deleteThumbnail(String noteId) async {
-    final db = await dbProvider.database;
-    var count = await db
-        .delete('thumbnails', where: "note_id = ?", whereArgs: [noteId]);
-    LogHistory.trackLog(
-        "[Thumbnail]", "DELETE thumbnail of note: " + noteId.toString());
-    return count;
+  Future<int> deleteThumbnail(String noteId, {Transaction txn}) async {
+    var count = 0;
+    if (txn != null) {
+      count = await txn
+          .delete('thumbnails', where: "note_id = ?", whereArgs: [noteId]);
+      LogHistory.trackLog(
+          "[Thumbnail]", "DELETE thumbnail of note: " + noteId.toString());
+      return count;
+    } else {
+      final db = await dbProvider.database;
+      count = await db
+          .delete('thumbnails', where: "note_id = ?", whereArgs: [noteId]);
+      LogHistory.trackLog(
+          "[Thumbnail]", "DELETE thumbnail of note: " + noteId.toString());
+      return count;
+    }
   }
 
   //Update a Thumbnail

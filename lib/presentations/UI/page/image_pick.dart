@@ -2,20 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:note_app/application/constants.dart';
 import 'dart:io';
-import 'package:note_app/presentations/UI/custom_widget/custom_text_style.dart';
 import 'package:note_app/presentations/UI/page/customPaint.dart';
 import 'package:note_app/utils/model/note.dart';
 import 'package:note_app/utils/model/noteItem.dart';
-// <<<<<<< audio
-// import 'package:note_app/utils/database/model/note.dart';
-// import 'package:note_app/utils/database/model/noteItem.dart';
 import 'package:note_app/view_model/note_view_model.dart';
-// =======
-// import 'package:note_app/utils/model/note.dart';
-// import 'package:note_app/utils/model/noteItem.dart';
-// >>>>>>> master
-import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
+
+class Arg {
+  final File data;
+  final NoteViewModel model;
+  Arg(this.data, this.model);
+}
 
 class PickImage extends StatefulWidget {
   final NoteViewModel model;
@@ -26,11 +23,18 @@ class PickImage extends StatefulWidget {
 
 class _PickImageState extends State<PickImage> {
   Future<File> imageFile;
-
   pickImageFromGallery(ImageSource source) {
     setState(() {
       imageFile = ImagePicker.pickImage(source: source);
     });
+  }
+
+  void initState() {
+    super.initState();
+  }
+
+  void dispose() {
+    super.dispose();
   }
 
   Widget showImage(BuildContext context) {
@@ -43,12 +47,21 @@ class _PickImageState extends State<PickImage> {
             snapshot.data != null) {
           return GestureDetector(
               onTap: () {
-                Image tmp = new Image.file(snapshot.data);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => CustomPaintPage(tmp, widget.model)),
-                );
+                File tmp = snapshot.data;
+//                Navigator.push(
+//                  context,
+//                  MaterialPageRoute(
+//                      builder: (context) =>
+//                          CustomPaintPage(snapshot.data, widget.model)),
+//                );
+//                Navigator.of(context).pushAndRemoveUntil(
+//                    MaterialPageRoute(
+//                        builder: (context) =>
+//                            CustomPaintPage(snapshot.data, widget.model)),
+//                    (Route<dynamic> route) => true);
+
+                Navigator.of(context).popAndPushNamed('custom_paint',
+                    arguments: Arg(tmp, widget.model));
               },
               child: Container(
                   width: w * 100,

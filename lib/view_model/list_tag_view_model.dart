@@ -17,7 +17,7 @@ class BaseModel extends ChangeNotifier {
 class TagCreatedModel extends BaseModel {
   TagBUS tagBus = TagBUS();
   List<Tag> listTagCreated = [];
-  void loadData() async {
+  Future<void> loadData() async {
     listTagCreated = await tagBus.getTags();
     notifyListeners();
   }
@@ -39,4 +39,10 @@ class TagCreatedModel extends BaseModel {
     listTagCreated = [];
     notifyListeners();
   }
+
+//  Future getTags() async {
+//    applyState(ViewState.Busy);
+//    listTagCreated = await getTags();
+//    applyState(ViewState.Idle);
+//  }
 }

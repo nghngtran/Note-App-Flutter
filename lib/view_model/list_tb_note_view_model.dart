@@ -44,4 +44,10 @@ class NoteCreatedModel extends BaseModel {
     listNoteCreated = [];
     notifyListeners();
   }
+
+  void deleteNote(ThumbnailNote note) {
+    listNoteCreated.remove(note);
+    print("delete");
+    notifyListeners();
+  }
 }

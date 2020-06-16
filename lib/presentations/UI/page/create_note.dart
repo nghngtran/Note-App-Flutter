@@ -1,11 +1,12 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
+import 'package:audiofileplayer/audiofileplayer.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:flutter/services.dart' show rootBundle;
 import 'package:note_app/application/constants.dart';
 import 'package:note_app/presentations/UI/custom_widget/choose_title.dart';
 import 'package:note_app/presentations/UI/custom_widget/tab_bar_note.dart';
@@ -25,6 +26,7 @@ import 'package:note_app/utils/model/noteItem.dart';
 import 'package:note_app/view_model/list_tb_note_view_model.dart';
 import 'package:note_app/view_model/list_tag_view_model.dart';
 import 'package:note_app/view_model/note_view_model.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:unicorndial/unicorndial.dart';
 
 class CreateNote extends StatefulWidget {
@@ -59,7 +61,7 @@ class CreateNoteState extends State<CreateNote> {
           onPressed: () {
             Navigator.push(context,
                 MaterialPageRoute(builder: (BuildContext context) {
-              return CameraScreen();
+              return CameraScreen(model);
             }));
           },
         ),
@@ -77,6 +79,28 @@ class CreateNoteState extends State<CreateNote> {
     );
   }
 
+  ByteData _audioByteData;
+  void _saveAudio(ByteData byteData, String fileName,
+      {Function success, Function fail}) async {
+    final buffer = byteData.buffer;
+    String tempPath = fileName;
+    File audio = File(tempPath);
+    bool isExist = await audio.exists();
+    if (isExist) await audio.delete();
+    File(tempPath)
+        .writeAsBytes(
+            buffer.asUint8List(byteData.offsetInBytes, byteData.lengthInBytes))
+        .then((_) {
+      print("success");
+      if (success != null) success();
+    });
+  }
+
+  void _loadAudioByteData(String fileName) async {
+    _audioByteData = await rootBundle.load(fileName);
+  }
+
+  int i = 0;
   Widget dialogSound(BuildContext context, NoteViewModel model) {
     return CupertinoAlertDialog(
         title: Text('Get sound from ?'),
@@ -98,10 +122,15 @@ class CreateNoteState extends State<CreateNote> {
           CupertinoDialogAction(
               child: Text('Mp3'),
               onPressed: () async {
+//                get Path file audio
                 _path = await FilePicker.getFilePath(type: _pickingType);
-
+//                fileName of audio
                 _fileName = _path != null ? _path.split('/').last : '';
+                String sdPath = '/storage/emulated/0/NoteApp/';
+                String pathTmp = sdPath + "/record_${i++}.mp3";
                 print("check" + _fileName);
+                _loadAudioByteData(_path);
+                _saveAudio(_audioByteData, pathTmp);
                 NoteItem tmp = NoteItem("Audio");
                 tmp.type = "Audio";
                 tmp.setContent(_path);
@@ -257,14 +286,14 @@ class CreateNoteState extends State<CreateNote> {
                             final NoteBUS noteBus = NoteBUS();
                             await noteBus.addNote(note);
 
-                            final ThumbnailBUS thumbBus = ThumbnailBUS();
-                            print("|Load FTS|");
-                            var thumbs = await thumbBus.getThumbnailsByKeyWordAll("abcd");
-                            for (var thumb in thumbs) {
-                              print(thumb.toString());
-//                              //noteCreatedModel.addToList(thumb);
-                            }
-                            print("|Load FTS|");
+//                            final ThumbnailBUS thumbBus = ThumbnailBUS();
+//                            print("|Load FTS|");
+//                            var thumbs = await thumbBus.getThumbnailsByKeyWordAll("abcd");
+//                            for (var thumb in thumbs) {
+//                              print(thumb.toString());
+////                              //noteCreatedModel.addToList(thumb);
+//                            }
+//                            print("|Load FTS|");
 
                             Navigator.of(context)
                                 .push(MaterialPageRoute(builder: (context) {
@@ -366,6 +395,8 @@ class EditTextState extends State<EditText> {
                 padding: EdgeInsets.fromLTRB(w * 4, h / 2, w * 2, h),
                 child: Wrap(children: <Widget>[
                   TextFormField(
+                      textInputAction: TextInputAction.done,
+                      autofocus: false,
                       autocorrect: false,
                       decoration: InputDecoration(
                         contentPadding: EdgeInsets.fromLTRB(w, h, w, h),
@@ -391,6 +422,7 @@ class EditTextState extends State<EditText> {
                         widget.item.setContent(txtController.text);
                         widget.item.setBgColor(noteColor);
                         print(widget.item.content);
+                        FocusScope.of(context).unfocus();
                       })
                 ]))));
   }
@@ -401,12 +433,21 @@ class NoteItemWidget extends StatelessWidget {
   AudioPlayer advancedPlayer = AudioPlayer();
   NoteItemWidget(NoteItem _item) : item = _item;
   Uint8List bytes;
-  void enCodeImg() {
-    final picker = ImagePicker();
+  ByteData _audioByteData;
+  Future<Uint8List> enCodeImg() async {
     File imgFile = File(item.content);
-    print(item.content);
-    ImagePicker.pickImage(source: ImageSource.gallery);
     bytes = imgFile.readAsBytesSync();
+    print(bytes.toString());
+    return bytes;
+  }
+
+  void _loadAudioByteData() async {
+    _audioByteData = await rootBundle.load(item.content);
+  }
+
+  Future<void> generateImageBytes() async {
+    _loadAudioByteData();
+    Audio.loadFromByteData(_audioByteData);
   }
 
   Widget build(BuildContext context) {
@@ -415,21 +456,34 @@ class NoteItemWidget extends StatelessWidget {
     if (item.type == "Text") {
       return EditText(item);
     } else if (item.type == "Image") {
-      enCodeImg();
-      print("Bytes:"+bytes.toString());
-      return Container(
-          width: w * 100,
-          height: w * 100,
-          margin: EdgeInsets.fromLTRB(w * 2, h, w * 2, h),
-          padding: EdgeInsets.fromLTRB(w, h, w, h),
-          decoration: BoxDecoration(
-              border: Border.all(width: 1, color: Colors.black),
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-              color: Colors.white),
-          child: Image.memory(bytes));
+      print(item.content);
+      return FutureBuilder<Uint8List>(
+        future: enCodeImg(),
+        builder: (BuildContext context, AsyncSnapshot<Uint8List> image) {
+          if (image.connectionState == ConnectionState.done && image.hasData) {
+            print(bytes.toString());
+            return Container(
+                width: w * 100,
+                height: w * 100,
+                margin: EdgeInsets.fromLTRB(w * 2, h, w * 2, h),
+                padding: EdgeInsets.fromLTRB(w, h, w, h),
+                decoration: BoxDecoration(
+                    border: Border.all(width: 1, color: Colors.transparent),
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                    color: Theme.of(context).backgroundColor),
+                child: Image.memory(
+                  bytes,
+                  fit: BoxFit.fitWidth,
+                )); // image is ready
+          } else {
+            return Container(); // placeholder
+          }
+        },
+      );
     }
     advancedPlayer.startHeadlessService();
     print(item.content);
     return HandleAudio(url: item.content);
+//
   }
 }

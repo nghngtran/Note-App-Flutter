@@ -1,13 +1,14 @@
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
-import 'package:note_app/presentations/UI/custom_widget/custom_list_notes.dart';
+import 'package:flutter/services.dart' show rootBundle;
 import 'package:note_app/utils/model/noteItem.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:note_app/view_model/note_view_model.dart';
 import 'dart:async';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter/cupertino.dart';
-
+import 'package:audiofileplayer/audiofileplayer.dart';
 import 'package:record_mp3/record_mp3.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:audioplayers/audioplayers.dart';
@@ -28,9 +29,26 @@ class RecordState extends State<Record> {
   bool isComplete;
   bool isRecording;
   String fileName = "";
+  ByteData _audioByteData;
   void initState() {
     super.initState();
     isRecording = false;
+  }
+
+  void _saveAudio(ByteData byteData, String fileName,
+      {Function success, Function fail}) async {
+    final buffer = byteData.buffer;
+    String tempPath = fileName;
+    File image = File(tempPath);
+    bool isExist = await image.exists();
+    if (isExist) await image.delete();
+    File(tempPath)
+        .writeAsBytes(
+            buffer.asUint8List(byteData.offsetInBytes, byteData.lengthInBytes))
+        .then((_) {
+      print("success");
+      if (success != null) success();
+    });
   }
 
   Widget build(BuildContext context) {
@@ -47,13 +65,15 @@ class RecordState extends State<Record> {
               isRecording = !isRecording;
             });
             if (isRecording) {
-              NoteItem tmp = NoteItem("Audio");
-              print("FIle" + fileName);
-              tmp.setContent(fileName);
-              widget.model.addNoteItem(tmp);
               startRecord();
             } else {
               stopRecord();
+              _loadAudioByteData();
+              _saveAudio(_audioByteData, fileName);
+              NoteItem tmp = NoteItem("Audio");
+              print("File" + fileName);
+              tmp.setContent(fileName);
+              widget.model.addNoteItem(tmp);
               Navigator.of(context).pop();
             }
           },
@@ -102,11 +122,18 @@ class RecordState extends State<Record> {
     }
   }
 
+  void _loadAudioByteData() async {
+    _audioByteData = await rootBundle.load(fileName);
+    setState(() {});
+  }
+
   void stopRecord() {
     print("stop");
     bool s = RecordMp3.instance.stop();
+
     if (s) {
       isComplete = true;
+
       setState(() {});
     }
   }
