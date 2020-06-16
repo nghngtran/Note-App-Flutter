@@ -54,9 +54,10 @@ class NoteCardState extends State<NoteCard> {
               width: 45 * MediaQuery.of(context).size.width / 100,
               decoration: BoxDecoration(
                 border: Border.all(
-                    color: Theme.of(context).iconTheme.color, width: 0.6),
+                    color: Theme.of(context).iconTheme.color.withOpacity(0.6),
+                    width: 0.5),
                 borderRadius: BorderRadius.all(Radius.circular(5)),
-                color: Theme.of(context).backgroundColor,
+                color: Theme.of(context).cardColor,
               ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -67,7 +68,7 @@ class NoteCardState extends State<NoteCard> {
                       style: Theme.of(context)
                           .textTheme
                           .title
-                          .copyWith(color: Colors.black)),
+                          .copyWith(color: Theme.of(context).iconTheme.color)),
                   SizedBox(height: MediaQuery.of(context).size.height / 100),
                   Row(children: <Widget>[
                     noteCard.tags.length > 0
@@ -123,7 +124,7 @@ class NoteCardState extends State<NoteCard> {
                     color: Theme.of(context).iconTheme.color.withOpacity(0.6),
                     width: 0.5),
                 borderRadius: BorderRadius.all(Radius.circular(5)),
-                color: (noteCard.color == Colors.transparent)
+                color: (noteCard.color == Theme.of(context).cardColor)
                     ? Theme.of(context).backgroundColor
                     : noteCard.color,
               ),

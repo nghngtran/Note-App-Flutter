@@ -69,7 +69,7 @@ class EditNoteState extends State<EditNote> {
           onPressed: () {
             Navigator.push(context,
                 MaterialPageRoute(builder: (BuildContext context) {
-              return CameraScreen();
+              return CameraScreen(model);
             }));
           },
         ),

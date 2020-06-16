@@ -1,4 +1,6 @@
 import 'dart:collection';
+import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:note_app/presentations/UI/page/base_view.dart';
 import 'package:note_app/utils/model/TimeUtils.dart';
@@ -23,6 +25,13 @@ class NoteViewModel extends BaseModel {
   List<NoteItem> contents = [];
   int get size {
     return contents != null ? contents.length : 0;
+  }
+
+  Future<Uint8List> enCodeImg(NoteItem item) async {
+    Uint8List bytes;
+    File imgFile = File(item.content);
+    bytes = imgFile.readAsBytesSync();
+    return bytes;
   }
 
   void setContentChildItem(String content) {

@@ -8,8 +8,9 @@ class NoteCreatedModel extends BaseModel {
   ThumbnailBUS noteBus = ThumbnailBUS();
   List<ThumbnailNote> listNoteCreated = [];
 
-  Future<void> loadData() async {
+  void loadData() async {
     listNoteCreated = await noteBus.getThumbnails();
+    notifyListeners();
   }
 
   Future<void> loadDataByKeyword(String key) async {

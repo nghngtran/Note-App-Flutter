@@ -60,7 +60,7 @@ class CreateNoteState extends State<CreateNote> {
           onPressed: () {
             Navigator.push(context,
                 MaterialPageRoute(builder: (BuildContext context) {
-              return CameraScreen();
+              return CameraScreen(model);
             }));
           },
         ),
@@ -367,6 +367,7 @@ class EditTextState extends State<EditText> {
                 padding: EdgeInsets.fromLTRB(w * 4, h / 2, w * 2, h),
                 child: Wrap(children: <Widget>[
                   TextFormField(
+                      autofocus: false,
                       autocorrect: false,
                       decoration: InputDecoration(
                         contentPadding: EdgeInsets.fromLTRB(w, h, w, h),
@@ -402,9 +403,11 @@ class NoteItemWidget extends StatelessWidget {
   AudioPlayer advancedPlayer = AudioPlayer();
   NoteItemWidget(NoteItem _item) : item = _item;
   Uint8List bytes;
-  void enCodeImg() {
+  Future<Uint8List> enCodeImg() async {
     File imgFile = File(item.content);
     bytes = imgFile.readAsBytesSync();
+    print(bytes.toString());
+    return bytes;
   }
 
   Widget build(BuildContext context) {
@@ -413,25 +416,30 @@ class NoteItemWidget extends StatelessWidget {
     if (item.type == "Text") {
       return EditText(item);
     } else if (item.type == "Image") {
-      enCodeImg();
-      print("Bytes:" + bytes.toString());
-      return Container(
-          width: w * 100,
-          height: w * 100,
-          margin: EdgeInsets.fromLTRB(w * 2, h, w * 2, h),
-          padding: EdgeInsets.fromLTRB(w, h, w, h),
-          decoration: BoxDecoration(
-              border: Border.all(width: 1, color: Colors.transparent),
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-              color: Theme.of(context).backgroundColor),
-          child: Image.memory(
-            bytes,
-            fit: BoxFit.fitWidth,
-          )
-//            File(item.content),
-//            fit: BoxFit.cover,
-          );
-//          });
+      print(item.content);
+      return FutureBuilder<Uint8List>(
+        future: enCodeImg(),
+        builder: (BuildContext context, AsyncSnapshot<Uint8List> image) {
+          if (image.connectionState == ConnectionState.done && image.hasData) {
+            print(bytes.toString());
+            return Container(
+                width: w * 100,
+                height: w * 100,
+                margin: EdgeInsets.fromLTRB(w * 2, h, w * 2, h),
+                padding: EdgeInsets.fromLTRB(w, h, w, h),
+                decoration: BoxDecoration(
+                    border: Border.all(width: 1, color: Colors.transparent),
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                    color: Theme.of(context).backgroundColor),
+                child: Image.memory(
+                  bytes,
+                  fit: BoxFit.fitWidth,
+                )); // image is ready
+          } else {
+            return Container(); // placeholder
+          }
+        },
+      );
     }
     advancedPlayer.startHeadlessService();
     print(item.content);

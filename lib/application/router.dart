@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:note_app/application/constants.dart';
-import 'package:note_app/presentations/UI/page/camera_access.dart';
 import 'package:note_app/presentations/UI/page/create_note.dart';
 import 'package:note_app/presentations/UI/page/customPaint.dart';
 import 'package:note_app/presentations/UI/page/home_screen.dart';
@@ -27,9 +26,9 @@ class Router {
         return MaterialPageRoute(
             builder: (BuildContext context) =>
                 CustomPaintPage(arg.data, arg.model));
-      case RoutePaths.Camera:
-        return MaterialPageRoute(
-            builder: (BuildContext context) => TakePictureScreen());
+//      case RoutePaths.Camera:
+//        return MaterialPageRoute(
+//            builder: (BuildContext context) => TakePictureScreen());
 //      case RoutePaths.Paint:
 //        return MaterialPageRoute(builder: (BuildContext context) => CustomPaintPage());
       case RoutePaths.Create_note:

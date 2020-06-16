@@ -49,19 +49,19 @@ class _CustomPaintPageState extends State<CustomPaintPage> {
 
   int i = 0;
 
-//  Future<File> saveFile(File img) async {
-//    File paintImg = widget.img;
-////        .copy("/imgPaint_${i++}.jpg");
-////    Directory storageDirectory = await getApplicationDocumentsDirectory();
-////    String sdPath = storageDirectory.path + "/img";
-////    var d = Directory(sdPath);
-////    if (!d.existsSync()) {
-////      d.createSync(recursive: true);
-////    }
-////    fileName = sdPath + "/img_paint";
-//    Uint8List byte = paintImg.readAsBytesSync();
-//    return paintImg.writeAsBytesSync(byte);
-//  }
+  void _saveImage(Uint8List uint8List, Directory dir, String fileName,
+      {Function success, Function fail}) async {
+    bool isDirExist = await Directory(dir.path).exists();
+    if (!isDirExist) Directory(dir.path).create();
+    String tempPath = '${dir.path}$fileName';
+    File image = File(tempPath);
+    bool isExist = await image.exists();
+    if (isExist) await image.delete();
+    File(tempPath).writeAsBytes(uint8List).then((_) {
+      print("succéess");
+      if (success != null) success();
+    });
+  }
 
   Widget build(BuildContext context) {
     List<Widget> actions;
@@ -114,27 +114,32 @@ class _CustomPaintPageState extends State<CustomPaintPage> {
                       IconButton(
                           icon: Icon(Icons.check),
                           onPressed: () async {
-                            print("save " + widget.img.path);
-                            await GallerySaver.saveImage(widget.img.path,
-                                albumName: "NoteApp");
+//                            print("save " + widget.img.path);
+//                            await GallerySaver.saveImage(widget.img.path,
+//                                albumName: "NoteApp");
 
                             NoteItem tmp = NoteItem("Image");
                             var pathImg = '/storage/emulated/0/NoteApp/' +
                                 widget.img.path.split("/").last;
+//                            Image paint = Image.memory(bytes);
+//                            String pathTemp = pathImg + "-paint";
+//                            await GallerySaver.saveImage(pathTemp,
+//                                albumName: "NoteApp");
+                            await _saveImage(
+                                bytes,
+                                Directory('/storage/emulated/0/NoteApp/'),
+                                widget.img.path.split("/").last);
+//                            Uint8List bytes;
+//                            File imgFile = File(pathImg);
+//                            bytes = imgFile.readAsBytesSync();
                             tmp.content = pathImg;
+//                            widget.model.enCodeImg(tmp);
                             widget.model.addNoteItem(tmp);
-//                            widget.model
-//                                .setContentChildItem(widget.path.toString());
-//                            Navigator.popUntil(
-//                                context, ModalRoute.withName('create_note'));
-//                            Navigator.of(context).push(
-
+//                            Navigator.of(context).pop(
                             MaterialPageRoute(builder: (BuildContext context) {
                               return CreateNote();
-                              Navigator.of(context).pushNamed('create_note');
-//                            })
                             });
-//                            Navigator.of(context).pushNamed('create_note');
+//                            );
                           })
                     ],
                     elevation: 0.0,
