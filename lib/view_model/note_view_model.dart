@@ -1,4 +1,6 @@
 import 'dart:collection';
+import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:note_app/presentations/UI/page/base_view.dart';
 import 'package:note_app/utils/model/TimeUtils.dart';
@@ -8,13 +10,13 @@ import 'package:note_app/utils/model/tag.dart';
 import 'package:note_app/view_model/list_tag_view_model.dart';
 import 'package:scoped_model/scoped_model.dart';
 
-class Audio extends NoteItem {
-  String path;
-  Audio() : super("Audio");
-  void setPath(String _path) {
-    this.path = _path;
-  }
-}
+//class Audio extends NoteItem {
+//  String path;
+//  Audio() : super("Audio");
+//  void setPath(String _path) {
+//    this.path = _path;
+//  }
+//}
 
 class NoteViewModel extends BaseModel {
   String title = "Untitled note";
@@ -23,6 +25,13 @@ class NoteViewModel extends BaseModel {
   List<NoteItem> contents = [];
   int get size {
     return contents != null ? contents.length : 0;
+  }
+
+  Future<Uint8List> enCodeImg(NoteItem item) async {
+    Uint8List bytes;
+    File imgFile = File(item.content);
+    bytes = imgFile.readAsBytesSync();
+    return bytes;
   }
 
   void setContentChildItem(String content) {

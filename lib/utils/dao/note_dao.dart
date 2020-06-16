@@ -33,8 +33,8 @@ class NoteDAO {
       //Insert NoteItem
       await noteItemDao.createListNoteItemByNote(note, txn: txn);
       //Insert Tag Relative
-      await relativeDao.insertRelativesFromTagList(
-          note.id, note.tags, txn: txn);
+      await relativeDao.insertRelativesFromTagList(note.id, note.tags,
+          txn: txn);
       //Insert Thumbnail
       await thumbnailNoteDao.createThumbnailByNote(note, txn: txn);
 
@@ -57,8 +57,8 @@ class NoteDAO {
       );
 
       await relativeDao.deleteRelativesByNoteID(note.id, txn: txn);
-      await relativeDao.insertRelativesFromTagList(
-          note.id, note.tags, txn: txn);
+      await relativeDao.insertRelativesFromTagList(note.id, note.tags,
+          txn: txn);
       await noteItemDao.updateListNoteItemByNote(note, txn: txn);
 
       LogHistory.trackLog("[Note]", "UPDATE note:" + note.id.toString());
@@ -74,11 +74,12 @@ class NoteDAO {
     var count = 0;
     await db.transaction((txn) async {
       count =
-      await txn.delete('notes', where: "note_id = ?", whereArgs: [noteId]);
+          await txn.delete('notes', where: "note_id = ?", whereArgs: [noteId]);
 
       await relativeDao.deleteRelativesByNoteID(noteId, txn: txn);
       await noteItemDao.deleteNoteItemsByNoteID(noteId, txn: txn);
 
+      await thumbnailNoteDao.deleteThumbnail(noteId, txn: txn);
       LogHistory.trackLog("[Note]", "DELETE note:" + noteId.toString());
     });
     return count;
@@ -93,7 +94,7 @@ class NoteDAO {
       await txn.delete(
         'notes',
       );
-      await noteItemDao.deleteAllNoteItem(txn:txn);
+      await noteItemDao.deleteAllNoteItem(txn: txn);
       await relativeDao.deleteAllRelatives(txn: txn);
       //await tagDao.deleteAllTags();
 
@@ -136,7 +137,7 @@ class NoteDAO {
     final db = await dbProvider.database;
     // Get List Note
     List<Map<String, dynamic>> maps =
-    await db.query('notes', where: "note_id = ?", whereArgs: [noteId]);
+        await db.query('notes', where: "note_id = ?", whereArgs: [noteId]);
     // Case Found
     if (maps.isNotEmpty) {
       var tags = await tagDao.getTagsByNoteID(noteId); //Get tags of Note
@@ -165,7 +166,7 @@ class NoteDAO {
   Future<int> getOrder() async {
     final db = await dbProvider.database;
     List<Map<String, dynamic>> maps =
-    await db.query('tableCount', where: "id = ?", whereArgs: ["notes"]);
+        await db.query('tableCount', where: "id = ?", whereArgs: ["notes"]);
     if (maps.isNotEmpty)
       return maps[0]['count'];
     else

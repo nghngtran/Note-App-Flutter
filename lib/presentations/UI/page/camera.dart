@@ -1,18 +1,21 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:note_app/presentations/UI/page/preview.dart';
+import 'package:note_app/utils/model/noteItem.dart';
+import 'package:note_app/view_model/note_view_model.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 
-
 class CameraScreen extends StatefulWidget {
+  final NoteViewModel model;
+  CameraScreen(NoteViewModel _model) : model = _model;
   @override
   _CameraScreenState createState() {
     return _CameraScreenState();
   }
 }
 
-class _CameraScreenState extends State {
+class _CameraScreenState extends State<CameraScreen> {
   CameraController controller;
   List cameras;
   int selectedCameraIdx;
@@ -22,7 +25,6 @@ class _CameraScreenState extends State {
   void initState() {
     super.initState();
     availableCameras().then((availableCameras) {
-
       cameras = availableCameras;
 
       if (cameras.length > 0) {
@@ -31,7 +33,7 @@ class _CameraScreenState extends State {
         });
 
         _initCameraController(cameras[selectedCameraIdx]).then((void v) {});
-      }else{
+      } else {
         print("No camera available");
       }
     }).catchError((err) {
@@ -72,8 +74,8 @@ class _CameraScreenState extends State {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Take image from camera'),
-        backgroundColor: Color.fromRGBO(255, 209, 16, 1.0),
+        title: Text('Take image from camera',
+            style: TextStyle(color: Theme.of(context).iconTheme.color)),
       ),
       body: Container(
         child: SafeArea(
@@ -82,7 +84,7 @@ class _CameraScreenState extends State {
             children: <Widget>[
               Expanded(
                 flex: 1,
-                child: _cameraPreviewWidget(),
+                child: _cameraPreviewWidget(context),
               ),
               SizedBox(height: 10.0),
               Row(
@@ -102,12 +104,12 @@ class _CameraScreenState extends State {
   }
 
   /// Display Camera preview.
-  Widget _cameraPreviewWidget() {
+  Widget _cameraPreviewWidget(BuildContext context) {
     if (controller == null || !controller.value.isInitialized) {
-      return const Text(
+      return Text(
         'Loading',
         style: TextStyle(
-          color: Colors.white,
+          color: Theme.of(context).iconTheme.color,
           fontSize: 20.0,
           fontWeight: FontWeight.w900,
         ),
@@ -177,7 +179,7 @@ class _CameraScreenState extends State {
 
   void _onSwitchCamera() {
     selectedCameraIdx =
-    selectedCameraIdx < cameras.length - 1 ? selectedCameraIdx + 1 : 0;
+        selectedCameraIdx < cameras.length - 1 ? selectedCameraIdx + 1 : 0;
     CameraDescription selectedCamera = cameras[selectedCameraIdx];
     _initCameraController(selectedCamera);
   }
@@ -197,10 +199,11 @@ class _CameraScreenState extends State {
       await controller.takePicture(path);
 
       // If the picture was taken, display it on a new screen
+
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => PreviewImageScreen(imagePath: path),
+          builder: (context) => PreviewImageScreen(path, widget.model),
         ),
       );
     } catch (e) {

@@ -78,6 +78,7 @@ class AppTheme {
         color: Colors.black,
       ),
     ),
+    cardColor: Colors.white,
     floatingActionButtonTheme:
         FloatingActionButtonThemeData(backgroundColor: Colors.blue),
     iconTheme: IconThemeData(
@@ -109,7 +110,7 @@ class AppTheme {
         color: Colors.white,
       ),
     ),
-
+    cardColor: Colors.black54,
     floatingActionButtonTheme:
         FloatingActionButtonThemeData(backgroundColor: Colors.black),
 

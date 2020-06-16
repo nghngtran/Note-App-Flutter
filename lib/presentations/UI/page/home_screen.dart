@@ -86,6 +86,12 @@ class HomeScreenState extends State<HomeScreen>
     );
   }
 
+//  TagBUS tagBUS = TagBUS();
+//  List<Tag> listCreatedTag;
+//  void loadTagData() async {
+//    listCreatedTag = await tagBUS.getTags();
+//  }
+
   void updateSearchQuery(String newQuery) {
     setState(() {
       searchQuery = newQuery;
@@ -104,7 +110,6 @@ class HomeScreenState extends State<HomeScreen>
               return;
             }
             _clearSearchQuery();
-//            search(context);
           },
         ),
       ];
@@ -135,13 +140,25 @@ class HomeScreenState extends State<HomeScreen>
                             style: TextStyle(
                                 color: Theme.of(context).iconTheme.color))));
           }
-//          else if (_searchQuery.text != null) {
-//            return Center(
-//                child: SpinKitCircle(color: Theme.of(context).iconTheme.color));
-//          }
           return Container();
         });
   }
+
+//  Widget loadHome(BuildContext context, NoteCreatedModel model) {
+//    return FutureBuilder(
+//        future: model.loadData(),
+//        builder: (context, state) {
+//          if (state.connectionState == ConnectionState.done) {
+//            return Container(
+//                width: MediaQuery.of(context).size.width,
+//                height: MediaQuery.of(context).size.height,
+//                child: model.getNoteCreated().length > 0
+//                    ? NoteGrid(model.getNoteCreated())
+//                    : Text(""));
+//          }
+//          return Container();
+//        });
+//  }
 
   Widget build(BuildContext context) {
     return MultiProvider(
