@@ -264,7 +264,7 @@ class HandleAudioState extends State<HandleAudio> {
                               color: Theme.of(context).iconTheme.color),
                           SizedBox(width: w * 2),
                           url.length > 0
-                              ? Text(url.split('/').last,
+                              ? Text(url.split('/').last.substring(0, 30),
                                   style: TextStyle(
                                       fontSize: 17,
                                       fontFamily: Font.Name,

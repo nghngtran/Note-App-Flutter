@@ -171,5 +171,55 @@ class NoteCardState extends State<NoteCard> {
                 ],
               )));
     }
+
+    return InkWell(
+        splashColor: Colors.blue.withAlpha(30),
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => EditNote(noteCard)),
+          );
+        },
+        onLongPress: () async {
+//          Thumbnail xóa đúng, nhưng noteBus sai !!
+          NoteBUS noteBus = NoteBUS();
+          var stt = await noteBus.deleteNoteById(noteCard.noteId);
+          NoteCreatedModel model = NoteCreatedModel();
+          model.deleteNote(noteCard);
+        },
+        child: Container(
+            margin: EdgeInsets.only(
+                top: 2 * MediaQuery.of(context).size.height / 100),
+            padding:
+                EdgeInsets.all(4 * MediaQuery.of(context).size.width / 100),
+            width: 45 * MediaQuery.of(context).size.width / 100,
+            decoration: BoxDecoration(
+              border: Border.all(
+                  color: Theme.of(context).iconTheme.color.withOpacity(0.6),
+                  width: 0.5),
+              borderRadius: BorderRadius.all(Radius.circular(5)),
+              color: Theme.of(context).backgroundColor,
+            ),
+            child: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Icon(Icons.audiotrack,
+                          size: 24, color: Theme.of(context).iconTheme.color),
+                      SizedBox(
+                          height: 2 * MediaQuery.of(context).size.height / 100),
+                      Text(noteCard.content.split('/').last.substring(0, 12),
+                          style: TextStyle(
+                              fontSize: 15,
+                              fontFamily: Font.Name,
+                              fontWeight: Font.Regular,
+                              color: Theme.of(context).iconTheme.color))
+                    ],
+                  )
+                ])));
   }
 }

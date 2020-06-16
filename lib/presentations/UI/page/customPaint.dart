@@ -114,26 +114,14 @@ class _CustomPaintPageState extends State<CustomPaintPage> {
                       IconButton(
                           icon: Icon(Icons.check),
                           onPressed: () async {
-//                            print("save " + widget.img.path);
-//                            await GallerySaver.saveImage(widget.img.path,
-//                                albumName: "NoteApp");
-
                             NoteItem tmp = NoteItem("Image");
                             var pathImg = '/storage/emulated/0/NoteApp/' +
                                 widget.img.path.split("/").last;
-//                            Image paint = Image.memory(bytes);
-//                            String pathTemp = pathImg + "-paint";
-//                            await GallerySaver.saveImage(pathTemp,
-//                                albumName: "NoteApp");
                             await _saveImage(
                                 bytes,
                                 Directory('/storage/emulated/0/NoteApp/'),
                                 widget.img.path.split("/").last);
-//                            Uint8List bytes;
-//                            File imgFile = File(pathImg);
-//                            bytes = imgFile.readAsBytesSync();
                             tmp.content = pathImg;
-//                            widget.model.enCodeImg(tmp);
                             widget.model.addNoteItem(tmp);
 //                            Navigator.of(context).pop(
                             MaterialPageRoute(builder: (BuildContext context) {
