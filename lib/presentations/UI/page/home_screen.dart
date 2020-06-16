@@ -27,6 +27,7 @@ class HomeScreenState extends State<HomeScreen>
     with SingleTickerProviderStateMixin {
   TagCreatedModel model = TagCreatedModel();
   bool _isSearching = false;
+  String SearchTag = "";
   String searchQuery = "Search for a word ...";
   TextEditingController _searchQuery;
 
@@ -68,6 +69,14 @@ class HomeScreenState extends State<HomeScreen>
 
     setState(() {
       _isSearching = true;
+    });
+  }
+
+  _updateMyTitle(String text) { /////function callback from tag class
+    print("CHOSEN TAG: " + text);
+    setState(() {
+      _stopSearching();
+      SearchTag = text;
     });
   }
 
@@ -144,6 +153,27 @@ class HomeScreenState extends State<HomeScreen>
         });
   }
 
+
+  Widget searchByTag(BuildContext context, NoteCreatedModel model) {
+    return FutureBuilder(
+        future: model.loadDataByTag(SearchTag),
+        builder: (context, state) {
+          if (state.connectionState == ConnectionState.done) {
+            SearchTag = "";
+            return Container(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height,
+                child: model.getNoteCreated().length > 0
+                    ? NoteGrid(model.getNoteCreated())
+                    : Center(
+                    child: Text("No match!",
+                        style: TextStyle(
+                            color: Theme.of(context).iconTheme.color))));
+          }
+          return Container();
+        });
+  }
+
 //  Widget loadHome(BuildContext context, NoteCreatedModel model) {
 //    return FutureBuilder(
 //        future: model.loadData(),
@@ -159,6 +189,7 @@ class HomeScreenState extends State<HomeScreen>
 //          return Container();
 //        });
 //  }
+
 
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -234,16 +265,17 @@ class HomeScreenState extends State<HomeScreen>
                   Consumer<TagCreatedModel>(
                       builder: (context, tagCreatedModel, _) {
                     tagCreatedModel.loadData();
-                    return TagBar(mainController, tagCreatedModel);
+                    return TagBar(mainController, tagCreatedModel, _updateMyTitle);
                   }),
                   (!_isSearching)
-                      ? SingleChildScrollView(
+                      ? (SearchTag.compareTo("") == 0)
+                        ? SingleChildScrollView(
                           child: Container(
                               width: MediaQuery.of(context).size.width,
                               height: MediaQuery.of(context).size.height,
                               child: Consumer<NoteCreatedModel>(
                                   builder: (context, listTBNote, _) {
-                                listTBNote.loadData();
+                                    listTBNote.loadData();
                                 if (listTBNote.listSize > 0) {
                                   return NoteGrid(listTBNote.getNoteCreated());
                                 }
@@ -255,6 +287,14 @@ class HomeScreenState extends State<HomeScreen>
                                                 .iconTheme
                                                 .color)));
                               })))
+                        : SingleChildScrollView(
+                            child: Container(
+                              width: MediaQuery.of(context).size.width,
+                              height: MediaQuery.of(context).size.height,
+                              child: Consumer<NoteCreatedModel>(
+                                builder: (context, listTBNote, _) {
+                                  return searchByTag(context, listTBNote);
+                                })))
                       : SingleChildScrollView(
                           child: Container(
                               width: MediaQuery.of(context).size.width,
