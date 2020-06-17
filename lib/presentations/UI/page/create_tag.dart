@@ -99,29 +99,6 @@ class CreateTagState extends State<CreateTag> {
                             hintStyle: TextStyle(
                                 color: Theme.of(context).iconTheme.color,
                                 fontSize: 13)),
-//                        itemBuilder: (context, item) {
-//                          return Container(
-//                              height:
-//                                  MediaQuery.of(context).size.height / 100 * 6,
-//                              padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
-//                              child: Text(item.title,
-//                                  style: TextStyle(
-//                                      color: Theme.of(context).iconTheme.color,
-//                                      fontSize: 16)));
-//                        },
-//                        itemFilter: (item, query) {
-//                          return item.title
-//                              .toLowerCase()
-//                              .startsWith(query.toLowerCase());
-//                        },
-//                        itemSorter: (a, b) {
-//                          return a.title.compareTo(b.title);
-//                        },
-//                        itemSubmitted: (Tag item) {
-//                          textController.text = item.title;
-//                        },
-//                        suggestions: tagCreatedModel.getTagCreated(),
-//                        key: null,
                       )),
                   SizedBox(width: MediaQuery.of(context).size.width / 100 * 2),
                 ])),
@@ -129,7 +106,6 @@ class CreateTagState extends State<CreateTag> {
                 child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
-//                SizedBox(width: MediaQuery.of(context).size.width / 100 * 10),
                   Expanded(
                       flex: 1,
                       child: FlatButton(

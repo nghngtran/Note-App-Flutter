@@ -282,19 +282,12 @@ class CreateNoteState extends State<CreateNote> {
                           onTap: () async {
                             note.setListNoteItems(noteViewModel.contents);
                             note.setTitle(noteViewModel.title);
+                            for (var i in noteViewModel.tags) {
+                              print(i.title);
+                            }
                             note.setTag(noteViewModel.tags);
                             final NoteBUS noteBus = NoteBUS();
                             await noteBus.addNote(note);
-
-//                            final ThumbnailBUS thumbBus = ThumbnailBUS();
-//                            print("|Load FTS|");
-//                            var thumbs = await thumbBus.getThumbnailsByKeyWordAll("abcd");
-//                            for (var thumb in thumbs) {
-//                              print(thumb.toString());
-////                              //noteCreatedModel.addToList(thumb);
-//                            }
-//                            print("|Load FTS|");
-
                             Navigator.of(context)
                                 .push(MaterialPageRoute(builder: (context) {
                               return HomeScreen();

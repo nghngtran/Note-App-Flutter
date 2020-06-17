@@ -15,40 +15,25 @@ import 'package:flutter_typeahead/flutter_typeahead.dart';
 
 class CreateTagNote extends StatefulWidget {
   final NoteViewModel noteModel;
-  CreateTagNote(NoteViewModel _model) : noteModel = _model;
+  final TagCreatedModel tagCreatedModel;
+  CreateTagNote(NoteViewModel _model, TagCreatedModel _tagModel)
+      : noteModel = _model,
+        tagCreatedModel = _tagModel;
   CreateTagNoteState createState() => CreateTagNoteState();
 }
 
 class CreateTagNoteState extends State<CreateTagNote> {
   Tag tag = Tag();
-  final textController = TextEditingController();
-  TagCreatedModel tagCreatedModel = TagCreatedModel();
+  final TextEditingController controller = TextEditingController();
 
-  TagBUS tagBus = TagBUS();
-  List<Tag> tagsCreated = List<Tag>();
+  List<Tag> tagCreated = List<Tag>();
+
   bool valid;
   Color tagColor;
-
-  void initState() {
-    tagCreatedModel.loadData();
-    tagsCreated = tagCreatedModel.getTagCreated();
-    super.initState();
-    setState(() {
-      tagColor = Colors.green;
-      valid = true;
-    });
-  }
-
-  void dispose() {
-    super.dispose();
-    textController.dispose();
-  }
+  AutoCompleteTextField searchTextField;
 
   Widget build(BuildContext context) {
-    tag.setColor(Colors.green);
-    for (var i in tagsCreated) {
-      print(i.title);
-    }
+//    tagColor = Colors.green;
     return Container(
         width: MediaQuery.of(context).size.width / 100 * 80,
         height: MediaQuery.of(context).size.height / 100 * 20,
@@ -64,28 +49,16 @@ class CreateTagNoteState extends State<CreateTagNote> {
               style: Theme.of(context).textTheme.title.copyWith(
                   fontWeight: Font.SemiBold,
                   color: Theme.of(context).iconTheme.color)),
-          SizedBox(height: MediaQuery.of(context).size.height / 100 * 1),
-          (!valid)
-              ? Expanded(
-                  child: Container(
-                      alignment: Alignment.topRight,
-                      padding: EdgeInsets.only(
-                          right: MediaQuery.of(context).size.width / 100 * 2),
-                      child: Text("Using available tag!",
-                          style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: Font.Regular,
-                              color: Colors.red))))
-              : SizedBox(height: MediaQuery.of(context).size.height / 100 * 1),
+          SizedBox(height: MediaQuery.of(context).size.height / 100 * 2),
           Expanded(
               child: Row(mainAxisAlignment: MainAxisAlignment.start, children: <
                   Widget>[
-            Wrap(children: <Widget>[DropDownButtonNote(tag)]),
+            Wrap(children: <Widget>[DropDownButtonNote(tag, color: tagColor)]),
             SizedBox(width: MediaQuery.of(context).size.width / 100),
             Expanded(
               flex: 7,
-              child: AutoCompleteTextField<Tag>(
-                  controller: textController,
+              child: searchTextField = AutoCompleteTextField<Tag>(
+                  controller: controller,
                   style: TextStyle(color: Theme.of(context).iconTheme.color),
                   decoration: InputDecoration(
                       suffixIcon: Container(
@@ -99,23 +72,24 @@ class CreateTagNoteState extends State<CreateTagNote> {
                       hintStyle:
                           TextStyle(color: Theme.of(context).iconTheme.color)),
                   submitOnSuggestionTap: true,
-                  clearOnSubmit: true,
-                  suggestions: tagCreatedModel.getTagCreated(),
+                  clearOnSubmit: false,
+                  suggestions: widget.tagCreatedModel.getTagCreated(),
                   itemBuilder: (context, item) {
                     return Container(
-                        color: Colors.lightBlue,
+                        color: Colors.transparent,
                         height: MediaQuery.of(context).size.height / 100 * 6,
-                        padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
+                        padding: EdgeInsets.fromLTRB(15, 5, 0, 0),
                         child: Text(item.title,
                             style: TextStyle(
                                 color: Theme.of(context).iconTheme.color,
                                 fontSize: 16)));
                   },
-                  key: widget.key,
+                  key: null,
                   itemSubmitted: (item) {
                     setState(() {
-                      tag = item;
-                      textController.text = item.title;
+//                      tag = item;
+                      tagColor = item.color;
+                      controller.text = item.title;
                     });
                   },
                   itemSorter: (a, b) {
@@ -125,67 +99,7 @@ class CreateTagNoteState extends State<CreateTagNote> {
                     return item.title
                         .toLowerCase()
                         .startsWith(query.toLowerCase());
-                  }
-//                      textFieldConfiguration: TextFieldConfiguration(
-//                          style: TextStyle(color: Colors.black, fontSize: 16.0),
-//                          controller: textController,
-//                          decoration: InputDecoration(
-//                              suffixIcon: Container(
-//                                width: 85.0,
-//                                height: 60.0,
-//                              ),
-//                              contentPadding:
-//                                  EdgeInsets.fromLTRB(10.0, 30.0, 10.0, 20.0),
-//                              filled: true,
-//                              hintStyle: TextStyle(color: Colors.black))),
-//                      suggestionsCallback: (pattern) async {
-//                        return tagCreatedModel.getTagCreated();
-//                      },
-//                      transitionBuilder: (context, suggestionsBox, controller) {
-//                        return suggestionsBox;
-//                      },
-////                      decoration: InputDecoration(
-////                          suffixIcon: Container(
-////                            width: 85.0,
-////                            height: 60.0,
-////                          ),
-////                          contentPadding:
-////                              EdgeInsets.fromLTRB(10.0, 30.0, 10.0, 20.0),
-////                          filled: true,
-////                          hintStyle: TextStyle(color: Colors.black)),
-////                      itemSubmitted: (Tag item) {
-////                        textController.text = item.title;
-////                      },
-////                      clearOnSubmit: true,
-////                      suggestions: tagsCreated,
-//                      itemBuilder: (context, item) {
-//                        return Container(
-//                            height:
-//                                MediaQuery.of(context).size.height / 100 * 6,
-//                            padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
-//                            child: Text(item.title,
-//                                style: TextStyle(
-//                                    color: Theme.of(context).iconTheme.color,
-//                                    fontSize: 16)));
-//                      },
-//                      onSuggestionSelected: (suggestion) {
-//                        textController.text = suggestion.title;
-//                        setState(() {
-//                          tagColor = suggestion.color;
-//                          tag = suggestion;
-//                          tag.setColor(tagColor);
-//                        });
-//                      },
-//                      itemSorter: (a, b) {
-//                        return a.title.compareTo(b.title);
-//                      },
-//                      itemFilter: (item, query) {
-//                        return item.title
-//                            .toLowerCase()
-//                            .startsWith(query.toLowerCase());
-//                      },
-//                      key: null,
-                  ),
+                  }),
             ),
             SizedBox(width: MediaQuery.of(context).size.width / 100 * 2)
           ])),
@@ -223,18 +137,15 @@ class CreateTagNoteState extends State<CreateTagNote> {
                           fontWeight: Font.Regular,
                           color: Colors.blue)),
                   onPressed: () async {
-                    tag.setTitle(textController.text);
+                    tag.setTitle(controller.text);
+                    widget.noteModel.addTag(tag);
                     TagBUS tagbus = new TagBUS();
                     var stt = await tagbus.addTag(tag);
                     if (stt) {
-                      widget.noteModel.addTag(tag);
-                      Navigator.of(context).pop();
-                      print(widget.noteModel.tags.first);
-                    } else {
-                      setState(() {
-                        valid = false;
-                      });
+                      widget.tagCreatedModel.addToList(tag);
                     }
+                    Navigator.of(context).pop();
+                    print(widget.noteModel.tags.first);
                   },
                   shape: RoundedRectangleBorder(
                       borderRadius: new BorderRadius.circular(5),
@@ -247,13 +158,24 @@ class CreateTagNoteState extends State<CreateTagNote> {
 
 class DropDownButtonNote extends StatefulWidget {
   Tag tag;
-  DropDownButtonNote(Tag _tag) : tag = _tag;
+  Color color = Colors.green;
+  DropDownButtonNote(Tag _tag, {Color color})
+      : tag = _tag,
+        color = color;
   @override
   _DropDownButtonNoteState createState() => _DropDownButtonNoteState();
 }
 
 class _DropDownButtonNoteState extends State<DropDownButtonNote> {
-  var _value = Colors.green;
+  Color _value;
+  void initState() {
+    super.initState();
+    if (widget.color == null) {
+      _value = Colors.green;
+    } else {
+      _value = widget.color;
+    }
+  }
 
   DropdownButton dropdownBtn() => DropdownButton<Color>(
       elevation: 0,
@@ -295,8 +217,9 @@ class TagBarOfNote extends StatelessWidget {
   TagBarOfNote(this.model, {String heroTag});
 //  List<Tag> listTags = List<Tag>();
   final NoteViewModel model;
-
+  TagCreatedModel tagCreatedModel = TagCreatedModel();
   Widget build(BuildContext context) {
+    tagCreatedModel.loadData();
     return Row(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -322,8 +245,9 @@ class TagBarOfNote extends StatelessWidget {
                           backgroundColor: Theme.of(context).backgroundColor,
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(5)),
-                          child:
-                              Stack(children: <Widget>[CreateTagNote(model)])));
+                          child: Stack(children: <Widget>[
+                            CreateTagNote(model, tagCreatedModel)
+                          ])));
                 },
                 child: Icon(Icons.add,
                     size: 20, color: Theme.of(context).iconTheme.color),

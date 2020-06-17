@@ -17,7 +17,7 @@ class Notes extends TimeUtils with ChangeNotifier {
 
   //Constructor
   Notes() : super() {
-    this.id = "note-"+UniqueKey().toString();
+    this.id = "note-" + UniqueKey().toString();
     this.title = "New untitled note";
     this.tags = new List<Tag>();
     this.contents = new List<NoteItem>();
@@ -37,8 +37,8 @@ class Notes extends TimeUtils with ChangeNotifier {
     this.created_time = created_time;
     this.modified_time = modified_time;
   }
-  Notes.withTitle(String title):super() {
-    this.id = "note-"+UniqueKey().toString();
+  Notes.withTitle(String title) : super() {
+    this.id = "note-" + UniqueKey().toString();
     this.tags = new List<Tag>();
     this.contents = new List<NoteItem>();
     this.history = new List<String>();
@@ -47,7 +47,7 @@ class Notes extends TimeUtils with ChangeNotifier {
   }
 
   Notes.withTag(Tag tag) : super() {
-    this.id = "note-"+UniqueKey().toString();
+    this.id = "note-" + UniqueKey().toString();
     this.title = "New Note";
     this.tags = new List<Tag>();
     this.contents = new List<NoteItem>();
@@ -68,19 +68,22 @@ class Notes extends TimeUtils with ChangeNotifier {
 
   void setTag(List<Tag> tags) {
     this.tags.addAll(tags);
-    //this.tags = this.tags.toSet().toList();
+    notifyListeners();
   }
 
   void addTag(Tag tag) {
     this.tags.add(tag);
+    notifyListeners();
   }
 
   void removeTag(List<Tag> tags) {
     tags.forEach((element) => this.tags.remove(element));
+    notifyListeners();
   }
 
   void setNoteItem(List<NoteItem> noteItems) {
     this.contents.addAll(noteItems);
+    notifyListeners();
   }
 
   void addNoteItem(NoteItem noteItem) {
@@ -100,7 +103,8 @@ class Notes extends TimeUtils with ChangeNotifier {
   String toString() {
     String noteItem = "";
     if (contents != null) {
-      contents.forEach((f) => {noteItem = noteItem + "\t\t" + f.toString() + "\n"});
+      contents
+          .forEach((f) => {noteItem = noteItem + "\t\t" + f.toString() + "\n"});
     }
     String tag = "";
     if (tags != null) {
@@ -124,15 +128,16 @@ class Notes extends TimeUtils with ChangeNotifier {
         "</Note>";
   }
 
-  factory Notes.fromDatabaseJson(Map<String, dynamic> data) => Notes.withBasicInfo(
-      data['note_id'],
-      data['title'],
-      DateTime.parse(data['created_time']),
-      DateTime.parse(data['modified_time']));
+  factory Notes.fromDatabaseJson(Map<String, dynamic> data) =>
+      Notes.withBasicInfo(
+          data['note_id'],
+          data['title'],
+          DateTime.parse(data['created_time']),
+          DateTime.parse(data['modified_time']));
   Map<String, dynamic> toDatabaseJson() {
     var formatter = TimeUtils.formatter;
     return {
-      'note_id':id,
+      'note_id': id,
       'title': title,
       'created_time': formatter.format(created_time),
       'modified_time': formatter.format(modified_time)
