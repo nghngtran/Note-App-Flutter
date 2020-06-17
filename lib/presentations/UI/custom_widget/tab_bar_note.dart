@@ -145,6 +145,9 @@ class CreateTagNoteState extends State<CreateTagNote> {
                     if (tagColor != null) {
                       tag.setColor(tagColor);
                     }
+                    else {
+                      tag.setColor(Colors.green);
+                    }
                     tag.setTitle(controller.text);
                     widget.noteModel.addTag(tag);
                     TagBUS tagbus = new TagBUS();
