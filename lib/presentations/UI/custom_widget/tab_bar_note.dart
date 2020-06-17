@@ -94,6 +94,7 @@ class CreateTagNoteState extends State<CreateTagNote> {
                       tag.setTitle(item.title);
                       tag.setColor(tagColor);
                       widget.noteModel.addTag(tag);
+                      Navigator.of(context).pop();
                     });
                   },
                   itemSorter: (a, b) {

@@ -115,7 +115,7 @@ class _CustomPaintPageState extends State<CustomPaintPage> {
                           icon: Icon(Icons.check),
                           onPressed: () async {
                             NoteItem tmp = NoteItem("Image");
-                            var pathImg = '/storage/emulated/0/NoteApp/' +
+                            var pathImg = '/sdcard/NoteApp/' +
                                 widget.img.path.split("/").last;
                             print("save " + widget.img.path);
                             await GallerySaver.saveImage(
@@ -123,12 +123,8 @@ class _CustomPaintPageState extends State<CustomPaintPage> {
                                     .path, //                            await GallerySaver.saveImage(widget.img.path,
                                 albumName:
                                     "NoteApp"); //                                albumName: "NoteApp");
-                            await GallerySaver.saveImage(
-                                widget.img.path.split("/").last,
-                                albumName: "NoteApp");
-                            _saveImage(
-                                bytes,
-                                Directory('/storage/emulated/0/NoteApp/'),
+
+                            _saveImage(bytes, Directory('/sdcard/NoteApp/'),
                                 widget.img.path.split("/").last);
                             tmp.content = pathImg;
                             widget.model.addNoteItem(tmp);
