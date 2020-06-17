@@ -109,7 +109,7 @@ class _PickImageState extends State<PickImage> {
               onPressed: () {
                 if (widget.model.contents.length > 0) {
                   NoteItem noteItem =
-                      Provider.of<Notes>(context, listen: true).contents.last;
+                      Provider.of<Notes>(context, listen: false).contents.last;
                   Provider.of<Notes>(context, listen: false)
                       .removeNoteItem(noteItem);
                 }

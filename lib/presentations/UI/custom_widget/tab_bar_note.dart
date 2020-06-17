@@ -88,8 +88,12 @@ class CreateTagNoteState extends State<CreateTagNote> {
                   itemSubmitted: (item) {
                     setState(() {
 //                      tag = item;
+
                       tagColor = item.color;
                       controller.text = item.title;
+                      tag.setTitle(item.title);
+                      tag.setColor(tagColor);
+                      widget.noteModel.addTag(tag);
                     });
                   },
                   itemSorter: (a, b) {
@@ -137,6 +141,9 @@ class CreateTagNoteState extends State<CreateTagNote> {
                           fontWeight: Font.Regular,
                           color: Colors.blue)),
                   onPressed: () async {
+                    if (tagColor != null) {
+                      tag.setColor(tagColor);
+                    }
                     tag.setTitle(controller.text);
                     widget.noteModel.addTag(tag);
                     TagBUS tagbus = new TagBUS();

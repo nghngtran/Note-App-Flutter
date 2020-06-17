@@ -117,7 +117,16 @@ class _CustomPaintPageState extends State<CustomPaintPage> {
                             NoteItem tmp = NoteItem("Image");
                             var pathImg = '/storage/emulated/0/NoteApp/' +
                                 widget.img.path.split("/").last;
-                            await _saveImage(
+                            print("save " + widget.img.path);
+                            await GallerySaver.saveImage(
+                                widget.img
+                                    .path, //                            await GallerySaver.saveImage(widget.img.path,
+                                albumName:
+                                    "NoteApp"); //                                albumName: "NoteApp");
+                            await GallerySaver.saveImage(
+                                widget.img.path.split("/").last,
+                                albumName: "NoteApp");
+                            _saveImage(
                                 bytes,
                                 Directory('/storage/emulated/0/NoteApp/'),
                                 widget.img.path.split("/").last);
