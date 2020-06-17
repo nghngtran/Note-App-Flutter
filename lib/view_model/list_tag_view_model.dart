@@ -22,6 +22,10 @@ class TagCreatedModel extends BaseModel {
     notifyListeners();
   }
 
+  Future<void> loadTag() async {
+    listTagCreated = await tagBus.getTags();
+  }
+
   int get listSize {
     return listTagCreated != null ? listTagCreated.length : 0;
   }
@@ -39,10 +43,4 @@ class TagCreatedModel extends BaseModel {
     listTagCreated = [];
     notifyListeners();
   }
-
-//  Future getTags() async {
-//    applyState(ViewState.Busy);
-//    listTagCreated = await getTags();
-//    applyState(ViewState.Idle);
-//  }
 }
