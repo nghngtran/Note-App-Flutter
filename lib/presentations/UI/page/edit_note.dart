@@ -273,27 +273,30 @@ class EditNoteState extends State<EditNote> {
                                 Expanded(
                                     child: GestureDetector(
                                   onTap: () async {
-                                    //note.setListNoteItems(noteViewModel.contents);
-                                    //note.setTitle(noteViewModel.title);
-                                    //note.setTag(noteViewModel.tags);
-//                                    final NoteBUS noteBus = NoteBUS();
-                                    //await noteBus.addNote(note);
+                                    Notes tem = Notes();
+                                    tem.setListNoteItems(noteViewModel.contents);
+                                    tem.setTitle(noteViewModel.title);
+                                    tem.setTag(noteViewModel.tags);
+                                    tem.id = cur.id;
+                                    tem.history = cur.history;
 
-//                                    final ThumbnailBUS thumbBus =
-//                                        ThumbnailBUS();
-//                                    print("|Load FTS|");
-//                                    var thumbs = await thumbBus
-//                                        .getThumbnailsByKeyWordAll("abcd");
-//                                    for (var thumb in thumbs) {
-//                                      print(thumb.toString());
-//                              //noteCreatedModel.addToList(thumb);
-//                                    }
-//                                    print("|Load FTS|");
-
+                                    for (var i in noteViewModel.tags) {
+                                      print("TAG: " + i.title);
+                                    }
+                                    for (var i in noteViewModel.contents) {
+                                      print("CONTENT: " + i.content);
+                                    }
+                                    final NoteBUS noteBus = NoteBUS();
+                                    bool temp = await noteBus.updateNote(tem);
+                                    print("WORK? :" + temp.toString());
+                                    /*
                                     Navigator.of(context).push(
                                         MaterialPageRoute(builder: (context) {
                                       return HomeScreen();
-                                    }));
+                                    }
+                                    ))
+                                    */
+                                    ;
                                   },
                                   child: Text(
                                     "Save",
@@ -428,6 +431,11 @@ class EditTextState extends State<EditText> {
                           fontSize: 17,
                           fontStyle: FontStyle.normal,
                           color: Theme.of(context).iconTheme.color),
+                      onChanged: (text) {
+                        widget.item.setContent(text);
+                        widget.item.setBgColor(noteColor);
+                        print("CHANGE:" + text);
+                      },
                       onSaved: (value) {
                         widget.item.setContent(
                             TextEditingController.fromValue(TextEditingValue(

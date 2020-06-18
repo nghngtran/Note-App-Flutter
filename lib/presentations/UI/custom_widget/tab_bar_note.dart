@@ -33,7 +33,7 @@ class CreateTagNoteState extends State<CreateTagNote> {
   AutoCompleteTextField searchTextField;
 
   Widget build(BuildContext context) {
-//    tagColor = Colors.green;
+    //tagColor = Colors.green;
     return Container(
         width: MediaQuery.of(context).size.width / 100 * 80,
         height: MediaQuery.of(context).size.height / 100 * 20,
@@ -145,9 +145,7 @@ class CreateTagNoteState extends State<CreateTagNote> {
                     if (tagColor != null) {
                       tag.setColor(tagColor);
                     }
-                    else {
-                      tag.setColor(Colors.green);
-                    }
+
                     tag.setTitle(controller.text);
                     widget.noteModel.addTag(tag);
                     TagBUS tagbus = new TagBUS();

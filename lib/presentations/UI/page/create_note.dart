@@ -283,7 +283,10 @@ class CreateNoteState extends State<CreateNote> {
                             note.setListNoteItems(noteViewModel.contents);
                             note.setTitle(noteViewModel.title);
                             for (var i in noteViewModel.tags) {
-                              print(i.title);
+                              print("TAG" + i.title);
+                            }
+                            for (var i in noteViewModel.contents) {
+                              print("CONTENT: " + i.content);
                             }
                             note.setTag(noteViewModel.tags);
                             final NoteBUS noteBus = NoteBUS();
@@ -411,6 +414,10 @@ class EditTextState extends State<EditText> {
                           fontSize: 17,
                           fontStyle: FontStyle.normal,
                           color: Theme.of(context).iconTheme.color),
+                      onChanged: (text) {
+                        widget.item.setContent(txtController.text);
+                        widget.item.setBgColor(noteColor);
+                      },
                       onSaved: (value) {
                         widget.item.setContent(txtController.text);
                         widget.item.setBgColor(noteColor);
