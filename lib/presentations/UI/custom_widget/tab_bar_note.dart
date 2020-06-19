@@ -93,6 +93,8 @@ class CreateTagNoteState extends State<CreateTagNote> {
                       controller.text = item.title;
                       tag.setTitle(item.title);
                       tag.setColor(tagColor);
+                      tag.setID(item.id);
+
                       widget.noteModel.addTag(tag);
                       Navigator.of(context).pop();
                     });

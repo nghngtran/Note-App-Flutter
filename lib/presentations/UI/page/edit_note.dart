@@ -47,7 +47,15 @@ class EditNoteState extends State<EditNote> {
   Future<void> loadNoteItems() async {
     var notebus = new NoteBUS();
     cur = await notebus.getNoteById(widget.current.noteId);
-    print(cur.title);
+    print("OPEN NOTE!");
+    print("ID: " + cur.id);
+    print("Title: " + cur.title);
+    for (var i in cur.tags) {
+      print("TAG: " + i.title);
+    }
+    for (var i in cur.contents) {
+      print("CONTENT: " + i.content);
+    }
   }
 
   void initState() {
@@ -240,8 +248,7 @@ class EditNoteState extends State<EditNote> {
                                                                   BorderRadius
                                                                       .circular(
                                                                           5)),
-                                                      child: ChooseTitle(
-                                                          noteViewModel)));
+                                                      child: ChooseTitle(noteViewModel)));
                                         },
                                         child: Container(
                                           child: Row(
@@ -279,23 +286,29 @@ class EditNoteState extends State<EditNote> {
                                     tem.setTag(noteViewModel.tags);
                                     tem.id = cur.id;
                                     tem.history = cur.history;
+                                    tem.modified_time = DateTime.now();
+                                    tem.created_time = cur.created_time;
 
+                                    print("SAVE NOTE!");
+                                    print("ID " + tem.id);
+                                    print("Title: " + noteViewModel.title);
                                     for (var i in noteViewModel.tags) {
-                                      print("TAG: " + i.title);
+                                      print("TAG: " + i.title + " Color: " + i.color.toString() + " ID: " + i.id);
                                     }
                                     for (var i in noteViewModel.contents) {
                                       print("CONTENT: " + i.content);
                                     }
+
                                     final NoteBUS noteBus = NoteBUS();
                                     bool temp = await noteBus.updateNote(tem);
                                     print("WORK? :" + temp.toString());
-                                    /*
+
                                     Navigator.of(context).push(
                                         MaterialPageRoute(builder: (context) {
                                       return HomeScreen();
                                     }
                                     ))
-                                    */
+
                                     ;
                                   },
                                   child: Text(
