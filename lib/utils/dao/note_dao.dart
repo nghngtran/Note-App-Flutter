@@ -38,7 +38,7 @@ class NoteDAO {
       //Insert Thumbnail
       await thumbnailNoteDao.createThumbnailByNote(note, txn: txn);
 
-      LogHistory.trackLog("[Note]", "INSERT new note:" + note.id.toString());
+      LogHistory.trackLog("[Transaction][Note]", "INSERT new note:" + note.id.toString());
     });
     return noteId;
   }
@@ -60,8 +60,9 @@ class NoteDAO {
       await relativeDao.insertRelativesFromTagList(note.id, note.tags,
           txn: txn);
       await noteItemDao.updateListNoteItemByNote(note, txn: txn);
+      await thumbnailNoteDao.updateThumbnailByNote(note,txn: txn);
 
-      LogHistory.trackLog("[Note]", "UPDATE note:" + note.id.toString());
+      LogHistory.trackLog("[Transaction][Note]", "UPDATE note:" + note.id.toString());
     });
 
     return count;
@@ -80,7 +81,7 @@ class NoteDAO {
       await noteItemDao.deleteNoteItemsByNoteID(noteId, txn: txn);
 
       await thumbnailNoteDao.deleteThumbnail(noteId, txn: txn);
-      LogHistory.trackLog("[Note]", "DELETE note:" + noteId.toString());
+      LogHistory.trackLog("[Transaction][Note]", "DELETE note:" + noteId.toString());
     });
     return count;
   }
@@ -98,7 +99,7 @@ class NoteDAO {
       await relativeDao.deleteAllRelatives(txn: txn);
       //await tagDao.deleteAllTags();
 
-      LogHistory.trackLog("[Note]", "DELETE ALL note");
+      LogHistory.trackLog("[Transaction][Note]", "DELETE ALL note");
     });
     return count;
   }
@@ -126,9 +127,25 @@ class NoteDAO {
     return note;
   }
 
-  Future<List<Notes>> getNotesFullData() async {
-    //TODO
-    return null;
+  Future<List<Notes>> getNotesFullData({List<String> columns, String query}) async {
+    final db = await dbProvider.database;
+
+    List<Map<String, dynamic>> result;
+    if (query != null) {
+      if (query.isNotEmpty)
+        result = await db.query('notes',
+            columns: columns,
+            where: 'description LIKE ?',
+            whereArgs: ["%$query%"]);
+    } else {
+      result = await db.query('notes', columns: columns);
+    }
+
+    List<Notes> notes = new List<Notes>();
+    for(var i in result){
+      notes.add(await getNoteByID(i['note_id']));
+    }
+    return notes;
   }
 
   //Get Note by ID
@@ -152,26 +169,26 @@ class NoteDAO {
     return null;
   }
 
-  Future<int> updateOrder(int order) async {
-    final db = await dbProvider.database;
-
-    var orderId = await db.insert(
-      'tableCount',
-      {'id': 'notes', 'count': order},
-      conflictAlgorithm: ConflictAlgorithm.replace,
-    );
-    return orderId;
-  }
-
-  Future<int> getOrder() async {
-    final db = await dbProvider.database;
-    List<Map<String, dynamic>> maps =
-        await db.query('tableCount', where: "id = ?", whereArgs: ["notes"]);
-    if (maps.isNotEmpty)
-      return maps[0]['count'];
-    else
-      return 0;
-  }
+//  Future<int> updateOrder(int order) async {
+//    final db = await dbProvider.database;
+//
+//    var orderId = await db.insert(
+//      'tableCount',
+//      {'id': 'notes', 'count': order},
+//      conflictAlgorithm: ConflictAlgorithm.replace,
+//    );
+//    return orderId;
+//  }
+//
+//  Future<int> getOrder() async {
+//    final db = await dbProvider.database;
+//    List<Map<String, dynamic>> maps =
+//        await db.query('tableCount', where: "id = ?", whereArgs: ["notes"]);
+//    if (maps.isNotEmpty)
+//      return maps[0]['count'];
+//    else
+//      return 0;
+//  }
 
   Future<int> getCounts() async {
     final db = await dbProvider.database;
