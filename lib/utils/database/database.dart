@@ -23,6 +23,13 @@ class DatabaseApp {
     _database = await createDatabase();
     return _database;
   }
+  closeDb() async {
+    if(_database != null) await _database.close();
+  }
+  static closeDatabase() async {
+    final dbProvider = DatabaseApp.dbProvider;
+    await dbProvider.closeDb();
+  }
   createDatabase() async {
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
     String path = join(documentsDirectory.path, "test59.db");
