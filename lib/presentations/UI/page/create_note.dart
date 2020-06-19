@@ -282,9 +282,6 @@ class CreateNoteState extends State<CreateNote> {
                           onTap: () async {
                             note.setListNoteItems(noteViewModel.contents);
                             note.setTitle(noteViewModel.title);
-                            for (var i in noteViewModel.tags) {
-                              print(i.title);
-                            }
                             note.setTag(noteViewModel.tags);
                             final NoteBUS noteBus = NoteBUS();
                             await noteBus.addNote(note);
