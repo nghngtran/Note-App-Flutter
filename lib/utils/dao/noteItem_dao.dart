@@ -43,6 +43,7 @@ class NoteItemDAO {
   //Insert ListNoteItem by note
   //Return none
   Future<void> createListNoteItemByNote(Notes note, {Transaction txn}) async {
+    if(note.contents.isEmpty) return;
     for (var noteItem in note.contents) {
       await createNoteItem(noteItem, note.id, txn: txn);
     }

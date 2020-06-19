@@ -59,7 +59,10 @@ class NoteDAO {
       await relativeDao.deleteRelativesByNoteID(note.id, txn: txn);
       await relativeDao.insertRelativesFromTagList(note.id, note.tags,
           txn: txn);
-      await noteItemDao.updateListNoteItemByNote(note, txn: txn);
+      await noteItemDao.deleteNoteItemsByNoteID(note.id,txn: txn);
+      await noteItemDao.createListNoteItemByNote(note,txn: txn);
+
+//      await noteItemDao.updateListNoteItemByNote(note, txn: txn);
       await thumbnailNoteDao.updateThumbnailByNote(note,txn: txn);
 
       LogHistory.trackLog("[Transaction][Note]", "UPDATE note:" + note.id.toString());

@@ -23,12 +23,13 @@ class NoteBUS {
   }
 
   addNote(Notes note) async {
+    if(note.contents.isEmpty) return false;
     var rowId = await _noteRepository.insertNotes(note);
     //getNotes();
     return rowId;
   }
-
   updateNote(Notes note) async {
+    if(note.contents.isEmpty) return false;
     return await _noteRepository.updateNotes(note) > 0;
     //getNotes();
     //return count;

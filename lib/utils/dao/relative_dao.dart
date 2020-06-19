@@ -48,6 +48,7 @@ class RelativeDAO {
   //Return none
   Future<void> insertRelativesFromTagList(String noteId, List<Tag> tags,
       {Transaction txn}) async {
+    if(tags.isEmpty) return;
     for (var tag in tags) {
       await insertRelative(noteId, tag.id, txn: txn);
     }
