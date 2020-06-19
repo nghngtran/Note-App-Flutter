@@ -25,7 +25,7 @@ class ThumbnailNoteDAO {
         thumbnail.toDatabaseJson(),
         conflictAlgorithm: ConflictAlgorithm.replace,
       );
-      LogHistory.trackLog("[Thumbnail]",
+      LogHistory.trackLog("[Transaction][Thumbnail]",
           "INSERT new thumbnail note:" + thumbnail.noteId.toString());
     } else {
       final db = await dbProvider.database;
@@ -43,38 +43,26 @@ class ThumbnailNoteDAO {
   //Insert new Thumbnail
   //Return row id
   Future<int> createThumbnailByNote(Notes note, {Transaction txn}) async {
+    ThumbnailNote thumbnail = new ThumbnailNote(
+        note.id,
+        note.title,
+        note.tags,
+        note.contents[0].type,
+        note.contents[0].noteColor,
+        note.contents[0].content,
+        note.created_time,
+        note.modified_time);
     var thumbId = -1;
     if (txn != null) {
-      ThumbnailNote thumbnail = new ThumbnailNote(
-          note.id,
-          note.title,
-          note.tags,
-          note.contents[0].type,
-          note.contents[0].noteColor,
-          note.contents[0].content,
-          note.created_time,
-          note.modified_time);
-
       thumbId = await txn.insert(
         'thumbnails',
         thumbnail.toDatabaseJson(),
         conflictAlgorithm: ConflictAlgorithm.replace,
       );
-      LogHistory.trackLog("[Thumbnail]",
+      LogHistory.trackLog("[Transaction][Thumbnail]",
           "INSERT new thumbnail note:" + thumbnail.noteId.toString());
     } else {
       final db = await dbProvider.database;
-
-      ThumbnailNote thumbnail = new ThumbnailNote(
-          note.id,
-          note.title,
-          note.tags,
-          note.contents[0].type,
-          note.contents[0].noteColor,
-          note.contents[0].content,
-          note.created_time,
-          note.modified_time);
-
       thumbId = await db.insert(
         'thumbnails',
         thumbnail.toDatabaseJson(),
@@ -218,7 +206,7 @@ class ThumbnailNoteDAO {
       count = await txn
           .delete('thumbnails', where: "note_id = ?", whereArgs: [noteId]);
       LogHistory.trackLog(
-          "[Thumbnail]", "DELETE thumbnail of note: " + noteId.toString());
+          "[Transaction][Thumbnail]", "DELETE thumbnail of note: " + noteId.toString());
       return count;
     } else {
       final db = await dbProvider.database;
@@ -242,6 +230,42 @@ class ThumbnailNoteDAO {
     );
     LogHistory.trackLog(
         "[Note]", "UPDATE thumbnail of note:" + thumbnail.noteId.toString());
+    return count;
+  }
+
+  //Update a Thumbnail by noteid
+  //Return number of record was applied
+  Future<int> updateThumbnailByNote(Notes note, {Transaction txn}) async {
+    ThumbnailNote thumbnail = new ThumbnailNote(
+        note.id,
+        note.title,
+        note.tags,
+        note.contents[0].type,
+        note.contents[0].noteColor,
+        note.contents[0].content,
+        note.created_time,
+        note.modified_time);
+    var count = 0;
+    if (txn != null) {
+      count = await txn.update(
+        'thumbnails',
+        thumbnail.toDatabaseJson(),
+        where: "note_id = ?",
+        whereArgs: [thumbnail.noteId],
+      );
+      LogHistory.trackLog(
+          "[Transaction][Thumbnail]", "UPDATE thumbnail of note:" + thumbnail.noteId.toString());
+    } else {
+      final db = await dbProvider.database;
+      count = await db.update(
+        'thumbnails',
+        thumbnail.toDatabaseJson(),
+        where: "note_id = ?",
+        whereArgs: [thumbnail.noteId],
+      );
+      LogHistory.trackLog(
+          "[Thumbnail]", "UPDATE thumbnail of note:" + thumbnail.noteId.toString());
+    }
     return count;
   }
 
