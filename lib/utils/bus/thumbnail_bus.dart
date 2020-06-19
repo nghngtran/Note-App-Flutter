@@ -44,21 +44,21 @@ class ThumbnailBUS {
     print('[Time] Query Thumbnail executed in ${stopwatch.elapsed}');
     return result;
   }
-
-  addThumbnail(ThumbnailNote thumbnail) async {
-    return await _thumbnailRepository.insertThumbnail(thumbnail) > 0;
-    //getThumbnails();
-  }
-
-  updateThumbnail(ThumbnailNote thumbnail) async {
-    return await _thumbnailRepository.updateThumbnail(thumbnail) > 0;
-    //getThumbnails();
-  }
-
-  deleteThumbnailById(String id) async {
-   return await _thumbnailRepository.deleteThumbnailById(id) > 0;
-    //getThumbnails();
-  }
+//
+//  addThumbnail(ThumbnailNote thumbnail) async {
+//    return await _thumbnailRepository.insertThumbnail(thumbnail) > 0;
+//    //getThumbnails();
+//  }
+//
+//  updateThumbnail(ThumbnailNote thumbnail) async {
+//    return await _thumbnailRepository.updateThumbnail(thumbnail) > 0;
+//    //getThumbnails();
+//  }
+//
+//  deleteThumbnailById(String id) async {
+//   return await _thumbnailRepository.deleteThumbnailById(id) > 0;
+//    //getThumbnails();
+//  }
 
 //  dispose() {
 //    _thumbnailController.close();
