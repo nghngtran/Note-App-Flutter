@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:collection';
 
+import 'package:note_app/utils/app_constant.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:note_app/utils/dao/tag_dao.dart';
 import 'package:note_app/utils/db_commands.dart';
 import 'package:note_app/utils/model/note.dart';
@@ -43,13 +45,22 @@ class ThumbnailNoteDAO {
   //Insert new Thumbnail
   //Return row id
   Future<int> createThumbnailByNote(Notes note, {Transaction txn}) async {
+    String content = EMPTY_NOTE;
+    String type = DEFAULT_TYPE;
+    Color color = DEFAULT_ITEM_COLOR;
+
+    if(note.contents.isNotEmpty){
+      type = note.contents[0].type;
+      color = note.contents[0].noteColor;
+      content = note.contents[0].content;
+    }
     ThumbnailNote thumbnail = new ThumbnailNote(
         note.id,
         note.title,
         note.tags,
-        note.contents[0].type,
-        note.contents[0].noteColor,
-        note.contents[0].content,
+        type,
+        color,
+        content,
         note.created_time,
         note.modified_time);
     var thumbId = -1;
