@@ -186,6 +186,7 @@ class _DropDownButtonNoteState extends State<DropDownButtonNote> {
     } else {
       _value = widget.color;
     }
+    widget.tag.setColor(Colors.green);
   }
 
   DropdownButton dropdownBtn() => DropdownButton<Color>(
