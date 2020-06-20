@@ -168,6 +168,10 @@ class DropDownButton extends StatefulWidget {
 
 class _DropDownButtonState extends State<DropDownButton> {
   var _value = Colors.green;
+  void initState() {
+    super.initState();
+    widget.tag.setColor(Colors.green);
+  }
 
   DropdownButton dropdownBtn() => DropdownButton<Color>(
           items: [
