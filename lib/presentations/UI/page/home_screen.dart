@@ -80,6 +80,13 @@ class HomeScreenState extends State<HomeScreen>
     });
   }
 
+  _reLoad(String text) {
+    setState(() {
+      print(text);
+    });
+
+  }
+
   Widget _buildSearchField() {
     return TextField(
       controller: _searchQuery,
@@ -143,7 +150,7 @@ class HomeScreenState extends State<HomeScreen>
                 width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.height,
                 child: model.getNoteCreated().length > 0
-                    ? NoteGrid(model.getNoteCreated())
+                    ? NoteGrid(model.getNoteCreated(), _reLoad)
                     : Center(
                         child: Text("No match!",
                             style: TextStyle(
@@ -164,7 +171,7 @@ class HomeScreenState extends State<HomeScreen>
                 width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.height,
                 child: model.getNoteCreated().length > 0
-                    ? NoteGrid(model.getNoteCreated())
+                    ? NoteGrid(model.getNoteCreated(), _reLoad)
                     : Center(
                     child: Text("No match!",
                         style: TextStyle(
@@ -183,7 +190,7 @@ class HomeScreenState extends State<HomeScreen>
                 width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.height,
                 child: model.getNoteCreated().length > 0
-                    ? NoteGrid(model.getNoteCreated())
+                    ? NoteGrid(model.getNoteCreated(), _reLoad)
                     : Center(
                     child: Text("Nothing is here yet. Live up the space by creating new notes!",
                         style: TextStyle(
@@ -284,7 +291,7 @@ class HomeScreenState extends State<HomeScreen>
                   Consumer<TagCreatedModel>(
                       builder: (context, tagCreatedModel, _) {
                     tagCreatedModel.loadData();
-                    return TagBar(mainController, tagCreatedModel, _updateMyTitle);
+                    return TagBar(mainController, tagCreatedModel, _updateMyTitle, _reLoad);
                   }),
                   (!_isSearching)
                       ? (SearchTag.compareTo("") == 0)

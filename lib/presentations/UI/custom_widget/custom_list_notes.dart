@@ -28,9 +28,10 @@ import 'package:note_app/utils/model/thumbnailNote.dart';
 //  }
 //}
 
-Widget noteGridBuilder(BuildContext context, List<ThumbnailNote> indexes) {
+Widget noteGridBuilder(BuildContext context, List<ThumbnailNote> indexes, ValueChanged<String> parent) {
   List<Widget> columnOne = List<Widget>();
   List<Widget> columnTwo = List<Widget>();
+  final ValueChanged<String> parentAction = parent; ////callback
 
   bool secondColumnFirst = false;
   if ((indexes.length - 1).isEven) {
@@ -42,9 +43,9 @@ Widget noteGridBuilder(BuildContext context, List<ThumbnailNote> indexes) {
   for (int i = 0; i < indexes.length; i++) {
     int bIndex = (indexes.length - 1) - i;
     if (bIndex.isEven) {
-      columnOne.add(NoteCard(indexes[bIndex]));
+      columnOne.add(NoteCard(indexes[bIndex], parentAction));
     } else {
-      columnTwo.add(NoteCard(indexes[bIndex]));
+      columnTwo.add(NoteCard(indexes[bIndex], parentAction));
     }
   }
 
@@ -75,7 +76,8 @@ Widget noteGridBuilder(BuildContext context, List<ThumbnailNote> indexes) {
 
 class NoteGrid extends StatefulWidget {
   List<ThumbnailNote> _note = List<ThumbnailNote>();
-  NoteGrid(List<ThumbnailNote> note) : _note = note;
+  final ValueChanged<String> parentAction; ////callback
+  NoteGrid(List<ThumbnailNote> note, ValueChanged<String> _parent) : _note = note, parentAction = _parent;
   NoteGridState createState() => NoteGridState();
 }
 
@@ -86,7 +88,7 @@ class NoteGridState extends State<NoteGrid> {
 
   Widget build(BuildContext context) {
     return ListView(
-      children: <Widget>[noteGridBuilder(context, widget._note)],
+      children: <Widget>[noteGridBuilder(context, widget._note, widget.parentAction)],
     );
   }
 //  }

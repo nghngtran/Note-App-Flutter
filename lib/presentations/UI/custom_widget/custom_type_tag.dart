@@ -14,7 +14,8 @@ import 'package:note_app/presentations/UI/custom_widget/custom_text_style.dart';
 class CustomTag extends StatelessWidget {
   Tag tag;
   final ValueChanged<String> parentAction;
-  CustomTag(Tag _tag, ValueChanged<String> _parent) : tag = _tag, parentAction = _parent;
+  final ValueChanged<String> parentAction1;
+  CustomTag(Tag _tag, ValueChanged<String> _parent, ValueChanged<String> _parent1) : tag = _tag, parentAction = _parent, parentAction1 = _parent1;
   Widget build(BuildContext context) {
     return GestureDetector(
         onTap: () {
@@ -23,6 +24,7 @@ class CustomTag extends StatelessWidget {
         onLongPress: () {
           TagBUS tagbus = new TagBUS();
           tagbus.deleteTagById(tag.id);
+          parentAction1("RELOAD!");
         },
         child: Wrap(children: <Widget>[
           Container(
@@ -54,12 +56,14 @@ class CustomTag extends StatelessWidget {
 
 class TagBar extends StatelessWidget {
   ScrollController horizontal;
-  TagBar(ScrollController _scroll, TagCreatedModel _model, ValueChanged<String> _parent)
+  TagBar(ScrollController _scroll, TagCreatedModel _model, ValueChanged<String> _parent, ValueChanged<String> _parent1)
       : horizontal = _scroll,
         model = _model,
-        parentAction = _parent;
+        parentAction = _parent,
+        parentAction1 = _parent1;
   TagCreatedModel model;
   final ValueChanged<String> parentAction; ////callback
+  final ValueChanged<String> parentAction1; ////callback
 
   Widget build(BuildContext context) {
     model.loadData();
@@ -101,7 +105,7 @@ class TagBar extends StatelessWidget {
                       itemCount: model.getTagCreated().length,
                       itemBuilder: (context, index) {
                         final item = model.getTagCreated()[index];
-                        return CustomTag(item, parentAction);
+                        return CustomTag(item, parentAction, parentAction1);
                       })))
         ]);
   }

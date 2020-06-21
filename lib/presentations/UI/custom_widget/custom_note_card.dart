@@ -15,7 +15,8 @@ import 'package:note_app/view_model/list_tb_note_view_model.dart';
 
 class NoteCard extends StatefulWidget {
   ThumbnailNote noteCard;
-  NoteCard(ThumbnailNote note) : this.noteCard = note;
+  final ValueChanged<String> parentAction; ////callback
+  NoteCard(ThumbnailNote note, ValueChanged<String> parent) : this.noteCard = note, parentAction = parent;
 
   NoteCardState createState() {
     return NoteCardState(noteCard);
@@ -117,6 +118,7 @@ class NoteCardState extends State<NoteCard> {
             var stt = await noteBus.deleteNoteById(noteCard.noteId);
             NoteCreatedModel model = NoteCreatedModel();
             model.deleteNote(noteCard);
+            widget.parentAction("RELOAD!");
           },
           child: Container(
               margin: EdgeInsets.only(
