@@ -52,6 +52,13 @@ class NoteCardState extends State<NoteCard> {
               MaterialPageRoute(builder: (context) => EditNote(noteCard)),
             );
           },
+          onLongPress: () async {
+            NoteBUS noteBus = NoteBUS();
+            var stt = await noteBus.deleteNoteById(noteCard.noteId);
+            NoteCreatedModel model = NoteCreatedModel();
+            model.deleteNote(noteCard);
+            widget.parentAction("RELOAD!");
+          },
           child: Container(
               margin: EdgeInsets.only(
                   top: 2 * MediaQuery.of(context).size.height / 100),

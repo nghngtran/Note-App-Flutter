@@ -23,7 +23,7 @@ class NoteBUS {
   }
 
   addNote(Notes note) async {
-    if(note.contents.isEmpty) return false;
+    //if(note.contents.isEmpty) return false;
     var rowId = await _noteRepository.insertNotes(note);
     //getNotes();
     return rowId;
