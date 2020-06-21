@@ -468,10 +468,10 @@ class NoteItemWidget extends StatelessWidget {
   NoteItemWidget(NoteItem _item) : item = _item;
   Uint8List bytes;
   void enCodeImg() {
-    final picker = ImagePicker();
+    //final picker = ImagePicker();
     File imgFile = File(item.content);
     print(item.content);
-    ImagePicker.pickImage(source: ImageSource.gallery);
+    //ImagePicker.pickImage(source: ImageSource.gallery);
     bytes = imgFile.readAsBytesSync();
   }
 
@@ -483,7 +483,11 @@ class NoteItemWidget extends StatelessWidget {
     } else if (item.type == "Image") {
       enCodeImg();
       print("Bytes:" + bytes.toString());
-      return Container(
+      return GestureDetector(
+          onTap: () {
+            //showDialog(context: context, child: dialogImg(context, model)); //thằng này có note item
+          },
+          child: Container(
           width: w * 100,
           height: w * 100,
           margin: EdgeInsets.fromLTRB(w * 2, h, w * 2, h),
@@ -492,10 +496,38 @@ class NoteItemWidget extends StatelessWidget {
               border: Border.all(width: 1, color: Colors.black),
               borderRadius: BorderRadius.all(Radius.circular(10)),
               color: Colors.white),
-          child: Image.memory(bytes));
+          child: Image.memory(bytes))
+      );
     }
     advancedPlayer.startHeadlessService();
     print(item.content);
     return HandleAudio(url: item.content);
+  }
+
+  Widget dialogImg(BuildContext context, NoteViewModel model) {
+    return CupertinoAlertDialog(
+      title: Text('Get image from ?'),
+      actions: <Widget>[
+        CupertinoDialogAction(
+          child: Text('Camera'),
+          onPressed: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (BuildContext context) {
+                  return CameraScreen(model);
+                }));
+          },
+        ),
+        CupertinoDialogAction(
+            child: Text('Gallery'),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (BuildContext context) {
+                  return PickImage(model);
+                }),
+              );
+            })
+      ],
+    );
   }
 }

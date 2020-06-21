@@ -80,6 +80,13 @@ class HomeScreenState extends State<HomeScreen>
     });
   }
 
+  _reLoad(String text) {
+    setState(() {
+      print(text);
+    });
+
+  }
+
   Widget _buildSearchField() {
     return TextField(
       controller: _searchQuery,
@@ -143,7 +150,7 @@ class HomeScreenState extends State<HomeScreen>
                 width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.height,
                 child: model.getNoteCreated().length > 0
-                    ? NoteGrid(model.getNoteCreated())
+                    ? NoteGrid(model.getNoteCreated(), _reLoad)
                     : Center(
                         child: Text("No match!",
                             style: TextStyle(
@@ -164,9 +171,28 @@ class HomeScreenState extends State<HomeScreen>
                 width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.height,
                 child: model.getNoteCreated().length > 0
-                    ? NoteGrid(model.getNoteCreated())
+                    ? NoteGrid(model.getNoteCreated(), _reLoad)
                     : Center(
                     child: Text("No match!",
+                        style: TextStyle(
+                            color: Theme.of(context).iconTheme.color))));
+          }
+          return Container();
+        });
+  }
+
+  Widget searchAll(BuildContext context, NoteCreatedModel model) {
+    return FutureBuilder(
+        future: model.loadData(),
+        builder: (context, state) {
+          if (state.connectionState == ConnectionState.done) {
+            return Container(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height,
+                child: model.getNoteCreated().length > 0
+                    ? NoteGrid(model.getNoteCreated(), _reLoad)
+                    : Center(
+                    child: Text("Nothing is here yet. Live up the space by creating new notes!",
                         style: TextStyle(
                             color: Theme.of(context).iconTheme.color))));
           }
@@ -265,7 +291,7 @@ class HomeScreenState extends State<HomeScreen>
                   Consumer<TagCreatedModel>(
                       builder: (context, tagCreatedModel, _) {
                     tagCreatedModel.loadData();
-                    return TagBar(mainController, tagCreatedModel, _updateMyTitle);
+                    return TagBar(mainController, tagCreatedModel, _updateMyTitle, _reLoad);
                   }),
                   (!_isSearching)
                       ? (SearchTag.compareTo("") == 0)
@@ -275,17 +301,7 @@ class HomeScreenState extends State<HomeScreen>
                               height: MediaQuery.of(context).size.height,
                               child: Consumer<NoteCreatedModel>(
                                   builder: (context, listTBNote, _) {
-                                    listTBNote.loadData();
-                                if (listTBNote.listSize > 0) {
-                                  return NoteGrid(listTBNote.getNoteCreated());
-                                }
-                                return Center(
-                                    child: Text(
-                                        "Nothing is here yet. Live up the space by creating new notes!",
-                                        style: TextStyle(
-                                            color: Theme.of(context)
-                                                .iconTheme
-                                                .color)));
+                                    return searchAll(context, listTBNote);
                               })))
                         : SingleChildScrollView(
                             child: Container(
