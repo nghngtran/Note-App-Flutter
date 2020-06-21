@@ -45,7 +45,12 @@ class NoteCardState extends State<NoteCard> {
       enCodeImg();
       return InkWell(
           splashColor: Colors.blue.withAlpha(30),
-          onTap: () {},
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => EditNote(noteCard)),
+            );
+          },
           child: Container(
               margin: EdgeInsets.only(
                   top: 2 * MediaQuery.of(context).size.height / 100),

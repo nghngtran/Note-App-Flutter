@@ -30,6 +30,10 @@ class Tag extends TimeUtils with ChangeNotifier {
     notifyListeners();
   }
 
+  void setID(String ID) {
+    this.id = ID;
+    notifyListeners();
+  }
 //  Tag getTag() {
 //    return this;
 //  }

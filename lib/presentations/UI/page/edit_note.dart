@@ -47,7 +47,15 @@ class EditNoteState extends State<EditNote> {
   Future<void> loadNoteItems() async {
     var notebus = new NoteBUS();
     cur = await notebus.getNoteById(widget.current.noteId);
-    print(cur.title);
+    print("OPEN NOTE!");
+    print("ID: " + cur.id);
+    print("Title: " + cur.title);
+    for (var i in cur.tags) {
+      print("TAG: " + i.title);
+    }
+    for (var i in cur.contents) {
+      print("CONTENT: " + i.content);
+    }
   }
 
   void initState() {
@@ -240,8 +248,7 @@ class EditNoteState extends State<EditNote> {
                                                                   BorderRadius
                                                                       .circular(
                                                                           5)),
-                                                      child: ChooseTitle(
-                                                          noteViewModel)));
+                                                      child: ChooseTitle(noteViewModel)));
                                         },
                                         child: Container(
                                           child: Row(
@@ -273,27 +280,36 @@ class EditNoteState extends State<EditNote> {
                                 Expanded(
                                     child: GestureDetector(
                                   onTap: () async {
-                                    //note.setListNoteItems(noteViewModel.contents);
-                                    //note.setTitle(noteViewModel.title);
-                                    //note.setTag(noteViewModel.tags);
-//                                    final NoteBUS noteBus = NoteBUS();
-                                    //await noteBus.addNote(note);
+                                    Notes tem = Notes();
+                                    tem.setListNoteItems(noteViewModel.contents);
+                                    tem.setTitle(noteViewModel.title);
+                                    tem.setTag(noteViewModel.tags);
+                                    tem.id = cur.id;
+                                    tem.history = cur.history;
+                                    tem.modified_time = DateTime.now();
+                                    tem.created_time = cur.created_time;
 
-//                                    final ThumbnailBUS thumbBus =
-//                                        ThumbnailBUS();
-//                                    print("|Load FTS|");
-//                                    var thumbs = await thumbBus
-//                                        .getThumbnailsByKeyWordAll("abcd");
-//                                    for (var thumb in thumbs) {
-//                                      print(thumb.toString());
-//                              //noteCreatedModel.addToList(thumb);
-//                                    }
-//                                    print("|Load FTS|");
+                                    print("SAVE NOTE!");
+                                    print("ID " + tem.id);
+                                    print("Title: " + noteViewModel.title);
+                                    for (var i in noteViewModel.tags) {
+                                      print("TAG: " + i.title + " Color: " + i.color.toString() + " ID: " + i.id);
+                                    }
+                                    for (var i in noteViewModel.contents) {
+                                      print("CONTENT: " + i.content);
+                                    }
+
+                                    final NoteBUS noteBus = NoteBUS();
+                                    bool temp = await noteBus.updateNote(tem);
+                                    print("WORK? :" + temp.toString());
 
                                     Navigator.of(context).push(
                                         MaterialPageRoute(builder: (context) {
                                       return HomeScreen();
-                                    }));
+                                    }
+                                    ))
+
+                                    ;
                                   },
                                   child: Text(
                                     "Save",
@@ -428,6 +444,11 @@ class EditTextState extends State<EditText> {
                           fontSize: 17,
                           fontStyle: FontStyle.normal,
                           color: Theme.of(context).iconTheme.color),
+                      onChanged: (text) {
+                        widget.item.setContent(text);
+                        widget.item.setBgColor(noteColor);
+                        print("CHANGE:" + text);
+                      },
                       onSaved: (value) {
                         widget.item.setContent(
                             TextEditingController.fromValue(TextEditingValue(

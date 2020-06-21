@@ -33,7 +33,7 @@ class CreateTagNoteState extends State<CreateTagNote> {
   AutoCompleteTextField searchTextField;
 
   Widget build(BuildContext context) {
-//    tagColor = Colors.green;
+    //tagColor = Colors.green;
     return Container(
         width: MediaQuery.of(context).size.width / 100 * 80,
         height: MediaQuery.of(context).size.height / 100 * 20,
@@ -86,13 +86,20 @@ class CreateTagNoteState extends State<CreateTagNote> {
                   },
                   key: null,
                   itemSubmitted: (item) {
+                    for(var i in widget.noteModel.tags) {
+                        if(item.title == i.title && item.color == i.color) {
+                          Navigator.of(context).pop();
+                          return;
+                        }
+                    }
                     setState(() {
 //                      tag = item;
-
                       tagColor = item.color;
                       controller.text = item.title;
                       tag.setTitle(item.title);
                       tag.setColor(tagColor);
+                      tag.setID(item.id);
+
                       widget.noteModel.addTag(tag);
                       Navigator.of(context).pop();
                     });
@@ -146,6 +153,25 @@ class CreateTagNoteState extends State<CreateTagNote> {
                       tag.setColor(tagColor);
                     }
                     tag.setTitle(controller.text);
+
+                    for(var i in widget.tagCreatedModel.getTagCreated()) //check if tag existed
+                    {
+                        if(i.title == tag.title) //tag existed
+                        {
+                          for(var j in widget.noteModel.tags) {
+                            if(tag.title == j.title) { //tag existed in note
+                              Navigator.of(context).pop();
+                              return;
+                            }
+                          }
+                          //tag has yet to exist in note
+                          tag.setColor(i.color);
+                          widget.noteModel.addTag(tag);
+                          Navigator.of(context).pop();
+                          return;
+                        }
+                    }
+                    //tag doesn't exist
                     widget.noteModel.addTag(tag);
                     TagBUS tagbus = new TagBUS();
                     var stt = await tagbus.addTag(tag);
@@ -183,6 +209,7 @@ class _DropDownButtonNoteState extends State<DropDownButtonNote> {
     } else {
       _value = widget.color;
     }
+    widget.tag.setColor(Colors.green);
   }
 
   DropdownButton dropdownBtn() => DropdownButton<Color>(
