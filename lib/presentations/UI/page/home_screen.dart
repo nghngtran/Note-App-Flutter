@@ -174,6 +174,25 @@ class HomeScreenState extends State<HomeScreen>
         });
   }
 
+  Widget searchAll(BuildContext context, NoteCreatedModel model) {
+    return FutureBuilder(
+        future: model.loadData(),
+        builder: (context, state) {
+          if (state.connectionState == ConnectionState.done) {
+            return Container(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height,
+                child: model.getNoteCreated().length > 0
+                    ? NoteGrid(model.getNoteCreated())
+                    : Center(
+                    child: Text("Nothing is here yet. Live up the space by creating new notes!",
+                        style: TextStyle(
+                            color: Theme.of(context).iconTheme.color))));
+          }
+          return Container();
+        });
+  }
+
 //  Widget loadHome(BuildContext context, NoteCreatedModel model) {
 //    return FutureBuilder(
 //        future: model.loadData(),
@@ -275,17 +294,7 @@ class HomeScreenState extends State<HomeScreen>
                               height: MediaQuery.of(context).size.height,
                               child: Consumer<NoteCreatedModel>(
                                   builder: (context, listTBNote, _) {
-                                    listTBNote.loadData();
-                                if (listTBNote.listSize > 0) {
-                                  return NoteGrid(listTBNote.getNoteCreated());
-                                }
-                                return Center(
-                                    child: Text(
-                                        "Nothing is here yet. Live up the space by creating new notes!",
-                                        style: TextStyle(
-                                            color: Theme.of(context)
-                                                .iconTheme
-                                                .color)));
+                                    return searchAll(context, listTBNote);
                               })))
                         : SingleChildScrollView(
                             child: Container(

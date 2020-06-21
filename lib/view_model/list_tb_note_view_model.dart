@@ -9,11 +9,14 @@ class NoteCreatedModel extends BaseModel {
   ThumbnailBUS noteBus = ThumbnailBUS();
   List<ThumbnailNote> listNoteCreated = [];
 
-  void loadData() async {
-    Future.delayed(const Duration(milliseconds: 2500), () async {
+  Future<void> loadData() async {
+    listNoteCreated = await noteBus.getThumbnails();
+    /*
+    Future.delayed(const Duration(milliseconds: 500), () async {
       listNoteCreated = await noteBus.getThumbnails();
-      notifyListeners();
+      //notifyListeners();
     });
+    */
   }
 
   Future<void> loadDataByTag(String tagId) async {
