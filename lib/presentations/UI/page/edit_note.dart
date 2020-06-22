@@ -193,7 +193,17 @@ class EditNoteState extends State<EditNote> {
     );
   }
 
+  Widget _form; // Save the form
+
+  @override
   Widget build(BuildContext context) {
+    if (_form == null) { // Create the form if it does not exist
+      _form = _createForm(context); // Build the form
+    }
+    return _form; // Show the form in the application
+  }
+
+  Widget _createForm(BuildContext context) {
     double w = MediaQuery.of(context).size.width / 100; //giờ đếm đi
     double h = MediaQuery.of(context).size.height / 100;
 
@@ -257,7 +267,7 @@ class EditNoteState extends State<EditNote> {
                                             children: <Widget>[
                                               SizedBox(width: w * 4),
                                               Text(
-                                                cur.title, //uhm
+                                                noteViewModel.title, //uhm
                                                 style: Theme.of(context)
                                                     .textTheme
                                                     .subhead
@@ -364,23 +374,27 @@ class EditText extends StatefulWidget {
 }
 
 class EditTextState extends State<EditText> {
-//  TextEditingController txtController = TextEditingController();
+  TextEditingController txtController = TextEditingController();
   var noteColor;
   var _editableNote;
 
   void initState() {
     _editableNote = widget.item;
     noteColor = _editableNote.noteColor;
-//    txtController = TextEditingController.fromValue(TextEditingValue(
-//      text: widget.item.content,
-//      selection: TextSelection.collapsed(offset: widget.item.content.length),
-//    ));
+    if(widget.item.content == null)
+      widget.item.content = "";
+
+    txtController = TextEditingController.fromValue(TextEditingValue(
+      text: widget.item.content,
+      selection: TextSelection.collapsed(offset: widget.item.content.length),
+    ));
+
   }
 
   @override
   void dispose() {
     // Clean up the controller when the widget is disposed.
-//    txtController.dispose();
+    txtController.dispose();
     super.dispose();
   }
 
@@ -434,12 +448,7 @@ class EditTextState extends State<EditText> {
                       ),
                       maxLength: null,
                       maxLines: null,
-                      controller:
-                          TextEditingController.fromValue(TextEditingValue(
-                        text: widget.item.content,
-                        selection: TextSelection.collapsed(
-                            offset: widget.item.content.length),
-                      )),
+                      controller: txtController,
                       style: TextStyle(
                           fontSize: 17,
                           fontStyle: FontStyle.normal,
@@ -450,12 +459,7 @@ class EditTextState extends State<EditText> {
                         print("CHANGE:" + text);
                       },
                       onSaved: (value) {
-                        widget.item.setContent(
-                            TextEditingController.fromValue(TextEditingValue(
-                          text: widget.item.content,
-                          selection: TextSelection.collapsed(
-                              offset: widget.item.content.length),
-                        )).text);
+                        widget.item.setContent(value);
                         widget.item.setBgColor(noteColor);
                       })
                 ]))));
