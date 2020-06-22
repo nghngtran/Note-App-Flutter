@@ -10,13 +10,16 @@ import 'package:note_app/presentations/UI/custom_widget/custom_text_style.dart';
 import 'package:note_app/presentations/UI/page/edit_note.dart';
 import 'package:note_app/utils/bus/note_bus.dart';
 import 'package:note_app/utils/bus/thumbnail_bus.dart';
+import 'package:note_app/utils/model/tag.dart';
 import 'package:note_app/utils/model/thumbnailNote.dart';
 import 'package:note_app/view_model/list_tb_note_view_model.dart';
 
 class NoteCard extends StatefulWidget {
   ThumbnailNote noteCard;
   final ValueChanged<String> parentAction; ////callback
-  NoteCard(ThumbnailNote note, ValueChanged<String> parent) : this.noteCard = note, parentAction = parent;
+  NoteCard(ThumbnailNote note, ValueChanged<String> parent)
+      : this.noteCard = note,
+        parentAction = parent;
 
   NoteCardState createState() {
     return NoteCardState(noteCard);
@@ -39,6 +42,16 @@ class NoteCardState extends State<NoteCard> {
   void enCodeImg() {
     File imgFile = File(noteCard.content);
     bytes = imgFile.readAsBytesSync();
+  }
+
+  Widget showTag(BuildContext context, Tag tag) {
+    return Wrap(children: <Widget>[
+      Icon(Icons.local_offer, color: tag.color, size: 16),
+      SizedBox(width: MediaQuery.of(context).size.width / 100),
+      Text(tag.title,
+          style:
+              Theme.of(context).textTheme.subtitle.copyWith(color: tag.color))
+    ]);
   }
 
   Widget build(BuildContext context) {
@@ -154,26 +167,53 @@ class NoteCardState extends State<NoteCard> {
                           fontWeight: Font.Medium,
                           color: Theme.of(context).iconTheme.color)),
                   SizedBox(height: MediaQuery.of(context).size.height / 100),
-                  Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          noteCard.tags.length > 0
-                              ? Icon(Icons.local_offer,
-                                  color: noteCard.tags.first.color, size: 16)
-                              : Container(),
-                          SizedBox(
-                              width: MediaQuery.of(context).size.width / 100),
-                          noteCard.tags.length > 0
-                              ? Text(noteCard.tags.first.title,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .subtitle
-                                      .copyWith(
-                                          color: noteCard.tags.first.color))
-                              : Container()
-                        ],
-                      ) ??
-                      Text(""),
+                  noteCard.tags.length > 0
+                      ? noteCard.tags.length > 2
+                          ? Wrap(
+//                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                showTag(context, noteCard.tags.first),
+                                SizedBox(
+                                    width: MediaQuery.of(context).size.width /
+                                        100 *
+                                        2),
+                                showTag(context, noteCard.tags[1]),
+                                SizedBox(
+                                    width: MediaQuery.of(context).size.width /
+                                        100 *
+                                        5),
+                                Container(
+                                  margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                                  width: MediaQuery.of(context).size.width /
+                                      100 *
+                                      6,
+                                  height: MediaQuery.of(context).size.width /
+                                      100 *
+                                      6,
+                                  child: CircleAvatar(
+                                      backgroundColor:
+                                          Colors.orangeAccent.withOpacity(0.8),
+                                      child: Text(
+                                          "+" +
+                                              (noteCard.tags.length - 2)
+                                                  .toString(),
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .subtitle
+                                              .copyWith(
+                                                  color: Theme.of(context)
+                                                      .iconTheme
+                                                      .color,
+                                                  fontWeight: Font.Regular))),
+                                )
+                              ],
+                            )
+                          : Wrap(
+//
+                              children: <Widget>[
+                                  showTag(context, noteCard.tags.first)
+                                ])
+                      : Text(""),
                   SizedBox(
                       height: 2 * MediaQuery.of(context).size.height / 100),
                   Text(noteCard.content,

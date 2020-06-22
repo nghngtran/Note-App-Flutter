@@ -9,6 +9,7 @@ import 'package:note_app/presentations/UI/page/create_note.dart';
 
 import 'package:note_app/view_model/list_tb_note_view_model.dart';
 import 'package:note_app/view_model/list_tag_view_model.dart';
+import 'package:note_app/view_model/note_view_model.dart';
 import 'package:note_app/view_model/tag_view_model.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:note_app/presentations/UI/custom_widget/custom_text_style.dart';
@@ -30,6 +31,7 @@ class HomeScreenState extends State<HomeScreen>
   String SearchTag = "";
   String searchQuery = "Search for a word ...";
   TextEditingController _searchQuery;
+  NoteViewModel noteViewModel;
 
   bool visible = true;
   bool isCollapsed = true;
@@ -72,7 +74,8 @@ class HomeScreenState extends State<HomeScreen>
     });
   }
 
-  _updateMyTitle(String text) { /////function callback from tag class
+  _updateMyTitle(String text) {
+    /////function callback from tag class
     print("CHOSEN TAG: " + text);
     setState(() {
       _stopSearching();
@@ -84,7 +87,6 @@ class HomeScreenState extends State<HomeScreen>
     setState(() {
       print(text);
     });
-
   }
 
   Widget _buildSearchField() {
@@ -101,12 +103,6 @@ class HomeScreenState extends State<HomeScreen>
       onChanged: updateSearchQuery,
     );
   }
-
-//  TagBUS tagBUS = TagBUS();
-//  List<Tag> listCreatedTag;
-//  void loadTagData() async {
-//    listCreatedTag = await tagBUS.getTags();
-//  }
 
   void updateSearchQuery(String newQuery) {
     setState(() {
@@ -160,7 +156,6 @@ class HomeScreenState extends State<HomeScreen>
         });
   }
 
-
   Widget searchByTag(BuildContext context, NoteCreatedModel model) {
     return FutureBuilder(
         future: model.loadDataByTag(SearchTag),
@@ -173,9 +168,9 @@ class HomeScreenState extends State<HomeScreen>
                 child: model.getNoteCreated().length > 0
                     ? NoteGrid(model.getNoteCreated(), _reLoad)
                     : Center(
-                    child: Text("No match!",
-                        style: TextStyle(
-                            color: Theme.of(context).iconTheme.color))));
+                        child: Text("No match!",
+                            style: TextStyle(
+                                color: Theme.of(context).iconTheme.color))));
           }
           return Container();
         });
@@ -192,30 +187,14 @@ class HomeScreenState extends State<HomeScreen>
                 child: model.getNoteCreated().length > 0
                     ? NoteGrid(model.getNoteCreated(), _reLoad)
                     : Center(
-                    child: Text("Nothing is here yet. Live up the space by creating new notes!",
-                        style: TextStyle(
-                            color: Theme.of(context).iconTheme.color))));
+                        child: Text(
+                            "Nothing is here yet. Live up the space by creating new notes!",
+                            style: TextStyle(
+                                color: Theme.of(context).iconTheme.color))));
           }
           return Container();
         });
   }
-
-//  Widget loadHome(BuildContext context, NoteCreatedModel model) {
-//    return FutureBuilder(
-//        future: model.loadData(),
-//        builder: (context, state) {
-//          if (state.connectionState == ConnectionState.done) {
-//            return Container(
-//                width: MediaQuery.of(context).size.width,
-//                height: MediaQuery.of(context).size.height,
-//                child: model.getNoteCreated().length > 0
-//                    ? NoteGrid(model.getNoteCreated())
-//                    : Text(""));
-//          }
-//          return Container();
-//        });
-//  }
-
 
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -275,6 +254,7 @@ class HomeScreenState extends State<HomeScreen>
                 child: Icon(Icons.add,
                     size: 28, color: Theme.of(context).iconTheme.color),
                 onPressed: () {
+//                  noteViewModel = NoteViewModel();
                   Navigator.push(
                       context,
                       PageTransition(
@@ -291,26 +271,27 @@ class HomeScreenState extends State<HomeScreen>
                   Consumer<TagCreatedModel>(
                       builder: (context, tagCreatedModel, _) {
                     tagCreatedModel.loadData();
-                    return TagBar(mainController, tagCreatedModel, _updateMyTitle, _reLoad);
+                    return TagBar(mainController, tagCreatedModel,
+                        _updateMyTitle, _reLoad);
                   }),
                   (!_isSearching)
                       ? (SearchTag.compareTo("") == 0)
-                        ? SingleChildScrollView(
-                          child: Container(
-                              width: MediaQuery.of(context).size.width,
-                              height: MediaQuery.of(context).size.height,
-                              child: Consumer<NoteCreatedModel>(
-                                  builder: (context, listTBNote, _) {
+                          ? SingleChildScrollView(
+                              child: Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  height: MediaQuery.of(context).size.height,
+                                  child: Consumer<NoteCreatedModel>(
+                                      builder: (context, listTBNote, _) {
                                     return searchAll(context, listTBNote);
-                              })))
-                        : SingleChildScrollView(
-                            child: Container(
-                              width: MediaQuery.of(context).size.width,
-                              height: MediaQuery.of(context).size.height,
-                              child: Consumer<NoteCreatedModel>(
-                                builder: (context, listTBNote, _) {
-                                  return searchByTag(context, listTBNote);
-                                })))
+                                  })))
+                          : SingleChildScrollView(
+                              child: Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  height: MediaQuery.of(context).size.height,
+                                  child: Consumer<NoteCreatedModel>(
+                                      builder: (context, listTBNote, _) {
+                                    return searchByTag(context, listTBNote);
+                                  })))
                       : SingleChildScrollView(
                           child: Container(
                               width: MediaQuery.of(context).size.width,
