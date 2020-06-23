@@ -187,10 +187,9 @@ class HomeScreenState extends State<HomeScreen>
                 child: model.getNoteCreated().length > 0
                     ? NoteGrid(model.getNoteCreated(), _reLoad)
                     : Center(
-                        child: Text(
-                            "Nothing is here yet. Live up the space by creating new notes!",
-                            style: TextStyle(
-                                color: Theme.of(context).iconTheme.color))));
+                    child: Text("No notes yet!",
+                        style: TextStyle(
+                          fontSize: 17, color: Theme.of(context).iconTheme.color))));
           }
           return Container();
         });
