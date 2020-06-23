@@ -181,15 +181,15 @@ class NoteCardState extends State<NoteCard> {
                                 SizedBox(
                                     width: MediaQuery.of(context).size.width /
                                         100 *
-                                        5),
+                                        3),
                                 Container(
-                                  margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+//                                  margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                                   width: MediaQuery.of(context).size.width /
                                       100 *
-                                      6,
+                                      4,
                                   height: MediaQuery.of(context).size.width /
                                       100 *
-                                      6,
+                                      4,
                                   child: CircleAvatar(
                                       backgroundColor:
                                           Colors.orangeAccent.withOpacity(0.8),
@@ -204,7 +204,7 @@ class NoteCardState extends State<NoteCard> {
                                                   color: Theme.of(context)
                                                       .iconTheme
                                                       .color,
-                                                  fontWeight: Font.Regular))),
+                                                  fontWeight: Font.Regular,fontSize: 10))),
                                 )
                               ],
                             )

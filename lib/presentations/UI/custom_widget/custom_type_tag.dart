@@ -77,7 +77,7 @@ class CustomTagState extends State<CustomTag> {
                     margin: EdgeInsets.only(
                         left: 4 * MediaQuery.of(context).size.width / 100,
                         top: MediaQuery.of(context).size.height / 100),
-//            width: MediaQuery.of(context).size.width / 100 * 25,
+//            width: MediaQuery.of(context).size.width / 100 * 25,2
                     height: MediaQuery.of(context).size.height / 100 * 5,
                     padding: EdgeInsets.fromLTRB(
                         MediaQuery.of(context).size.width / 100 * 2,
@@ -87,7 +87,7 @@ class CustomTagState extends State<CustomTag> {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.all(Radius.circular(15)),
                       color: widget.tag.color,
-                      border: Border.all(color: Colors.blueAccent, width: 1.5),
+                      border: Border.all(color: Colors.blueAccent, width: 3),
                       boxShadow: [
                         BoxShadow(
                           color: Colors.blueAccent.withOpacity(0.5),
