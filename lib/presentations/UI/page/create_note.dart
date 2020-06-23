@@ -340,8 +340,8 @@ class ListNoteItemsState extends State<ListNoteItems> {
               final item = getChildrenNotes()[index];
               final itemRemove = widget.model.contents[index];
               final Key noteItem = Key(item.toString());
-              print("note" + widget.model.contents.length.toString());
-              print("child" + getChildrenNotes().length.toString());
+//              print("note" + widget.model.contents.length.toString());
+//              print("child" + getChildrenNotes().length.toString());
               return Dismissible(
                   onResize: () {},
                   direction: DismissDirection.endToStart,
@@ -354,11 +354,11 @@ class ListNoteItemsState extends State<ListNoteItems> {
                   onDismissed: (direction) {
                     setState(() {
                       print("Xoas" + index.toString());
-//                      widget.model.contents.removeAt(index);
+                      widget.model.contents.removeAt(index);
                       print(widget.model.contents);
-                      widget.model.removeNoteItem(itemRemove);
-                      getChildrenNotes().removeAt(index);
-                      print(getChildrenNotes().length.toString());
+//                      widget.model.removeNoteItem(itemRemove);
+//                      getChildrenNotes().removeAt(index);
+//                      print(getChildrenNotes().length.toString());
                     });
                   },
                   key: noteItem,
@@ -437,37 +437,37 @@ class EditTextState extends State<EditText> {
                 child: Wrap(children: <Widget>[
                   TextFormField(
 //                      textInputAction: TextInputAction.done,
-                      autofocus: false,
-                      autocorrect: false,
-                      decoration: InputDecoration(
-                        contentPadding: EdgeInsets.fromLTRB(w, h, w, h),
-                        fillColor: noteColor,
-                        filled: true,
-                        enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: BorderSide(
-                                color: Theme.of(context).backgroundColor,
-                                width: 1)),
-                        border: OutlineInputBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(10))),
-                      ),
-                      maxLength: null,
-                      maxLines: null,
-                      controller: txtController,
-                      style: TextStyle(
-                          fontSize: 17,
-                          fontStyle: FontStyle.normal,
-                          color: Theme.of(context).iconTheme.color),
-                      onChanged: (text) {
-                        widget.item.setContent(txtController.text);
-                        widget.item.setBgColor(noteColor);
-                      },
-                      onSaved: (value) {
-                        widget.item.setContent(txtController.text);
-                        widget.item.setBgColor(noteColor);
-                        FocusScope.of(context).unfocus();
-                      })
+                    autofocus: false,
+                    autocorrect: false,
+                    decoration: InputDecoration(
+                      contentPadding: EdgeInsets.fromLTRB(w, h, w, h),
+                      fillColor: noteColor,
+                      filled: true,
+                      enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide(
+                              color: Theme.of(context).backgroundColor,
+                              width: 1)),
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10))),
+                    ),
+                    maxLength: null,
+                    maxLines: null,
+                    controller: txtController,
+                    style: TextStyle(
+                        fontSize: 17,
+                        fontStyle: FontStyle.normal,
+                        color: Theme.of(context).iconTheme.color),
+                    onChanged: (text) {
+                      widget.item.setContent(txtController.text);
+                      widget.item.setBgColor(noteColor);
+                    },
+//                      onSaved: (value) {
+//                        widget.item.setContent(txtController.text);
+//                        widget.item.setBgColor(noteColor);
+//                        FocusScope.of(context).unfocus();
+//                      }
+                  )
                 ]))));
   }
 }
