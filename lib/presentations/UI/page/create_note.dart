@@ -100,7 +100,6 @@ class CreateNoteState extends State<CreateNote> {
     _audioByteData = await rootBundle.load(fileName);
   }
 
-  int i = 0;
   Widget dialogSound(BuildContext context, NoteViewModel model) {
     return CupertinoAlertDialog(
         title: Text('Get sound from ?'),
@@ -127,7 +126,7 @@ class CreateNoteState extends State<CreateNote> {
 //                fileName of audio
                 _fileName = _path != null ? _path.split('/').last : '';
                 String sdPath = '/storage/emulated/0/NoteApp/';
-                String pathTmp = sdPath + "/record_${i++}.mp3";
+                String pathTmp = sdPath + "/record_${DateTime.now()}.mp3";
                 print("check" + _fileName);
                 _loadAudioByteData(_path);
                 _saveAudio(_audioByteData, pathTmp);
@@ -313,24 +312,67 @@ class CreateNoteState extends State<CreateNote> {
   }
 }
 
-class ListNoteItems extends StatelessWidget {
+class ListNoteItems extends StatefulWidget {
   final NoteViewModel model;
+
   ListNoteItems(this.model);
+  ListNoteItemsState createState() => ListNoteItemsState();
+}
+
+class ListNoteItemsState extends State<ListNoteItems> {
+  void initState() {
+    super.initState();
+  }
 
   ScrollController _controller = new ScrollController();
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      controller: _controller,
-      children: getChildrenNotes(),
-    );
+//    return ListView(
+//      controller: _controller,
+//      children: getChildrenNotes(),
+//    );
+
+    return (widget.model.contents.length > 0)
+        ? ListView.builder(
+            controller: _controller,
+            itemCount: widget.model.contents.length,
+            itemBuilder: (context, index) {
+              final item = getChildrenNotes()[index];
+              final itemRemove = widget.model.contents[index];
+              final Key noteItem = Key(item.toString());
+//              print("note" + widget.model.contents.length.toString());
+//              print("child" + getChildrenNotes().length.toString());
+              return Dismissible(
+                  onResize: () {},
+                  direction: DismissDirection.endToStart,
+                  resizeDuration: Duration(milliseconds: 200),
+                  background: Container(
+                      color: Colors.red,
+                      alignment: AlignmentDirectional.centerEnd,
+                      child: Icon(Icons.delete,
+                          color: Theme.of(context).iconTheme.color)),
+                  onDismissed: (direction) {
+                    setState(() {
+                      print("Xoas" + index.toString());
+                      widget.model.contents.removeAt(index);
+                      print(widget.model.contents);
+//                      widget.model.removeNoteItem(itemRemove);
+//                      getChildrenNotes().removeAt(index);
+//                      print(getChildrenNotes().length.toString());
+                    });
+                  },
+                  key: noteItem,
+                  child: item);
+            })
+        : Text("");
   }
 
   List<Widget> getChildrenNotes() {
-    if (model.contents.length == 0) {
+//    print("note" + widget.model.contents.length.toString());
+    if (widget.model.contents.length == 0) {
       return List<Container>();
     }
-    return model.contents.map((todo) => NoteItemWidget(todo)).toList();
+    return widget.model.contents.map((todo) => NoteItemWidget(todo)).toList();
   }
 }
 
@@ -381,7 +423,9 @@ class EditTextState extends State<EditText> {
   Widget build(BuildContext context) {
     double w = MediaQuery.of(context).size.width / 100;
     double h = MediaQuery.of(context).size.height / 100;
+
     widget.item.setContent(txtController.text);
+
     return SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: InkWell(
@@ -392,39 +436,38 @@ class EditTextState extends State<EditText> {
                 padding: EdgeInsets.fromLTRB(w * 4, h / 2, w * 2, h),
                 child: Wrap(children: <Widget>[
                   TextFormField(
-                      textInputAction: TextInputAction.done,
-                      autofocus: false,
-                      autocorrect: false,
-                      decoration: InputDecoration(
-                        contentPadding: EdgeInsets.fromLTRB(w, h, w, h),
-                        fillColor: noteColor,
-                        filled: true,
-                        enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: BorderSide(
-                                color: Theme.of(context).backgroundColor,
-                                width: 1)),
-                        border: OutlineInputBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(10))),
-                      ),
-                      maxLength: null,
-                      maxLines: null,
-                      controller: txtController,
-                      style: TextStyle(
-                          fontSize: 17,
-                          fontStyle: FontStyle.normal,
-                          color: Theme.of(context).iconTheme.color),
-                      onChanged: (text) {
-                        widget.item.setContent(txtController.text);
-                        widget.item.setBgColor(noteColor);
-                      },
-                      onSaved: (value) {
-                        widget.item.setContent(txtController.text);
-                        widget.item.setBgColor(noteColor);
-                        print(widget.item.content);
-                        FocusScope.of(context).unfocus();
-                      })
+//                      textInputAction: TextInputAction.done,
+                    autofocus: false,
+                    autocorrect: false,
+                    decoration: InputDecoration(
+                      contentPadding: EdgeInsets.fromLTRB(w, h, w, h),
+                      fillColor: noteColor,
+                      filled: true,
+                      enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide(
+                              color: Theme.of(context).backgroundColor,
+                              width: 1)),
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10))),
+                    ),
+                    maxLength: null,
+                    maxLines: null,
+                    controller: txtController,
+                    style: TextStyle(
+                        fontSize: 17,
+                        fontStyle: FontStyle.normal,
+                        color: Theme.of(context).iconTheme.color),
+                    onChanged: (text) {
+                      widget.item.setContent(txtController.text);
+                      widget.item.setBgColor(noteColor);
+                    },
+//                      onSaved: (value) {
+//                        widget.item.setContent(txtController.text);
+//                        widget.item.setBgColor(noteColor);
+//                        FocusScope.of(context).unfocus();
+//                      }
+                  )
                 ]))));
   }
 }
@@ -462,7 +505,7 @@ class NoteItemWidget extends StatelessWidget {
         future: enCodeImg(),
         builder: (BuildContext context, AsyncSnapshot<Uint8List> image) {
           if (image.connectionState == ConnectionState.done && image.hasData) {
-            print(bytes.toString());
+            print("notee" + bytes.toString());
             return Container(
                 width: w * 100,
                 height: w * 100,

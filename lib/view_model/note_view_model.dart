@@ -103,4 +103,9 @@ class NoteViewModel extends BaseModel {
   NoteItem getNoteItemAt(index) {
     return this.contents[index];
   }
+
+  void removeTagOfNote(Tag tag) {
+    this.tags.remove(tag);
+    notifyListeners();
+  }
 }

@@ -86,11 +86,11 @@ class CreateTagNoteState extends State<CreateTagNote> {
                   },
                   key: null,
                   itemSubmitted: (item) {
-                    for(var i in widget.noteModel.tags) {
-                        if(item.title == i.title && item.color == i.color) {
-                          Navigator.of(context).pop();
-                          return;
-                        }
+                    for (var i in widget.noteModel.tags) {
+                      if (item.title == i.title && item.color == i.color) {
+                        Navigator.of(context).pop();
+                        return;
+                      }
                     }
                     setState(() {
 //                      tag = item;
@@ -154,22 +154,24 @@ class CreateTagNoteState extends State<CreateTagNote> {
                     }
                     tag.setTitle(controller.text);
 
-                    for(var i in widget.tagCreatedModel.getTagCreated()) //check if tag existed
+                    for (var i in widget.tagCreatedModel
+                        .getTagCreated()) //check if tag existed
                     {
-                        if(i.title == tag.title) //tag existed
-                        {
-                          for(var j in widget.noteModel.tags) {
-                            if(tag.title == j.title) { //tag existed in note
-                              Navigator.of(context).pop();
-                              return;
-                            }
+                      if (i.title == tag.title) //tag existed
+                      {
+                        for (var j in widget.noteModel.tags) {
+                          if (tag.title == j.title) {
+                            //tag existed in note
+                            Navigator.of(context).pop();
+                            return;
                           }
-                          //tag has yet to exist in note
-                          tag.setColor(i.color);
-                          widget.noteModel.addTag(tag);
-                          Navigator.of(context).pop();
-                          return;
                         }
+                        //tag has yet to exist in note
+                        tag.setColor(i.color);
+                        widget.noteModel.addTag(tag);
+                        Navigator.of(context).pop();
+                        return;
+                      }
                     }
                     //tag doesn't exist
                     widget.noteModel.addTag(tag);
@@ -298,7 +300,7 @@ class TagBarOfNote extends StatelessWidget {
                       itemCount: model.tags.length,
                       itemBuilder: (context, index) {
                         final item = model.tags[index];
-                        return CustomTagNote(item);
+                        return CustomTagNote(item, model);
                       })))
 //              : Container()
         ]);
@@ -307,10 +309,34 @@ class TagBarOfNote extends StatelessWidget {
 
 class CustomTagNote extends StatelessWidget {
   Tag tag;
-  CustomTagNote(Tag _tag) : tag = _tag;
+  final NoteViewModel model;
+  CustomTagNote(Tag _tag, NoteViewModel _model)
+      : tag = _tag,
+        model = _model;
   Widget build(BuildContext context) {
     return GestureDetector(
-        onTap: () {},
+        onLongPress: () {
+          showDialog(
+              context: context,
+              builder: (BuildContext context) => CupertinoAlertDialog(
+                    title: Text('Remove tag ?'),
+                    actions: <Widget>[
+                      CupertinoDialogAction(
+                        child: Text('Cancel'),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                      CupertinoDialogAction(
+                        child: Text('Yes'),
+                        onPressed: () {
+                          model.removeTagOfNote(tag);
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    ],
+                  ));
+        },
         child: Wrap(children: <Widget>[
           Container(
               margin: EdgeInsets.only(
