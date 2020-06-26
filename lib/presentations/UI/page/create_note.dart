@@ -361,12 +361,8 @@ class ListNoteItemsState extends State<ListNoteItems> {
             itemCount: widget.model.contents.length,
             itemBuilder: (context, index) {
               final item = getChildrenNotes()[index];
-              final itemRemove = widget.model.contents[index];
               final Key noteItem = Key(item.toString());
-//              print("note" + widget.model.contents.length.toString());
-//              print("child" + getChildrenNotes().length.toString());
               return Dismissible(
-                  onResize: () {},
                   direction: DismissDirection.endToStart,
                   resizeDuration: Duration(milliseconds: 200),
                   background: Container(
@@ -375,14 +371,8 @@ class ListNoteItemsState extends State<ListNoteItems> {
                       child: Icon(Icons.delete,
                           color: Theme.of(context).iconTheme.color)),
                   onDismissed: (direction) {
-                    setState(() {
-                      print("Xoas" + index.toString());
                       widget.model.contents.removeAt(index);
                       print(widget.model.contents);
-//                      widget.model.removeNoteItem(itemRemove);
-//                      getChildrenNotes().removeAt(index);
-//                      print(getChildrenNotes().length.toString());
-                    });
                   },
                   key: noteItem,
                   child: item);

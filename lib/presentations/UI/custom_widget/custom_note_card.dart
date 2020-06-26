@@ -66,11 +66,31 @@ class NoteCardState extends State<NoteCard> {
             );
           },
           onLongPress: () async {
-            NoteBUS noteBus = NoteBUS();
-            var stt = await noteBus.deleteNoteById(noteCard.noteId);
-            NoteCreatedModel model = NoteCreatedModel();
-            model.deleteNote(noteCard);
-            widget.parentAction("RELOAD!");
+            showDialog(
+                context: context,
+                builder: (BuildContext context) => CupertinoAlertDialog(
+                  title: Text('Do you want to remove this note ?'),
+                  actions: <Widget>[
+                    CupertinoDialogAction(
+                      child: Text('Cancel'),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                    CupertinoDialogAction(
+                      child: Text('Yes'),
+                      onPressed: () async {
+                        NoteBUS noteBus = NoteBUS();
+                        var stt = await noteBus.deleteNoteById(noteCard.noteId);
+                        NoteCreatedModel model = NoteCreatedModel();
+                        model.deleteNote(noteCard);
+                        widget.parentAction("RELOAD!");
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  ],
+                ));
+
           },
           child: Container(
               margin: EdgeInsets.only(
@@ -133,12 +153,30 @@ class NoteCardState extends State<NoteCard> {
             );
           },
           onLongPress: () async {
-//          Thumbnail xóa đúng, nhưng noteBus sai !!
-            NoteBUS noteBus = NoteBUS();
-            var stt = await noteBus.deleteNoteById(noteCard.noteId);
-            NoteCreatedModel model = NoteCreatedModel();
-            model.deleteNote(noteCard);
-            widget.parentAction("RELOAD!");
+         showDialog(
+                context: context,
+                builder: (BuildContext context) => CupertinoAlertDialog(
+                  title: Text('Do you want to remove this note ?'),
+                  actions: <Widget>[
+                    CupertinoDialogAction(
+                      child: Text('Cancel'),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                    CupertinoDialogAction(
+                      child: Text('Yes'),
+                      onPressed: () async {
+                        NoteBUS noteBus = NoteBUS();
+                        var stt = await noteBus.deleteNoteById(noteCard.noteId);
+                        NoteCreatedModel model = NoteCreatedModel();
+                        model.deleteNote(noteCard);
+                        widget.parentAction("RELOAD!");
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  ],
+                ));
           },
           child: Container(
               margin: EdgeInsets.only(
@@ -235,11 +273,30 @@ class NoteCardState extends State<NoteCard> {
           );
         },
         onLongPress: () async {
-//          Thumbnail xóa đúng, nhưng noteBus sai !!
-          NoteBUS noteBus = NoteBUS();
-          var stt = await noteBus.deleteNoteById(noteCard.noteId);
-          NoteCreatedModel model = NoteCreatedModel();
-          model.deleteNote(noteCard);
+          showDialog(
+              context: context,
+              builder: (BuildContext context) => CupertinoAlertDialog(
+                title: Text('Do you want to remove this note ?'),
+                actions: <Widget>[
+                  CupertinoDialogAction(
+                    child: Text('Cancel'),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                  CupertinoDialogAction(
+                    child: Text('Yes'),
+                    onPressed: () async {
+                      NoteBUS noteBus = NoteBUS();
+                      var stt = await noteBus.deleteNoteById(noteCard.noteId);
+                      NoteCreatedModel model = NoteCreatedModel();
+                      model.deleteNote(noteCard);
+                      widget.parentAction("RELOAD!");
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
+              ));
         },
         child: Container(
             margin: EdgeInsets.only(

@@ -50,7 +50,7 @@ class CustomTagState extends State<CustomTag> {
           showDialog(
               context: context,
               builder: (BuildContext context) => CupertinoAlertDialog(
-                    title: Text('Remove tag ?'),
+                    title: Text('Do you want to remove this tag ?'),
                     actions: <Widget>[
                       CupertinoDialogAction(
                         child: Text('Cancel'),
