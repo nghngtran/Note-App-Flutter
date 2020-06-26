@@ -517,7 +517,7 @@ class NoteItemWidget extends StatelessWidget {
     } else if (item.type == "Image") {
       print(item.content);
       return FutureBuilder<Uint8List>(
-        future: Future.delayed(Duration(milliseconds: 2000), () => enCodeImg()),
+        future: Future.delayed(Duration(milliseconds: 1000), () => enCodeImg()),
         builder: (BuildContext context, AsyncSnapshot<Uint8List> image) {
           if (image.connectionState == ConnectionState.done && image.hasData) {
             print("notee" + bytes.toString());

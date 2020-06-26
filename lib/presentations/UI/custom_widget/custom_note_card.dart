@@ -316,6 +316,12 @@ class NoteCardState extends State<NoteCard> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
+                  Text(noteCard.title,style: TextStyle(
+                fontSize: 17,
+                fontFamily: Font.Name,
+                fontWeight: Font.Medium,
+                color: Theme.of(context).iconTheme.color)),
+          SizedBox(height: MediaQuery.of(context).size.height / 100),
                   Row(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
