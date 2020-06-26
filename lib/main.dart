@@ -5,8 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:note_app/application/constants.dart';
 import 'package:note_app/application/router.dart';
 import 'package:note_app/presentations/UI/page/base_view.dart';
+import 'package:note_app/presentations/UI/page/create_note.dart';
+import 'package:note_app/presentations/UI/page/customPaint.dart';
 
 import 'package:note_app/presentations/UI/page/home_screen.dart';
+import 'package:note_app/presentations/UI/page/image_pick.dart';
 import 'package:note_app/utils/bus/thumbnail_bus.dart';
 
 import 'package:note_app/utils/database/database.dart';
@@ -42,6 +45,7 @@ class MyApp extends StatelessWidget {
     return ChangeNotifierProvider(
         create: (context) => Notes(),
         child: Consumer<AppStateNotifier>(builder: (context, appState, child) {
+         
           return MaterialApp(
             title: "Note App",
             debugShowCheckedModeBanner: false,

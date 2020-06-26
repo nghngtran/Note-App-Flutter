@@ -42,13 +42,13 @@ class _PreviewImageScreenState extends State<PreviewImageScreen> {
           actions: <Widget>[
             IconButton(
                 icon: Icon(Icons.check),
-                onPressed: () async {
+                onPressed: ()async {
 //                  print("save " + widget.imagePath);
 //                  await GallerySaver.saveImage(widget.imagePath,
 //                      albumName: "NoteApp");
                   Uint8List bytes =
                       File(widget.imagePath).readAsBytesSync() as Uint8List;
-                  await _saveImage(
+                   await _saveImage(
                       bytes,
                       Directory('/storage/emulated/0/NoteApp/'),
                       widget.imagePath.split("/").last);
@@ -59,9 +59,10 @@ class _PreviewImageScreenState extends State<PreviewImageScreen> {
                   widget.model.addNoteItem(tmp);
 //                  Navigator.of(context)
 //                      .push(
-                  MaterialPageRoute(builder: (BuildContext context) {
-                    return CreateNote();
-                  });
+                  Navigator.popUntil(context, ModalRoute.withName('create_note'));
+//                  MaterialPageRoute(builder: (BuildContext context) {
+//                    return CreateNote();
+//                  });
                 })
           ],
         ),

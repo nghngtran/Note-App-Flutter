@@ -129,9 +129,10 @@ class _CustomPaintPageState extends State<CustomPaintPage> {
                             tmp.content = pathImg;
                             widget.model.addNoteItem(tmp);
 //                            Navigator.of(context).pop(
-                            MaterialPageRoute(builder: (BuildContext context) {
-                              return CreateNote();
-                            });
+//                            MaterialPageRoute(builder: (BuildContext context) {
+//                              return CreateNote();
+//                            });
+                            Navigator.popUntil(context, ModalRoute.withName('create_note'));
 //                            );
                           })
                     ],
