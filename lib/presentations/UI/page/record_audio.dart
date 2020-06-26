@@ -37,6 +37,8 @@ class RecordState extends State<Record> {
 
   void _saveAudio(ByteData byteData, String fileName,
       {Function success, Function fail}) async {
+    AudioPlayer advancedPlayer = AudioPlayer();
+    advancedPlayer.startHeadlessService();
     final buffer = byteData.buffer;
     String tempPath = fileName;
     File image = File(tempPath);
@@ -154,8 +156,6 @@ class RecordState extends State<Record> {
     }
   }
 
-  int i = 0;
-
   Future<String> getFilePath() async {
     Directory storageDirectory = await getApplicationDocumentsDirectory();
     String sdPath = storageDirectory.path + "/record";
@@ -163,7 +163,7 @@ class RecordState extends State<Record> {
     if (!d.existsSync()) {
       d.createSync(recursive: true);
     }
-    fileName = sdPath + "/record_${i++}.mp3";
+    fileName = sdPath + "/record_${DateTime.now()}.mp3";
     return fileName;
   }
 }

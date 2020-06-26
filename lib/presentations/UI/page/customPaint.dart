@@ -128,12 +128,10 @@ class _CustomPaintPageState extends State<CustomPaintPage> {
                                 widget.img.path.split("/").last);
                             tmp.content = pathImg;
                             widget.model.addNoteItem(tmp);
-//                            Navigator.of(context).pop(
-//                            MaterialPageRoute(builder: (BuildContext context) {
-//                              return CreateNote();
-//                            });
+
                             Navigator.popUntil(context, ModalRoute.withName('create_note'));
-//                            );
+
+
                           })
                     ],
                     elevation: 0.0,
