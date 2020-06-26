@@ -19,14 +19,11 @@ import 'package:note_app/presentations/UI/page/home_screen.dart';
 import 'package:note_app/presentations/UI/page/image_pick.dart';
 import 'package:note_app/presentations/UI/page/record_audio.dart';
 import 'package:note_app/utils/bus/note_bus.dart';
-import 'package:note_app/utils/bus/tag_bus.dart';
-import 'package:note_app/utils/bus/thumbnail_bus.dart';
 import 'package:note_app/utils/model/note.dart';
 import 'package:note_app/utils/model/noteItem.dart';
 import 'package:note_app/view_model/list_tb_note_view_model.dart';
 import 'package:note_app/view_model/list_tag_view_model.dart';
 import 'package:note_app/view_model/note_view_model.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:unicorndial/unicorndial.dart';
 
 class CreateNote extends StatefulWidget {
@@ -42,6 +39,7 @@ class CreateNoteState extends State<CreateNote> {
   FileType _pickingType = FileType.audio;
 
   var note = new Notes();
+
   void initState() {
     super.initState();
   }
@@ -80,6 +78,7 @@ class CreateNoteState extends State<CreateNote> {
   }
 
   ByteData _audioByteData;
+
   void _saveAudio(ByteData byteData, String fileName,
       {Function success, Function fail}) async {
     final buffer = byteData.buffer;
@@ -151,8 +150,6 @@ class CreateNoteState extends State<CreateNote> {
     children.add(_profileOption(
         iconData: Icons.camera_alt,
         onPressed: () {
-//          final NoteItem noteItem = NoteItem("Image");
-//          model.addNoteItem(noteItem);
           showDialog(context: context, child: dialogImg(context, model));
         },
         hero: "img"));
@@ -211,104 +208,129 @@ class CreateNoteState extends State<CreateNote> {
 
     return BaseView<NoteViewModel>(
         onModelReady: (noteViewModel) => noteViewModel,
-        builder: (context, noteViewModel, child) => Scaffold(
-            backgroundColor: Theme.of(context).backgroundColor,
-            resizeToAvoidBottomPadding: false,
-            floatingActionButton: UnicornDialer(
-              parentButtonBackground: Colors.blue,
-              orientation: UnicornOrientation.VERTICAL,
-              parentButton:
-                  Icon(Icons.add, color: Theme.of(context).primaryColor),
-              childButtons: _getProfileMenu(noteViewModel),
-            ),
-            appBar: AppBar(
-                title: Text('Create new note',
-                    style: TextStyle(color: Theme.of(context).iconTheme.color)),
-                leading: BackButton(
-                  color: Theme.of(context).iconTheme.color,
-                  onPressed: () {
-                    _handleClickMe();
-                  },
-                )),
-            body: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  SizedBox(height: h * 2),
-                  Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        builder: (context, noteViewModel, child) => GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onTap: () {
+                FocusScopeNode currentFocusScope = FocusScope.of(context);
+
+                if (!currentFocusScope.hasPrimaryFocus) {
+                  currentFocusScope.unfocus();
+                }
+              },
+              child: Scaffold(
+                  backgroundColor: Theme.of(context).backgroundColor,
+                  resizeToAvoidBottomPadding: false,
+                  floatingActionButton: UnicornDialer(
+                    parentButtonBackground: Colors.blue,
+                    orientation: UnicornOrientation.VERTICAL,
+                    parentButton:
+                        Icon(Icons.add, color: Theme.of(context).primaryColor),
+                    childButtons: _getProfileMenu(noteViewModel),
+                  ),
+                  appBar: AppBar(
+                      title: Text('Create new note',
+                          style: TextStyle(
+                              color: Theme.of(context).iconTheme.color)),
+                      leading: BackButton(
+                        color: Theme.of(context).iconTheme.color,
+                        onPressed: () {
+                          _handleClickMe();
+                        },
+                      )),
+                  body: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Expanded(
-                            flex: 6,
-                            child: InkWell(
-                                onTap: () {
-                                  showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) => Dialog(
-                                          elevation: 0.0,
-                                          backgroundColor:
-                                              Theme.of(context).backgroundColor,
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(5)),
-                                          child: ChooseTitle(noteViewModel)));
-                                },
-                                child: Container(
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: <Widget>[
-                                      SizedBox(width: w * 4),
-                                      Text(
-                                        noteViewModel.title,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .subhead
-                                            .copyWith(
+                        SizedBox(height: h * 2),
+                        Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: <Widget>[
+                              Expanded(
+                                  flex: 6,
+                                  child: InkWell(
+                                      onTap: () {
+                                        showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) =>
+                                                Dialog(
+                                                    elevation: 0.0,
+                                                    backgroundColor:
+                                                        Theme
+                                                                .of(context)
+                                                            .backgroundColor,
+                                                    shape:
+                                                        RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        5)),
+                                                    child: ChooseTitle(
+                                                        noteViewModel)));
+                                      },
+                                      child: Container(
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: <Widget>[
+                                            SizedBox(width: w * 4),
+                                            Text(
+                                              noteViewModel.title,
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .subhead
+                                                  .copyWith(
+                                                      color: Theme.of(context)
+                                                          .iconTheme
+                                                          .color,
+                                                      fontWeight: Font.Regular),
+                                            ),
+                                            SizedBox(width: w * 2),
+                                            Icon(Icons.edit,
+                                                size: 20,
                                                 color: Theme.of(context)
                                                     .iconTheme
-                                                    .color,
-                                                fontWeight: Font.Regular),
-                                      ),
-                                      SizedBox(width: w * 2),
-                                      Icon(Icons.edit,
-                                          size: 20,
-                                          color:
-                                              Theme.of(context).iconTheme.color)
-                                    ],
-                                  ),
-                                ))),
-                        Expanded(
-                            child: GestureDetector(
-                          onTap: () async {
-                            note.setListNoteItems(noteViewModel.contents);
-                            note.setTitle(noteViewModel.title);
-                            print("SAVE NEW NOTE!");
-                            for (var i in noteViewModel.tags) {
-                              print("TAG: " + i.title);
-                            }
-                            for (var i in noteViewModel.contents) {
-                              print("CONTENT: " + i.content);
-                            }
-                            note.setTag(noteViewModel.tags);
-                            final NoteBUS noteBus = NoteBUS();
-                            await noteBus.addNote(note);
-                            Navigator.of(context)
-                                .push(MaterialPageRoute(builder: (context) {
-                              return HomeScreen();
-                            }));
-                          },
-                          child: Text(
-                            "Save",
-                            style: Theme.of(context).textTheme.title.copyWith(
-                                color: Colors.blue, fontWeight: Font.Regular),
-                          ),
-                        ))
-                      ]),
-                  TagBarOfNote(noteViewModel, heroTag: "TagNote"),
-                  (noteViewModel.contents.length != null)
-                      ? Expanded(
-                          child: Container(child: ListNoteItems(noteViewModel)))
-                      : Text("")
-                ])));
+                                                    .color)
+                                          ],
+                                        ),
+                                      ))),
+                              Expanded(
+                                  child: GestureDetector(
+                                onTap: () async {
+                                  note.setListNoteItems(noteViewModel.contents);
+                                  note.setTitle(noteViewModel.title);
+                                  print("SAVE NEW NOTE!");
+                                  for (var i in noteViewModel.tags) {
+                                    print("TAG: " + i.title);
+                                  }
+                                  for (var i in noteViewModel.contents) {
+                                    print("CONTENT: " + i.content);
+                                  }
+                                  note.setTag(noteViewModel.tags);
+                                  final NoteBUS noteBus = NoteBUS();
+                                  await noteBus.addNote(note);
+                                  Navigator.of(context).push(
+                                      MaterialPageRoute(builder: (context) {
+                                    return HomeScreen();
+                                  }));
+                                },
+                                child: Text(
+                                  "Save",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .title
+                                      .copyWith(
+                                          color: Colors.blue,
+                                          fontWeight: Font.Regular),
+                                ),
+                              ))
+                            ]),
+                        TagBarOfNote(noteViewModel, heroTag: "TagNote"),
+                        (noteViewModel.contents.length != null)
+                            ? Expanded(
+                                child: Container(
+                                    child: ListNoteItems(noteViewModel)))
+                            : Text("")
+                      ])),
+            ));
   }
 }
 
@@ -325,6 +347,7 @@ class ListNoteItemsState extends State<ListNoteItems> {
   }
 
   ScrollController _controller = new ScrollController();
+
   @override
   Widget build(BuildContext context) {
 //    return ListView(
@@ -475,9 +498,11 @@ class EditTextState extends State<EditText> {
 class NoteItemWidget extends StatelessWidget {
   final NoteItem item;
   AudioPlayer advancedPlayer = AudioPlayer();
+
   NoteItemWidget(NoteItem _item) : item = _item;
   Uint8List bytes;
   ByteData _audioByteData;
+
   Future<Uint8List> enCodeImg() async {
     File imgFile = File(item.content);
     bytes = imgFile.readAsBytesSync();
@@ -502,7 +527,7 @@ class NoteItemWidget extends StatelessWidget {
     } else if (item.type == "Image") {
       print(item.content);
       return FutureBuilder<Uint8List>(
-        future: enCodeImg(),
+        future: Future.delayed(Duration(milliseconds: 2000), () => enCodeImg()),
         builder: (BuildContext context, AsyncSnapshot<Uint8List> image) {
           if (image.connectionState == ConnectionState.done && image.hasData) {
             print("notee" + bytes.toString());

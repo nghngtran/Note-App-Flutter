@@ -253,12 +253,13 @@ class HomeScreenState extends State<HomeScreen>
                 child: Icon(Icons.add,
                     size: 28, color: Theme.of(context).iconTheme.color),
                 onPressed: () {
-//                  noteViewModel = NoteViewModel();
-                  Navigator.push(
-                      context,
-                      PageTransition(
-                          type: PageTransitionType.downToUp,
-                          child: CreateNote()));
+
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => CreateNote(),
+                      settings: RouteSettings(name: 'create_note'))
+                  );
+               
+             
                 }),
             appBar: AppBar(
               elevation: 0.0,

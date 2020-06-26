@@ -60,8 +60,11 @@ class _PickImageState extends State<PickImage> {
 //                            CustomPaintPage(snapshot.data, widget.model)),
 //                    (Route<dynamic> route) => true);
 
-                Navigator.of(context).popAndPushNamed('custom_paint',
-                    arguments: Arg(tmp, widget.model));
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => CustomPaintPage(tmp, widget.model),
+                  settings: RouteSettings(name: 'custom_paint', arguments:Arg(tmp, widget.model) )
+                ));
+//                    arguments: Arg());
               },
               child: Container(
                   width: w * 100,
