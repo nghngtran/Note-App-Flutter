@@ -38,8 +38,6 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  DatabaseApp db = new DatabaseApp();
-
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
