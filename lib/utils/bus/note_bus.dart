@@ -6,42 +6,37 @@ import 'package:note_app/utils/repository/note_repo.dart';
 class NoteBUS {
   final _noteRepository = NoteRepository();
 
-  NoteBloc() {
-    getNotes();
-  }
-
   getNotes({String query}) async {
-    //sink is a way of adding data reactively to the stream
-    //by registering a new event
     var result = await _noteRepository.getAllNotes(query: query);
-    //_noteController.sink.add(result);
     return result;
   }
 
   getNoteById(String noteId) async {
-    return await _noteRepository.getNote(noteId);
+    final stopwatch = Stopwatch()..start();
+    var res = await _noteRepository.getNote(noteId);
+    print('[Time] Query Note by ID ${noteId} executed in ${stopwatch.elapsed}');
+    return res;
   }
 
   addNote(Notes note) async {
+    final stopwatch = Stopwatch()..start();
     //if(note.contents.isEmpty) return false;
     var rowId = await _noteRepository.insertNotes(note);
-    //getNotes();
+    print('[Time] Add new Note ${note.id} executed in ${stopwatch.elapsed}');
     return rowId;
   }
   updateNote(Notes note) async {
+    final stopwatch = Stopwatch()..start();
     if(note.contents.isEmpty) return false;
-    return await _noteRepository.updateNotes(note) > 0;
-    //getNotes();
-    //return count;
+    var res = await _noteRepository.updateNotes(note);
+    print('[Time] Update Note ${note.id} executed in ${stopwatch.elapsed}');
+    return res>0;
   }
 
-  deleteNoteById(String id) async {
-    return await _noteRepository.deleteNotesById(id) > 0;
-    //getNotes();
-    //return code;
+  deleteNoteById(String noteId) async {
+    final stopwatch = Stopwatch()..start();
+    var res = await _noteRepository.deleteNotesById(noteId);
+    print('[Time] Update Note ${noteId} executed in ${stopwatch.elapsed}');
+    return res>0;
   }
-
-//  dispose() {
-//    _noteController.close();
-//  }
 }

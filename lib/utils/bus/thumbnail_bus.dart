@@ -36,31 +36,9 @@ class ThumbnailBUS {
     return await _thumbnailRepository.findThumbnailByKeyWord(keyword);
   }
   getThumbnails({String query}) async {
-    //sink is a way of adding data reactively to the stream
-    //by registering a new event
     final stopwatch = Stopwatch()..start();
     var result = await _thumbnailRepository.getAllThumbnails(query: query);
-    //_thumbnailController.sink.add(result);
     print('[Time] Query Thumbnail executed in ${stopwatch.elapsed}');
     return result;
   }
-//
-//  addThumbnail(ThumbnailNote thumbnail) async {
-//    return await _thumbnailRepository.insertThumbnail(thumbnail) > 0;
-//    //getThumbnails();
-//  }
-//
-//  updateThumbnail(ThumbnailNote thumbnail) async {
-//    return await _thumbnailRepository.updateThumbnail(thumbnail) > 0;
-//    //getThumbnails();
-//  }
-//
-//  deleteThumbnailById(String id) async {
-//   return await _thumbnailRepository.deleteThumbnailById(id) > 0;
-//    //getThumbnails();
-//  }
-
-//  dispose() {
-//    _thumbnailController.close();
-//  }
 }
