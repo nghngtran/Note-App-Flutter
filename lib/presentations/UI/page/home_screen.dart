@@ -1,20 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:note_app/presentations/UI/custom_widget/custom_list_notes.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:note_app/presentations/UI/custom_widget/custom_note_card.dart';
 import 'package:note_app/presentations/UI/custom_widget/custom_type_tag.dart';
-import 'package:note_app/presentations/UI/page/base_view.dart';
 import 'package:note_app/presentations/UI/page/create_note.dart';
-
 import 'package:note_app/view_model/list_tb_note_view_model.dart';
 import 'package:note_app/view_model/list_tag_view_model.dart';
 import 'package:note_app/view_model/note_view_model.dart';
-import 'package:note_app/view_model/tag_view_model.dart';
-import 'package:page_transition/page_transition.dart';
-import 'package:note_app/presentations/UI/custom_widget/custom_text_style.dart';
 import 'package:provider/provider.dart';
-
 import '../../../main.dart';
 
 class HomeScreen extends StatefulWidget {

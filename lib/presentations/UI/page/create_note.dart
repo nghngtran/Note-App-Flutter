@@ -12,7 +12,6 @@ import 'package:note_app/presentations/UI/custom_widget/choose_title.dart';
 import 'package:note_app/presentations/UI/custom_widget/tab_bar_note.dart';
 import 'package:note_app/presentations/UI/page/MoreOptionsSheet.dart';
 import 'package:note_app/presentations/UI/page/base_view.dart';
-
 import 'package:note_app/presentations/UI/page/camera.dart';
 import 'package:note_app/presentations/UI/page/handle_audio.dart';
 import 'package:note_app/presentations/UI/page/home_screen.dart';
@@ -517,7 +516,7 @@ class NoteItemWidget extends StatelessWidget {
     } else if (item.type == "Image") {
       print(item.content);
       return FutureBuilder<Uint8List>(
-        future: Future.delayed(Duration(milliseconds: 1000), () => enCodeImg()),
+        future: Future.delayed(Duration(milliseconds: 800), () => enCodeImg()),
         builder: (BuildContext context, AsyncSnapshot<Uint8List> image) {
           if (image.connectionState == ConnectionState.done && image.hasData) {
             print("notee" + bytes.toString());
