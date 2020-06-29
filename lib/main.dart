@@ -5,21 +5,17 @@ import 'package:flutter/material.dart';
 import 'package:note_app/application/constants.dart';
 import 'package:note_app/application/router.dart';
 import 'package:note_app/presentations/UI/page/base_view.dart';
-import 'package:note_app/presentations/UI/page/create_note.dart';
-import 'package:note_app/presentations/UI/page/customPaint.dart';
-
 import 'package:note_app/presentations/UI/page/home_screen.dart';
-import 'package:note_app/presentations/UI/page/image_pick.dart';
-import 'package:note_app/utils/bus/thumbnail_bus.dart';
 
-import 'package:note_app/utils/database/database.dart';
 import 'package:note_app/utils/model/note.dart';
-import 'package:note_app/utils/model/thumbnailNote.dart';
 import 'package:provider/provider.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final cameras = await availableCameras();
+  AudioPlayer advancedPlayer = AudioPlayer();
+  advancedPlayer.startHeadlessService();
   final originalCheck = Provider.debugCheckInvalidValueType;
   Provider.debugCheckInvalidValueType = <T>(T value) {
     if (value is Object) return;
@@ -43,7 +39,6 @@ class MyApp extends StatelessWidget {
     return ChangeNotifierProvider(
         create: (context) => Notes(),
         child: Consumer<AppStateNotifier>(builder: (context, appState, child) {
-         
           return MaterialApp(
             title: "Note App",
             debugShowCheckedModeBanner: false,
@@ -51,7 +46,6 @@ class MyApp extends StatelessWidget {
                 AppTheme.lightTheme, // ThemeData(primarySwatch: Colors.blue),
             darkTheme:
                 AppTheme.darkTheme, // ThemeData(primarySwatch: Colors.blue),
-
             initialRoute: RoutePaths.Home,
             onGenerateRoute: Router.generateRoute,
             home: TestWidget(),
@@ -66,6 +60,7 @@ class TestWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return HomeScreen();
   }
+
 }
 
 class AppTheme {

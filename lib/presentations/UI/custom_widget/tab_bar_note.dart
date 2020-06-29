@@ -7,7 +7,7 @@ import 'package:note_app/utils/dao/tag_dao.dart';
 import 'package:note_app/utils/model/tag.dart';
 import 'package:note_app/view_model/list_tag_view_model.dart';
 import 'package:note_app/view_model/note_view_model.dart';
-import 'package:note_app/presentations/UI/custom_widget/custom_text_style.dart';
+
 
 import 'package:autocomplete_textfield/autocomplete_textfield.dart';
 import 'package:provider/provider.dart';
@@ -248,9 +248,9 @@ class _DropDownButtonNoteState extends State<DropDownButtonNote> {
   }
 }
 
+
 class TagBarOfNote extends StatelessWidget {
   ScrollController horizontal;
-
   TagBarOfNote(this.model, {String heroTag});
 //  List<Tag> listTags = List<Tag>();
   final NoteViewModel model;
@@ -266,7 +266,7 @@ class TagBarOfNote extends StatelessWidget {
           Container(
               color: Theme.of(context).backgroundColor,
               width: MediaQuery.of(context).size.width / 100 * 10,
-              height: MediaQuery.of(context).size.width / 100 * 9,
+              height: MediaQuery.of(context).size.width / 100 * 8,
               margin: EdgeInsets.only(
                   top: MediaQuery.of(context).size.height / 100 * 2,
                   bottom: MediaQuery.of(context).size.height / 100),

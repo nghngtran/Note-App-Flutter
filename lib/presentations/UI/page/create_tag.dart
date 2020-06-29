@@ -13,7 +13,6 @@ import 'package:note_app/utils/model/noteItem.dart';
 import 'package:note_app/utils/model/tag.dart';
 import 'package:note_app/utils/model/thumbnailNote.dart';
 import 'package:note_app/view_model/list_tag_view_model.dart';
-import 'package:note_app/presentations/UI/custom_widget/custom_text_style.dart';
 import 'package:autocomplete_textfield/autocomplete_textfield.dart';
 
 class CreateTag extends StatefulWidget {
