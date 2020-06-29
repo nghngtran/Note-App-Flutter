@@ -155,195 +155,268 @@ class TagBarState extends State<TagBar> {
   }
 
   Widget build(BuildContext context) {
-    widget.model.loadData();
-    return Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisSize: MainAxisSize.max,
-        children: <Widget>[
-          SizedBox(width: MediaQuery.of(context).size.width / 100 * 3),
-          Container(
-              color: Theme.of(context).backgroundColor,
-              width: MediaQuery.of(context).size.width / 100 * 9,
-              height: MediaQuery.of(context).size.width / 100 * 9,
-              margin: EdgeInsets.only(
-                  top: MediaQuery.of(context).size.height / 100 * 2,
-                  bottom: MediaQuery.of(context).size.height / 100),
-              child: FloatingActionButton(
-                elevation: 0.0,
-                onPressed: () {
-                  showDialog(
-                      context: context,
-                      builder: (BuildContext context) => Dialog(
-                          elevation: 0.0,
-                          backgroundColor: Theme.of(context).backgroundColor,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5)),
-                          child: CreateTag(widget.model)));
-                },
-                child: Icon(Icons.add,
-                    size: 20, color: Theme.of(context).iconTheme.color),
-              )),
-          Expanded(
-              child: Container(
-                  padding: EdgeInsets.fromLTRB(
-                      0, MediaQuery.of(context).size.height / 100, 0, 0),
-                  width: MediaQuery.of(context).size.width / 100 * 85,
-                  height: MediaQuery.of(context).size.height / 100 * 8,
-                  child: ListView.builder(
-                      controller: widget.horizontal,
-                      scrollDirection: Axis.horizontal,
-                      itemCount: widget.model.getTagCreated().length,
-                      itemBuilder: (context, index) {
-                        final item = widget.model.getTagCreated()[index];
-                        if (isSelected == item) {
-                          return Wrap(children: <Widget>[
-                            Container(
-                                margin: EdgeInsets.only(
-                                    left: 4 *
-                                        MediaQuery.of(context).size.width /
-                                        100,
-                                    top: MediaQuery.of(context).size.height /
-                                        100),
-                                height: MediaQuery.of(context).size.height /
-                                    100 *
-                                    5,
-                                padding: EdgeInsets.fromLTRB(
-                                    MediaQuery.of(context).size.width / 100 * 2,
-                                    0,
-                                    MediaQuery.of(context).size.width / 100 * 2,
-                                    0),
-                                decoration: BoxDecoration(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(15)),
-                                  color: item.color,
-                                  border: Border.all(
-                                      color: Colors.blueAccent, width: 3),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.blueAccent.withOpacity(0.5),
-                                      spreadRadius: 4,
-                                      blurRadius: 7,
-                                      offset: Offset(
-                                          0, 1.5), // changes position of shadow
-                                    ),
-                                  ],
-                                ),
-                                child: GestureDetector(
-                                    onTap: () {
-                                      widget.parentAction(item.id);
-                                    },
-                                    onLongPress: () {
-                                      showDialog(
-                                          context: context,
-                                          builder: (BuildContext context) =>
-                                              CupertinoAlertDialog(
-                                                title: Text(
-                                                    'Do you want to remove this tag ?'),
-                                                actions: <Widget>[
-                                                  CupertinoDialogAction(
-                                                    child: Text('Cancel'),
-                                                    onPressed: () {
-                                                      Navigator.of(context)
-                                                          .pop();
-                                                    },
-                                                  ),
-                                                  CupertinoDialogAction(
-                                                    child: Text('Yes'),
-                                                    onPressed: () {
-                                                      TagBUS tagbus =
-                                                          new TagBUS();
-                                                      tagbus.deleteTagById(
-                                                          item.id);
-                                                      widget.parentAction1(
-                                                          "RELOAD!");
-                                                      Navigator.of(context)
-                                                          .pop();
-                                                    },
-                                                  ),
-                                                ],
-                                              ));
-                                    },
-                                    child: Center(
-                                        child: Text(
-                                      "#" + item.title,
-                                      style: TextStyle(
-                                          fontSize: 17,
-                                          fontFamily: Font.Name,
-                                          fontWeight: Font.Regular,
-                                          color: Colors.white),
-                                    ))))
-                          ]);
-                        }
-                        return GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                isSelected = item;
-                              });
-                              widget.parentAction(item.id);
-                            },
-                            onLongPress: () {
-                              showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) =>
-                                      CupertinoAlertDialog(
-                                        title: Text(
-                                            'Do you want to remove this tag ?'),
-                                        actions: <Widget>[
-                                          CupertinoDialogAction(
-                                            child: Text('Cancel'),
-                                            onPressed: () {
-                                              Navigator.of(context).pop();
-                                            },
-                                          ),
-                                          CupertinoDialogAction(
-                                            child: Text('Yes'),
-                                            onPressed: () {
-                                              TagBUS tagbus = new TagBUS();
-                                              tagbus.deleteTagById(item.id);
-                                              widget.parentAction1("RELOAD!");
-                                              Navigator.of(context).pop();
-                                            },
-                                          ),
-                                        ],
-                                      ));
-                            },
-                            child: Wrap(children: <Widget>[
+    //widget.model.loadData();
+    return FutureBuilder(
+      future: widget.model.loadData(),
+      builder: (context, state) {
+        if (state.connectionState == ConnectionState.done) {
+          return Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.max,
+          children: <Widget>[
+            SizedBox(width: MediaQuery
+                .of(context)
+                .size
+                .width / 100 * 3),
+            Container(
+                color: Theme
+                    .of(context)
+                    .backgroundColor,
+                width: MediaQuery
+                    .of(context)
+                    .size
+                    .width / 100 * 9,
+                height: MediaQuery
+                    .of(context)
+                    .size
+                    .width / 100 * 9,
+                margin: EdgeInsets.only(
+                    top: MediaQuery
+                        .of(context)
+                        .size
+                        .height / 100 * 2,
+                    bottom: MediaQuery
+                        .of(context)
+                        .size
+                        .height / 100),
+                child: FloatingActionButton(
+                  elevation: 0.0,
+                  onPressed: () {
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) =>
+                            Dialog(
+                                elevation: 0.0,
+                                backgroundColor: Theme
+                                    .of(context)
+                                    .backgroundColor,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(5)),
+                                child: CreateTag(widget.model)));
+                  },
+                  child: Icon(Icons.add,
+                      size: 20, color: Theme
+                          .of(context)
+                          .iconTheme
+                          .color),
+                )),
+            Expanded(
+                child: Container(
+                    padding: EdgeInsets.fromLTRB(
+                        0, MediaQuery
+                        .of(context)
+                        .size
+                        .height / 100, 0, 0),
+                    width: MediaQuery
+                        .of(context)
+                        .size
+                        .width / 100 * 85,
+                    height: MediaQuery
+                        .of(context)
+                        .size
+                        .height / 100 * 8,
+                    child: ListView.builder(
+                        controller: widget.horizontal,
+                        scrollDirection: Axis.horizontal,
+                        itemCount: widget.model
+                            .getTagCreated()
+                            .length,
+                        itemBuilder: (context, index) {
+                          final item = widget.model.getTagCreated()[index];
+                          if (isSelected == item) {
+                            return Wrap(children: <Widget>[
                               Container(
                                   margin: EdgeInsets.only(
                                       left: 4 *
-                                          MediaQuery.of(context).size.width /
+                                          MediaQuery
+                                              .of(context)
+                                              .size
+                                              .width /
                                           100,
-                                      top: MediaQuery.of(context).size.height /
+                                      top: MediaQuery
+                                          .of(context)
+                                          .size
+                                          .height /
                                           100),
-                                  height: MediaQuery.of(context).size.height /
+                                  height: MediaQuery
+                                      .of(context)
+                                      .size
+                                      .height /
                                       100 *
                                       5,
                                   padding: EdgeInsets.fromLTRB(
-                                      MediaQuery.of(context).size.width /
-                                          100 *
-                                          2,
+                                      MediaQuery
+                                          .of(context)
+                                          .size
+                                          .width / 100 * 2,
                                       0,
-                                      MediaQuery.of(context).size.width /
-                                          100 *
-                                          2,
+                                      MediaQuery
+                                          .of(context)
+                                          .size
+                                          .width / 100 * 2,
                                       0),
                                   decoration: BoxDecoration(
                                     borderRadius:
-                                        BorderRadius.all(Radius.circular(15)),
+                                    BorderRadius.all(Radius.circular(15)),
                                     color: item.color,
+                                    border: Border.all(
+                                        color: Colors.blueAccent, width: 3),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.blueAccent.withOpacity(
+                                            0.5),
+                                        spreadRadius: 4,
+                                        blurRadius: 7,
+                                        offset: Offset(
+                                            0,
+                                            1.5), // changes position of shadow
+                                      ),
+                                    ],
                                   ),
-                                  child: Center(
-                                      child: Text(
-                                    "#" + item.title,
-                                    style: TextStyle(
-                                        fontSize: 17,
-                                        fontFamily: Font.Name,
-                                        fontWeight: Font.Regular,
-                                        color: Colors.white),
-                                  )))
-                            ]));
-                      })))
-        ]);
+                                  child: GestureDetector(
+                                      onTap: () {
+                                        widget.parentAction(item.id);
+                                      },
+                                      onLongPress: () {
+                                        showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) =>
+                                                CupertinoAlertDialog(
+                                                  title: Text(
+                                                      'Do you want to remove this tag ?'),
+                                                  actions: <Widget>[
+                                                    CupertinoDialogAction(
+                                                      child: Text('Cancel'),
+                                                      onPressed: () {
+                                                        Navigator.of(context)
+                                                            .pop();
+                                                      },
+                                                    ),
+                                                    CupertinoDialogAction(
+                                                      child: Text('Yes'),
+                                                      onPressed: () {
+                                                        TagBUS tagbus =
+                                                        new TagBUS();
+                                                        tagbus.deleteTagById(
+                                                            item.id);
+                                                        widget.parentAction1(
+                                                            "RELOAD!");
+                                                        Navigator.of(context)
+                                                            .pop();
+                                                      },
+                                                    ),
+                                                  ],
+                                                ));
+                                      },
+                                      child: Center(
+                                          child: Text(
+                                            "#" + item.title,
+                                            style: TextStyle(
+                                                fontSize: 17,
+                                                fontFamily: Font.Name,
+                                                fontWeight: Font.Regular,
+                                                color: Colors.white),
+                                          ))))
+                            ]);
+                          }
+                          return GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  isSelected = item;
+                                });
+                                widget.parentAction(item.id);
+                              },
+                              onLongPress: () {
+                                showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) =>
+                                        CupertinoAlertDialog(
+                                          title: Text(
+                                              'Do you want to remove this tag ?'),
+                                          actions: <Widget>[
+                                            CupertinoDialogAction(
+                                              child: Text('Cancel'),
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                            ),
+                                            CupertinoDialogAction(
+                                              child: Text('Yes'),
+                                              onPressed: () {
+                                                TagBUS tagbus = new TagBUS();
+                                                tagbus.deleteTagById(item.id);
+                                                widget.parentAction1("RELOAD!");
+                                                Navigator.of(context).pop();
+                                              },
+                                            ),
+                                          ],
+                                        ));
+                              },
+                              child: Wrap(children: <Widget>[
+                                Container(
+                                    margin: EdgeInsets.only(
+                                        left: 4 *
+                                            MediaQuery
+                                                .of(context)
+                                                .size
+                                                .width /
+                                            100,
+                                        top: MediaQuery
+                                            .of(context)
+                                            .size
+                                            .height /
+                                            100),
+                                    height: MediaQuery
+                                        .of(context)
+                                        .size
+                                        .height /
+                                        100 *
+                                        5,
+                                    padding: EdgeInsets.fromLTRB(
+                                        MediaQuery
+                                            .of(context)
+                                            .size
+                                            .width /
+                                            100 *
+                                            2,
+                                        0,
+                                        MediaQuery
+                                            .of(context)
+                                            .size
+                                            .width /
+                                            100 *
+                                            2,
+                                        0),
+                                    decoration: BoxDecoration(
+                                      borderRadius:
+                                      BorderRadius.all(Radius.circular(15)),
+                                      color: item.color,
+                                    ),
+                                    child: Center(
+                                        child: Text(
+                                          "#" + item.title,
+                                          style: TextStyle(
+                                              fontSize: 17,
+                                              fontFamily: Font.Name,
+                                              fontWeight: Font.Regular,
+                                              color: Colors.white),
+                                        )))
+                              ]));
+                        })))
+          ]);
+        }
+        return Row();
+    });
   }
 }
