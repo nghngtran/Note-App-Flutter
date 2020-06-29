@@ -356,12 +356,9 @@ class ListNoteItemsState extends State<ListNoteItems> {
                       print("Xoas" + index.toString());
                       widget.model.contents.removeAt(index);
                       print(widget.model.contents);
-//                      widget.model.removeNoteItem(itemRemove);
-//                      getChildrenNotes().removeAt(index);
-//                      print(getChildrenNotes().length.toString());
                     });
                   },
-                  key: noteItem,
+                  key: Key(widget.model.contents[index].id.toString()),
                   child: item);
             })
         : Text("");
