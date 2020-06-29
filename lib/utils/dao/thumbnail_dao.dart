@@ -130,7 +130,27 @@ class ThumbnailNoteDAO {
     } else
       return [];
   }
-
+  Future<ThumbnailNote> getThumbnailByIDWithTag(String noteId,String tagId) async {
+    final db = await dbProvider.database;
+    // Get List Note
+    List<Map<String, dynamic>> maps =
+    await db.query('thumbnails', where: "note_id = ?", whereArgs: [noteId]);
+    // Case Found
+    if (maps.isNotEmpty) {
+      var tags = await tagDao.getTagsByNoteID(noteId);
+      for(var i in tags){
+        if(i.id == tagId){
+          tags.remove(i);
+          tags.insert(0,i);
+          break;
+        }
+      }
+      var result = ThumbnailNote.fromDatabaseJson(maps.first);
+      result.setTag(tags);
+      return result;
+    } else
+      return null;
+  }
   Future<List<ThumbnailNote>> findThumbnailByTagId(String tagId) async {
     final db = await dbProvider.database;
     //Using full text search sql table Note
@@ -140,7 +160,7 @@ class ThumbnailNoteDAO {
     if (notes.isNotEmpty) {
       List<ThumbnailNote> thumbs = new List<ThumbnailNote>();
       for (var note in notes) {
-        var thumb = await getThumbnailByID(note['note_id']);
+        var thumb = await getThumbnailByIDWithTag(note['note_id'],tagId);
         thumbs.add(thumb);
       }
       return thumbs;

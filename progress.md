@@ -32,9 +32,9 @@
 - #### [2/6] Search:
 	- [0/4] Search by Tag:
 		- [] Ấn vào tag ngoài Home
-		- [] gõ #{têntag} trên search bar
-		- [] Khi hiển thị kết quả search bar hiện tên và màu tag
-		- [] Load list thumbnail by tag
+		- [:heavy_check_mark:] gõ #{têntag} trên search bar
+		- [:heavy_check_mark:] Khi hiển thị kết quả search bar hiện tên và màu tag
+		- :heavy_check_mark:] Load list thumbnail by tag
 	- [2/2] Search by keyword:Áp dụng cho cả content và title của Note, ưu tiên title 
 		- [:heavy_check_mark:] gõ keyword trên search bar
 		- [:heavy_check_mark:] Load list thumbnail by findkeyword

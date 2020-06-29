@@ -5,18 +5,17 @@ import 'package:flutter/material.dart';
 import 'package:note_app/application/constants.dart';
 import 'package:note_app/application/router.dart';
 import 'package:note_app/presentations/UI/page/base_view.dart';
-
 import 'package:note_app/presentations/UI/page/home_screen.dart';
-import 'package:note_app/utils/bus/thumbnail_bus.dart';
 
-import 'package:note_app/utils/database/database.dart';
 import 'package:note_app/utils/model/note.dart';
-import 'package:note_app/utils/model/thumbnailNote.dart';
 import 'package:provider/provider.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final cameras = await availableCameras();
+  AudioPlayer advancedPlayer = AudioPlayer();
+  advancedPlayer.startHeadlessService();
   final originalCheck = Provider.debugCheckInvalidValueType;
   Provider.debugCheckInvalidValueType = <T>(T value) {
     if (value is Object) return;
@@ -35,8 +34,6 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  DatabaseApp db = new DatabaseApp();
-
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
@@ -49,7 +46,6 @@ class MyApp extends StatelessWidget {
                 AppTheme.lightTheme, // ThemeData(primarySwatch: Colors.blue),
             darkTheme:
                 AppTheme.darkTheme, // ThemeData(primarySwatch: Colors.blue),
-
             initialRoute: RoutePaths.Home,
             onGenerateRoute: Router.generateRoute,
             home: TestWidget(),
@@ -64,6 +60,7 @@ class TestWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return HomeScreen();
   }
+
 }
 
 class AppTheme {
@@ -102,20 +99,23 @@ class AppTheme {
 
   static final ThemeData darkTheme = ThemeData.dark().copyWith(
     dialogBackgroundColor: Colors.transparent,
-    backgroundColor: Color.fromRGBO(34, 34, 34, 1.0),
-    scaffoldBackgroundColor: Color.fromRGBO(34, 34, 34, 1.0),
+    backgroundColor: Colors.black54,
+//    Color.fromRGBO(34, 34, 34, 1.0),
+    scaffoldBackgroundColor: Color.fromRGBO(163, 44, 196, 1.0),
     appBarTheme: AppBarTheme(
-      color: Colors.black54,
+      color:
+//      Color.fromRGBO(163, 44, 196, 1.0),
+     Colors.black,
       iconTheme: IconThemeData(
         color: Colors.white,
       ),
     ),
-    cardColor: Colors.black54,
+    cardColor: Color.fromRGBO(34, 34, 34, 1.0),
     floatingActionButtonTheme:
-        FloatingActionButtonThemeData(backgroundColor: Colors.black),
+        FloatingActionButtonThemeData(backgroundColor: Colors.blue),
 
     cardTheme: CardTheme(
-      color: Colors.black,
+      color: Color.fromRGBO(34, 34, 34, 1.0),
     ),
     iconTheme: IconThemeData(
       color: Colors.white,

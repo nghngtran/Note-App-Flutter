@@ -5,7 +5,7 @@ import 'package:note_app/presentations/UI/page/base_view.dart';
 import 'package:note_app/utils/model/note.dart';
 import 'package:note_app/view_model/note_view_model.dart';
 import 'package:provider/provider.dart';
-import 'package:note_app/presentations/UI/custom_widget/custom_text_style.dart';
+
 
 class ChooseTitle extends StatelessWidget {
   var title = "";
