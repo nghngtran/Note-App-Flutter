@@ -184,7 +184,7 @@ class NoteCardState extends State<NoteCard> {
                       color: Theme.of(context).iconTheme.color.withOpacity(0.6),
                       width: 0.5),
                   borderRadius: BorderRadius.all(Radius.circular(5)),
-                  color: Theme.of(context).cardColor,
+//                  color: Theme.of(context).cardColor,
                 ),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -195,20 +195,50 @@ class NoteCardState extends State<NoteCard> {
                         style: Theme.of(context).textTheme.title.copyWith(
                             color: Theme.of(context).iconTheme.color)),
                     SizedBox(height: MediaQuery.of(context).size.height / 100),
-                    Row(children: <Widget>[
-                      noteCard.tags.length > 0
-                          ? Icon(Icons.local_offer,
-                              color: noteCard.tags.first.color, size: 16)
-                          : Container(),
-                      SizedBox(width: MediaQuery.of(context).size.width / 100),
-                      noteCard.tags.length > 0
-                          ? Text(noteCard.tags.first.title,
+                noteCard.tags.length > 0
+                    ? noteCard.tags.length >= 2
+                    ? Wrap(
+                  children: <Widget>[
+                    showTag(context, noteCard.tags.first),
+                    SizedBox(
+                        width: MediaQuery.of(context).size.width /
+                            100 *
+                            2),
+                    showTag(context, noteCard.tags[1]),
+                    SizedBox(
+                        width: MediaQuery.of(context).size.width /
+                            100 *
+                            3),
+                    noteCard.tags.length - 2 > 0 ? Container(
+//                                  margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                      width: MediaQuery.of(context).size.width /
+                          100 *
+                          4,
+                      height: MediaQuery.of(context).size.width /
+                          100 *
+                          4,
+                      child: CircleAvatar(
+                          backgroundColor: Colors.orangeAccent
+                              .withOpacity(0.8),
+                          child: Text(
+                              "+" +
+                                  (noteCard.tags.length - 2)
+                                      .toString(),
                               style: Theme.of(context)
                                   .textTheme
                                   .subtitle
-                                  .copyWith(color: noteCard.tags.first.color))
-                          : Container()
-                    ]),
+                                  .copyWith(
+                                  color: Theme.of(context)
+                                      .iconTheme
+                                      .color,
+                                  fontWeight: Font.Regular,
+                                  fontSize: 10))),
+                    ):Text("")]):Wrap(
+//
+                    children: <Widget>[
+                      showTag(context, noteCard.tags.first)
+                    ])
+                    : Text(""),
                     SizedBox(
                         height: 2 * MediaQuery.of(context).size.height / 100),
                     Stack(children: <Widget>[
@@ -221,7 +251,7 @@ class NoteCardState extends State<NoteCard> {
                           ))
                     ]),
                   ],
-                )));
+        )));
       } else if (noteCard.type == "Text") {
         return InkWell(
             splashColor: Colors.blue.withAlpha(30),
@@ -286,7 +316,7 @@ class NoteCardState extends State<NoteCard> {
                             color: Theme.of(context).iconTheme.color)),
                     SizedBox(height: MediaQuery.of(context).size.height / 100),
                     noteCard.tags.length > 0
-                        ? noteCard.tags.length > 2
+                        ? noteCard.tags.length >= 2
                             ? Wrap(
 //                              mainAxisSize: MainAxisSize.min,
                                 children: <Widget>[
@@ -300,7 +330,7 @@ class NoteCardState extends State<NoteCard> {
                                       width: MediaQuery.of(context).size.width /
                                           100 *
                                           3),
-                                  Container(
+                                  noteCard.tags.length - 2 > 0 ? Container(
 //                                  margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                                     width: MediaQuery.of(context).size.width /
                                         100 *
@@ -324,7 +354,7 @@ class NoteCardState extends State<NoteCard> {
                                                         .color,
                                                     fontWeight: Font.Regular,
                                                     fontSize: 10))),
-                                  )
+                                  ):Text("")
                                 ],
                               )
                             : Wrap(
@@ -406,6 +436,52 @@ class NoteCardState extends State<NoteCard> {
                             fontWeight: Font.Medium,
                             color: Theme.of(context).iconTheme.color)),
                     SizedBox(height: MediaQuery.of(context).size.height / 100),
+                    noteCard.tags.length > 0
+                        ? noteCard.tags.length >= 2
+                        ? Wrap(
+                        children: <Widget>[
+                          showTag(context, noteCard.tags.first),
+                          SizedBox(
+                              width: MediaQuery.of(context).size.width /
+                                  100 *
+                                  2),
+                          showTag(context, noteCard.tags[1]),
+                          SizedBox(
+                              width: MediaQuery.of(context).size.width /
+                                  100 *
+                                  3),
+                          noteCard.tags.length - 2 > 0 ? Container(
+//                                  margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                            width: MediaQuery.of(context).size.width /
+                                100 *
+                                4,
+                            height: MediaQuery.of(context).size.width /
+                                100 *
+                                4,
+                            child: CircleAvatar(
+                                backgroundColor: Colors.orangeAccent
+                                    .withOpacity(0.8),
+                                child: Text(
+                                    "+" +
+                                        (noteCard.tags.length - 2)
+                                            .toString(),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .subtitle
+                                        .copyWith(
+                                        color: Theme.of(context)
+                                            .iconTheme
+                                            .color,
+                                        fontWeight: Font.Regular,
+                                        fontSize: 10))),
+                          ):Text("")]):Wrap(
+//
+                        children: <Widget>[
+                          showTag(context, noteCard.tags.first)
+                        ])
+                        : Text(""),
+                    SizedBox(
+                        height: 2 * MediaQuery.of(context).size.height / 100),
                     Row(
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[

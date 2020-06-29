@@ -99,20 +99,23 @@ class AppTheme {
 
   static final ThemeData darkTheme = ThemeData.dark().copyWith(
     dialogBackgroundColor: Colors.transparent,
-    backgroundColor: Color.fromRGBO(34, 34, 34, 1.0),
-    scaffoldBackgroundColor: Color.fromRGBO(34, 34, 34, 1.0),
+    backgroundColor: Colors.black54,
+//    Color.fromRGBO(34, 34, 34, 1.0),
+    scaffoldBackgroundColor: Color.fromRGBO(163, 44, 196, 1.0),
     appBarTheme: AppBarTheme(
-      color: Colors.black54,
+      color:
+//      Color.fromRGBO(163, 44, 196, 1.0),
+     Colors.black,
       iconTheme: IconThemeData(
         color: Colors.white,
       ),
     ),
-    cardColor: Colors.black54,
+    cardColor: Color.fromRGBO(34, 34, 34, 1.0),
     floatingActionButtonTheme:
-        FloatingActionButtonThemeData(backgroundColor: Colors.black),
+        FloatingActionButtonThemeData(backgroundColor: Colors.blue),
 
     cardTheme: CardTheme(
-      color: Colors.black,
+      color: Color.fromRGBO(34, 34, 34, 1.0),
     ),
     iconTheme: IconThemeData(
       color: Colors.white,
