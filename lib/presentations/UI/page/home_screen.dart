@@ -250,8 +250,6 @@ class HomeScreenState extends State<HomeScreen>
                       builder: (context) => CreateNote(),
                       settings: RouteSettings(name: 'create_note'))
                   );
-               
-             
                 }),
             appBar: AppBar(
               elevation: 0.0,
@@ -262,7 +260,7 @@ class HomeScreenState extends State<HomeScreen>
                 children: <Widget>[
                   Consumer<TagCreatedModel>(
                       builder: (context, tagCreatedModel, _) {
-                    tagCreatedModel.loadData();
+                    //tagCreatedModel.loadData();
                     return TagBar(mainController, tagCreatedModel,
                         _updateMyTitle, _reLoad);
                   }),

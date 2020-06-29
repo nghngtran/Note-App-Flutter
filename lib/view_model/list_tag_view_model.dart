@@ -19,7 +19,7 @@ class TagCreatedModel extends BaseModel {
   List<Tag> listTagCreated = [];
   Future<void> loadData() async {
     listTagCreated = await tagBus.getTags();
-    notifyListeners();
+    //notifyListeners();
   }
 
   Future<void> loadTag() async {
