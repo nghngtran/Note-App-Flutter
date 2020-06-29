@@ -149,7 +149,7 @@ class TagBar extends StatefulWidget {
 }
 
 class TagBarState extends State<TagBar> {
-  Tag isSelected;
+  Tag isSelected = Tag();
   void initState() {
     super.initState();
   }
