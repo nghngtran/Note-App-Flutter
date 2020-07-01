@@ -99,13 +99,14 @@ class AppTheme {
 
   static final ThemeData darkTheme = ThemeData.dark().copyWith(
     dialogBackgroundColor: Colors.transparent,
-    backgroundColor: Colors.black54,
-//    Color.fromRGBO(34, 34, 34, 1.0),
+    backgroundColor:
+//    Colors.black54,
+    Color.fromRGBO(34, 34, 34, 1.0),
     scaffoldBackgroundColor: Color.fromRGBO(163, 44, 196, 1.0),
     appBarTheme: AppBarTheme(
-      color:
+      color:Colors.black54,
 //      Color.fromRGBO(163, 44, 196, 1.0),
-     Colors.black,
+//      Color.fromRGBO(34, 34, 34, 1.0),
       iconTheme: IconThemeData(
         color: Colors.white,
       ),
