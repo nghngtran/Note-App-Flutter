@@ -124,3 +124,9 @@ fonts:
         weight: 200
 module:
   androidX: true
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/logo.jp"
+flutter_laucher_name:
+  name: "Zen Note"
