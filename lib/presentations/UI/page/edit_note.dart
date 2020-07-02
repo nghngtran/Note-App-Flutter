@@ -217,7 +217,7 @@ class EditNoteState extends State<EditNote> {
                     backgroundColor: Theme.of(context).backgroundColor,
                     resizeToAvoidBottomPadding: false,
                     floatingActionButton: UnicornDialer(
-                      parentButtonBackground: Colors.blue,
+                      parentButtonBackground: Theme.of(context).cursorColor,
                       orientation: UnicornOrientation.VERTICAL,
                       parentButton: Icon(Icons.add,
                           color: Theme.of(context).primaryColor),
@@ -327,7 +327,7 @@ class EditNoteState extends State<EditNote> {
                                         .textTheme
                                         .title
                                         .copyWith(
-                                            color: Colors.blue,
+                                            color: Theme.of(context).highlightColor,
                                             fontWeight: Font.Regular),
                                   ),
                                 ))
@@ -344,24 +344,58 @@ class EditNoteState extends State<EditNote> {
   }
 }
 
-class ListNoteItems extends StatelessWidget {
-  final NoteViewModel model; //có đâu
+class ListNoteItems extends StatefulWidget {
+  final NoteViewModel model;
+
   ListNoteItems(this.model);
+  ListNoteItemsState createState() => ListNoteItemsState();
+}
+
+class ListNoteItemsState extends State<ListNoteItems> {
+  void initState() {
+    super.initState();
+  }
 
   ScrollController _controller = new ScrollController();
+
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      controller: _controller,
-      children: getChildrenNotes(),
-    );
+//    return ListView(
+//      controller: _controller,
+//      children: getChildrenNotes(),
+//    );
+
+    return (widget.model.contents.length > 0)
+        ? ListView.builder(
+        controller: _controller,
+        itemCount: widget.model.contents.length,
+        itemBuilder: (context, index) {
+          final item = getChildrenNotes()[index];
+          final Key noteItem = Key(item.toString());
+          return Dismissible(
+              direction: DismissDirection.endToStart,
+              resizeDuration: Duration(milliseconds: 200),
+              background: Container(
+                  color: Colors.red,
+                  alignment: AlignmentDirectional.centerEnd,
+                  child: Icon(Icons.delete,
+                      color: Theme.of(context).iconTheme.color)),
+              onDismissed: (direction) {
+                widget.model.contents.removeAt(index);
+                print(widget.model.contents);
+              },
+              key: noteItem,
+              child: item);
+        })
+        : Text("");
   }
 
   List<Widget> getChildrenNotes() {
-    if (model.contents.length == 0) {
+//    print("note" + widget.model.contents.length.toString());
+    if (widget.model.contents.length == 0) {
       return List<Container>();
     }
-    return model.contents.map((todo) => NoteItemWidget(todo)).toList();
+    return widget.model.contents.map((todo) => NoteItemWidget(todo)).toList();
   }
 }
 

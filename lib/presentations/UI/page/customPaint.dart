@@ -109,7 +109,7 @@ class _CustomPaintPageState extends State<CustomPaintPage> {
                 return Scaffold(
                   backgroundColor: Theme.of(context).backgroundColor,
                   appBar: AppBar(
-                    backgroundColor: Color.fromRGBO(255, 209, 16, 1.0),
+                    backgroundColor: Theme.of(context).appBarTheme.color,
                     actions: <Widget>[
                       IconButton(
                           icon: Icon(Icons.check),

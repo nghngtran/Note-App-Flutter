@@ -217,7 +217,7 @@ packages:
       name: file
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "5.2.0"
+    version: "5.2.1"
   file_picker:
     dependency: "direct dev"
     description:
@@ -264,7 +264,7 @@ packages:
       name: flutter_keyboard_visibility
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.0"
+    version: "3.2.1"
   flutter_launcher_icons:
     dependency: "direct main"
     description:
@@ -304,7 +304,7 @@ packages:
       name: flutter_typeahead
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.8.3"
+    version: "1.8.5"
   flutter_web_plugins:
     dependency: transitive
     description: flutter
@@ -526,7 +526,7 @@ packages:
       name: path_provider_linux
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.0.1+1"
+    version: "0.0.1+2"
   path_provider_macos:
     dependency: transitive
     description:
@@ -561,7 +561,7 @@ packages:
       name: permission_handler
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "5.0.1"
+    version: "5.0.1+1"
   permission_handler_platform_interface:
     dependency: transitive
     description:

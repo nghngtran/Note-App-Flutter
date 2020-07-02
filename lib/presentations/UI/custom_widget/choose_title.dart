@@ -23,6 +23,9 @@ class ChooseTitle extends StatelessWidget {
         height: MediaQuery.of(context).size.height / 100 * 22,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(5)),
+          border: Border.all(
+              color: Theme.of(context).dividerColor,
+              width: 1),
           color: Theme.of(context).backgroundColor,
         ),
         padding: EdgeInsets.only(
@@ -48,12 +51,12 @@ class ChooseTitle extends StatelessWidget {
                     enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(5),
                         borderSide: BorderSide(
-                            color: Theme.of(context).iconTheme.color,
+                            color: Theme.of(context).dividerColor,
                             width: 1)),
                     focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(5),
                         borderSide: BorderSide(
-                            color: Theme.of(context).iconTheme.color,
+                            color: Theme.of(context).dividerColor,
                             width: 1)),
                     hintText: "Title",
                     contentPadding: EdgeInsets.fromLTRB(5, 15, 0, 15),
