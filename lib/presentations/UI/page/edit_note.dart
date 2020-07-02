@@ -213,7 +213,16 @@ class EditNoteState extends State<EditNote> {
           if (state.connectionState == ConnectionState.done)
             return BaseView<NoteViewModel>(
                 onModelReady: (noteViewModel) => noteViewModel.Set(cur),
-                builder: (context, noteViewModel, child) => Scaffold(
+                builder: (context, noteViewModel, child) =>GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onTap: () {
+                      FocusScopeNode currentFocusScope = FocusScope.of(context);
+
+                      if (!currentFocusScope.hasPrimaryFocus) {
+                        currentFocusScope.unfocus();
+                      }
+                    },
+                    child: Scaffold(
                     backgroundColor: Theme.of(context).backgroundColor,
                     resizeToAvoidBottomPadding: false,
                     floatingActionButton: UnicornDialer(
@@ -338,7 +347,7 @@ class EditNoteState extends State<EditNote> {
                                   child: Container(
                                       child: ListNoteItems(noteViewModel)))
                               : Text("")
-                        ])));
+                        ]))));
           return Container();
         });
   }
