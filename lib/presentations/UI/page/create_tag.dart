@@ -45,6 +45,7 @@ class CreateTagState extends State<CreateTag> {
         height: MediaQuery.of(context).size.height / 100 * 20,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(5)),
+          border: Border.all(color: Theme.of(context).dividerColor),
           color: Theme.of(context).backgroundColor,
         ),
         padding:
@@ -87,7 +88,7 @@ class CreateTagState extends State<CreateTag> {
                             enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(5),
                                 borderSide: BorderSide(
-                                    color: Colors.black38, width: 1)),
+                                    color: Theme.of(context).dividerColor, width: 1)),
                             focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(5),
                                 borderSide: BorderSide(

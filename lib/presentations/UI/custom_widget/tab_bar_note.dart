@@ -39,13 +39,16 @@ class CreateTagNoteState extends State<CreateTagNote> {
         height: MediaQuery.of(context).size.height / 100 * 20,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(5)),
+          border: Border.all(
+              color: Theme.of(context).dividerColor,
+              width: 1),
           color: Theme.of(context).backgroundColor,
         ),
         padding:
             EdgeInsets.only(top: MediaQuery.of(context).size.height / 100 * 2),
         child: Column(mainAxisAlignment: MainAxisAlignment.start, children: <
             Widget>[
-          Text("Create new tag",
+          Text("Add tag",
               style: Theme.of(context).textTheme.title.copyWith(
                   fontWeight: Font.SemiBold,
                   color: Theme.of(context).iconTheme.color)),

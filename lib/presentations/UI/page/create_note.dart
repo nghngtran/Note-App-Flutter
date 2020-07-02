@@ -220,10 +220,10 @@ class CreateNoteState extends State<CreateNote> {
                   backgroundColor: Theme.of(context).backgroundColor,
                   resizeToAvoidBottomPadding: false,
                   floatingActionButton: UnicornDialer(
-                    parentButtonBackground: Colors.blue,
+                    parentButtonBackground: Theme.of(context).cursorColor,
                     orientation: UnicornOrientation.VERTICAL,
                     parentButton:
-                        Icon(Icons.add, color: Theme.of(context).primaryColor),
+                        Icon(Icons.add, color: Theme.of(context).iconTheme.color),
                     childButtons: _getProfileMenu(noteViewModel),
                   ),
                   appBar: AppBar(
@@ -317,7 +317,7 @@ class CreateNoteState extends State<CreateNote> {
                                       .textTheme
                                       .title
                                       .copyWith(
-                                          color: Colors.blue,
+                                          color: Theme.of(context).highlightColor,
                                           fontWeight: Font.Regular),
                                 ),
                               ))

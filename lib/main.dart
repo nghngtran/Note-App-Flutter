@@ -68,19 +68,23 @@ class AppTheme {
   static final ThemeData lightTheme = ThemeData.light().copyWith(
     dialogBackgroundColor: Colors.white70,
     backgroundColor: Colors.white,
+    canvasColor: Colors.white, //thumbnail bg
     scaffoldBackgroundColor: Colors.white,
     appBarTheme: AppBarTheme(
-      color: Color.fromRGBO(255, 209, 16, 1.0),
+      color: Color(0xFF77A6F7),
       iconTheme: IconThemeData(
         color: Colors.black,
       ),
     ),
     cardColor: Colors.white,
     floatingActionButtonTheme:
-        FloatingActionButtonThemeData(backgroundColor: Colors.blue),
+        FloatingActionButtonThemeData(backgroundColor: Color(0xFF77A6F7)),
+    cursorColor: Color(0xFF77A6F7), //add note item button
     iconTheme: IconThemeData(
       color: Colors.black,
     ),
+    dividerColor: Colors.black, //thumbnail border
+    highlightColor: Colors.blueAccent,
     textTheme: TextTheme(
         title: TextStyle(
           color: Colors.black,
@@ -102,6 +106,7 @@ class AppTheme {
     backgroundColor:
 //    Colors.black54,
     Color.fromRGBO(34, 34, 34, 1.0),
+    canvasColor: Colors.black, //thumbnail bg
     scaffoldBackgroundColor: Color.fromRGBO(163, 44, 196, 1.0),
     appBarTheme: AppBarTheme(
       color:Colors.black54,
@@ -113,14 +118,16 @@ class AppTheme {
     ),
     cardColor: Color.fromRGBO(34, 34, 34, 1.0),
     floatingActionButtonTheme:
-        FloatingActionButtonThemeData(backgroundColor: Colors.blue),
-
+        FloatingActionButtonThemeData(backgroundColor: Colors.black),
+    cursorColor: Color(0xFF66FCF1), //add note item button
     cardTheme: CardTheme(
       color: Color.fromRGBO(34, 34, 34, 1.0),
     ),
     iconTheme: IconThemeData(
       color: Colors.white,
     ),
+    dividerColor: Color(0xFF66FCF1), //thumbnail border
+    highlightColor: Color(0xFF66FCF1), // save button
 //    focusColor: Colors.black54,
     focusColor: Colors.black12.withOpacity(0.3),
     textTheme: TextTheme(

@@ -100,8 +100,8 @@ class NoteCardState extends State<NoteCard> {
     width: 45 * MediaQuery.of(context).size.width / 100,
     decoration: BoxDecoration(
     border: Border.all(
-    color: Theme.of(context).iconTheme.color.withOpacity(0.6),
-    width: 0.5),
+    color: Theme.of(context).dividerColor,
+    width: 1),
     borderRadius: BorderRadius.all(Radius.circular(5)),
     color: (noteCard.color == Theme.of(context).cardColor)
     ? Theme.of(context).backgroundColor
@@ -181,8 +181,8 @@ class NoteCardState extends State<NoteCard> {
                 width: 45 * MediaQuery.of(context).size.width / 100,
                 decoration: BoxDecoration(
                   border: Border.all(
-                      color: Theme.of(context).iconTheme.color.withOpacity(0.6),
-                      width: 0.5),
+                      color: Theme.of(context).dividerColor,
+                      width: 1),
                   borderRadius: BorderRadius.all(Radius.circular(5)),
 //                  color: Theme.of(context).cardColor,
                 ),
@@ -296,8 +296,8 @@ class NoteCardState extends State<NoteCard> {
                 width: 45 * MediaQuery.of(context).size.width / 100,
                 decoration: BoxDecoration(
                   border: Border.all(
-                      color: Theme.of(context).iconTheme.color.withOpacity(0.6),
-                      width: 0.5),
+                      color: Theme.of(context).dividerColor,
+                      width: 1),
                   borderRadius: BorderRadius.all(Radius.circular(5)),
                   color: (noteCard.color == Theme.of(context).cardColor)
                       ? Theme.of(context).backgroundColor
@@ -419,8 +419,8 @@ class NoteCardState extends State<NoteCard> {
               width: 45 * MediaQuery.of(context).size.width / 100,
               decoration: BoxDecoration(
                 border: Border.all(
-                    color: Theme.of(context).iconTheme.color.withOpacity(0.6),
-                    width: 0.5),
+                    color: Theme.of(context).dividerColor,
+                    width: 1),
                 borderRadius: BorderRadius.all(Radius.circular(5)),
                 color: Theme.of(context).backgroundColor,
               ),
